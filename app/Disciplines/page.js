@@ -1,11 +1,11 @@
 import React from 'react'
 
-function Page() {
+function Discipline() {
   return (
     <div>
-      
+      discipline
     </div>
   )
 }
 
-export default P
+export default Discipline;
