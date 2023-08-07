@@ -38,8 +38,6 @@ export default function RootLayout({children}) {
               className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert rounded-full w-10 h-10"
               src="https://tecdn.b-cdn.net/img/new/avatars/2.jpg"
               alt="Next.js Logo"
-              
-              
             />
           </div>
         </div>
