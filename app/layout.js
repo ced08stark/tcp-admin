@@ -34,10 +34,13 @@ export default function RootLayout({children}) {
           <div className="font-bold text-xl text-white">TCP-ADMIN</div>
           <div className="flex items-center space-x-2">
             <Icons.BellIcon className="w-6 h-6 text-white" />
-            <img
-              className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert rounded-full w-10 h-10"
+            <Image
+              className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert w-10 h-10 rounded-full"
               src="https://tecdn.b-cdn.net/img/new/avatars/2.jpg"
               alt="Next.js Logo"
+              width={180}
+              height={37}
+              priority
             />
           </div>
         </div>
