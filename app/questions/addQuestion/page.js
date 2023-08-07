@@ -3,7 +3,7 @@ import React from 'react'
 function page() {
   return (
     <div className="flex h-auto m-1 lg:m-4 lg:mx-10 justify-center">
-      <div className="flex flex-col  w-[80%]">
+      <div className="flex flex-col w-full  lg:w-[80%]">
         <p className="text-center text-sm text-gray-600 m-3">Create Step</p>
         <fieldset class="border border-r-0 border-b-0 space-y-2 border-gray-400 p-3">
           <legend class="text-sm text-center font-bold">

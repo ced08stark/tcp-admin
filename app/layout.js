@@ -31,7 +31,7 @@ export default function RootLayout({children}) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <body className={inter.className}>
-        <div className="flex justify-between items-center bg-gray-900  p-4 px-10 shadow-lg shadow-white">
+        <div className="flex justify-between items-center bg-gray-900  p-4 lg:px-10 shadow-lg shadow-white">
           <div className="font-bold text-xl text-white">TCP-ADMIN</div>
           <div className="flex items-center space-x-2">
             <Icons.BellIcon className="w-6 h-6 text-white" />
