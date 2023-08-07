@@ -123,3 +123,9 @@ export default function Home() {
     </main>
   );
 }
+
+
+Home.getLayout = function getLayout(page) {
+  // Retourner la page sans utiliser le layout RootLayout
+  return page;
+};
