@@ -1,76 +1,70 @@
+"use client"
 import Image from "next/image";
+import React, {useState, useEffect} from "react"
 import Link from "next/link";
 import * as Icons from "@heroicons/react/24/outline"
+import { useRouter } from "next/navigation"
+import SerieComponent from "../../components/SerieComponent"
+import AddSerie from "../../components/AddSerie";
+import GetCookies from "../../hooks/getCookies";
+import { instance } from "../../hooks/Axios";
 
 export default function Home() {
-  //const router = useRouter()
+  const router = useRouter()
+  const token = GetCookies("token");
+  const [isLoading, setIsLoading] = useState(false);
+  const [series, setSeries] = useState([]);
+  const Add = async() =>{
+      let modal = document.querySelector("#lightbox");
+      modal.classList.remove("scale-0");
+  }
+
+  const getSeries = async () => {
+      const data = await instance
+        .get(
+          "/api/serie/series",
+          {
+            headers: {
+              Authorization: `basic ${token}`,
+            },
+          }
+        )
+        .catch((err) => console.log(err.message));
+        console.log(data)
+      if(data){
+        setSeries(data?.data)
+      }
+  };
+
+  useEffect(()=>{
+    getSeries()
+  }, [] )
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-12">
+    <main className="flex min-h-screen flex-col items-center justify-between p-3 pt-12 md:p-6 lg:p-12">
       <div className="bg-white w-full flex flex-col h-[270px] rounded-xl p-3">
         <div className="flex justify-between items-center p-2 ">
           <span className=" font-semibold">Serie Access</span>
           <div>
-            <Icons.EllipsisHorizontalIcon className="w-6 h-6" />
+            <Icons.EllipsisHorizontalIcon className="w-6 h-6 cursor-pointer" />
           </div>
         </div>
         <div className="w-full flex overflow-x-auto pb-2 no-scrollbar">
-          <div className="flex flex-nowrap ">
-            <div className=" border-2 mx-2 shadow-md w-[300px]  sm:w-1/2 lg:w-[300px] cursor-pointer border-gray-200 p-4 rounded-lg space-y-2">
-              <Image
-                className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert w-16 h-16"
-                src="/assets/images/folder.png"
-                alt="Next.js Logo"
-                width={180}
-                height={37}
-                priority
-              />
-              <div>
-                <span className="font-semibold">Serie: </span>
-                <span className=" font-light">5049</span>
-              </div>
-              <div>
-                <div className="flex items-center space-x-2">
-                  <Icons.QuestionMarkCircleIcon className="w-6 h-6 text-blue-500" />
-                  <span className=" font-light text-sm ">5049 questions</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Icons.TrophyIcon className="w-6 h-6 text-green-500" />
-                  <span className=" font-light text-sm">
-                    best score: 2000 points
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className=" border-2 mx-2 shadow-md w-[300px] sm:w-1/2 lg:w-[300px] cursor-pointer border-gray-200 p-4 rounded-lg space-y-2">
-              <Image
-                className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert w-16 h-16"
-                src="/assets/images/folder.png"
-                alt="Next.js Logo"
-                width={180}
-                height={37}
-                priority
-              />
-              <div>
-                <span className="font-semibold">Serie: </span>
-                <span className=" font-light">5049</span>
-              </div>
-              <div>
-                <div className="flex items-center space-x-2">
-                  <Icons.QuestionMarkCircleIcon className="w-6 h-6 text-blue-500" />
-                  <span className=" font-light text-sm ">5049 questions</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Icons.TrophyIcon className="w-6 h-6 text-green-500" />
-                  <span className=" font-light text-sm">
-                    best score: 2000 points
-                  </span>
-                </div>
-              </div>
+          <div className="flex flex-nowrap">
+            
+            {series?.map((item, index) => (
+              <SerieComponent item={item}  key={index} />
+            ))}
+            <div
+              onClick={() => Add()}
+              className="flex items-center justify-center hover:shadow-xl transition-shadow duration-300 ease-in-out border-2 border-dotted mx-2 shadow-md w-[300px] sm:w-1/2 lg:w-[300px] cursor-pointer border-green-200 p-20 rounded-lg space-y-2"
+            >
+              <Icons.PlusIcon className="w-16 h-16 font-bold text-green-500" />
             </div>
           </div>
         </div>
       </div>
-      <div className="mb-32 w-full grid text-center lg:mb-0 lg:grid-cols-2 lg:text-left">
+      <div className="mb-32 w-full grid text-center lg:mb-0 lg:grid-cols-2 lg:text-left p-6 lg:p-2">
         <Link
           href="/questions"
           className="group  overflow-hidden relative hover:bg-white rounded-lg border border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
@@ -154,7 +148,6 @@ export default function Home() {
             />
           </div>
         </Link>
-
         <Link
           href="/"
           className="group rounded-lg relative overflow-hidden hover:bg-white border border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
@@ -172,7 +165,6 @@ export default function Home() {
               Instantly deploy your Next.js site to a shareable URL with Vercel.
             </p>
           </div>
-
           <div className="absolute lg:relative opacity-20 group-hover:opacity-100">
             <Image
               className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
@@ -185,12 +177,7 @@ export default function Home() {
           </div>
         </Link>
       </div>
+      {<AddSerie setSeries={setSeries} series={series}  />}
     </main>
   );
 }
-
-
-Home.getLayout = function getLayout(page) {
-  // Retourner la page sans utiliser le layout RootLayout
-  return page;
-};
