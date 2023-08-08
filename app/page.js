@@ -21,9 +21,7 @@ export default function Home() {
       })
       .catch((err) => console.log(err.message));
     setIsLoading(false);
-    console.log(data);
-    
-    if (data?.status == 200) {
+    if (data) {
       alert("connexion success")
       SetCookies("token", data?.data?.token);
       router.push("/dashboard")
