@@ -45,28 +45,24 @@ export default function Home() {
 
           <div className="md:w-8/12 lg:ml-6 lg:w-5/12">
             <div>
-              <div className="relative mb-6" >
+              <div className="relative mb-6">
                 <input
                   type="text"
-                  className="peer bg-white block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                  id="exampleFormControlInput3"
+                  className="  block min-h-[auto] w-full rounded border-0  px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear  bg-white"
                   placeholder="Email address"
                   onChange={(e) => setUser({ ...user, email: e.target.value })}
                 />
-                
               </div>
 
-              <div className="relative mb-6" >
+              <div className="relative mb-6">
                 <input
                   type="password"
-                  className="peer bg-white  block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                  id="exampleFormControlInput33"
+                  className=" bg-white  block min-h-[auto] w-full rounded border-0  px-3 py-[0.32rem] leading-[2.15] outline-none  "
                   placeholder="Password"
                   onChange={(e) =>
                     setUser({ ...user, password: e.target.value })
                   }
                 />
-                
               </div>
 
               <div className="mb-6 flex items-center justify-between">
