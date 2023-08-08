@@ -24,8 +24,12 @@ export default function Home() {
     console.log(data);
     
     if (data?.status == 200) {
+      alert("connexion success")
       SetCookies("token", data?.data?.token);
       router.push("/dashboard")
+    }
+    else{
+      alert("connexion failed")
     }
   };
   return (
