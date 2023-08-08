@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Home() {
   //const router = useRouter()
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-12">
+    <main className="flex min-h-screen flex-col items-center justify-between pt-12 p-4 lg:p-12">
       <div className="mb-32 w-full grid text-center lg:mb-0 lg:grid-cols-2 lg:text-left">
         <Link
           href="/series/question"
