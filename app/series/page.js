@@ -1,75 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import * as Icons from "@heroicons/react/24/outline"
 
 export default function Home() {
   //const router = useRouter()
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-12">
-      <div className="bg-white w-full flex flex-col h-[270px] rounded-xl p-3">
-        <div className="flex justify-between items-center p-2 ">
-          <span className=" font-semibold">Serie Access</span>
-          <div>
-            <Icons.EllipsisHorizontalIcon className="w-6 h-6" />
-          </div>
-        </div>
-        <div className="w-full flex overflow-x-auto pb-2 no-scrollbar">
-          <div className="flex flex-nowrap ">
-            <div className=" border-2 mx-2 shadow-md w-[300px]  sm:w-1/2 lg:w-[300px] cursor-pointer border-gray-200 p-4 rounded-lg space-y-2">
-              <Image
-                className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert w-16 h-16"
-                src="/assets/images/folder.png"
-                alt="Next.js Logo"
-                width={180}
-                height={37}
-                priority
-              />
-              <div>
-                <span className="font-semibold">Serie: </span>
-                <span className=" font-light">5049</span>
-              </div>
-              <div>
-                <div className="flex items-center space-x-2">
-                  <Icons.QuestionMarkCircleIcon className="w-6 h-6 text-blue-500" />
-                  <span className=" font-light text-sm ">5049 questions</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Icons.TrophyIcon className="w-6 h-6 text-green-500" />
-                  <span className=" font-light text-sm">
-                    best score: 2000 points
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className=" border-2 mx-2 shadow-md w-[300px] sm:w-1/2 lg:w-[300px] cursor-pointer border-gray-200 p-4 rounded-lg space-y-2">
-              <Image
-                className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert w-16 h-16"
-                src="/assets/images/folder.png"
-                alt="Next.js Logo"
-                width={180}
-                height={37}
-                priority
-              />
-              <div>
-                <span className="font-semibold">Serie: </span>
-                <span className=" font-light">5049</span>
-              </div>
-              <div>
-                <div className="flex items-center space-x-2">
-                  <Icons.QuestionMarkCircleIcon className="w-6 h-6 text-blue-500" />
-                  <span className=" font-light text-sm ">5049 questions</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Icons.TrophyIcon className="w-6 h-6 text-green-500" />
-                  <span className=" font-light text-sm">
-                    best score: 2000 points
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       <div className="mb-32 w-full grid text-center lg:mb-0 lg:grid-cols-2 lg:text-left">
         <Link
           href="/questions"
@@ -188,7 +123,6 @@ export default function Home() {
     </main>
   );
 }
-
 
 Home.getLayout = function getLayout(page) {
   // Retourner la page sans utiliser le layout RootLayout
