@@ -82,6 +82,7 @@ function AddSerie(props) {
                   <span class="visually-hidden">Loading...</span>
                 </div>
               </button>
+              
             </div>
           )}
         </div>
