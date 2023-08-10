@@ -84,7 +84,9 @@ function QuestionsPage() {
   return (
     <div className="flex h-auto m-2 lg:m-4 lg:mx-10 flex-col">
       <div className="flex items-center justify-end m-2">
-        <span className="font-bold">{serie?.questions?.length? serie?.questions?.length : '0'} / 40 questions</span>
+        <span className="font-bold">
+          {selectLists?.length ? selectLists?.length : "0"} / 40 questions
+        </span>
       </div>
 
       {/* <div className="w-full flex items-center">
@@ -123,7 +125,7 @@ function QuestionsPage() {
           <div className="sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
               <div className="overflow-x-auto">
-                 {/* <table className="min-w-full text-left text-sm font-light">
+                {/* <table className="min-w-full text-left text-sm font-light">
                   <thead className="border-b font-medium bg-gray-50 dark:border-neutral-500">
                     <tr>
                       <th scope="col" className="px-6 py-4">
@@ -161,7 +163,9 @@ function QuestionsPage() {
                   </tbody>
     
                 </table> */}
-                <span className="text-black text-xl mt-10">list des questions de la disciplne</span>
+                <span className="text-black text-xl mt-10">
+                  list des questions de la disciplne
+                </span>
                 <table className="min-w-full text-left text-sm font-light ">
                   <thead className="border-b font-medium bg-gray-50 dark:border-neutral-500">
                     <tr>
