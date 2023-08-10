@@ -64,10 +64,10 @@ function AddQuestion() {
       case "B2":
        point = 20;
         break;
-      case "A1":
+      case "C1":
         point = 25;
         break;
-      case "A2":
+      case "C2":
         point = 30;
         break;
 
