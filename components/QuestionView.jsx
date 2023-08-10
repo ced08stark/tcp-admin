@@ -44,9 +44,7 @@ function QuestionView() {
           />
         </div>
         <div>
-          <audio className="bg-red-400 w-full p-4">
-            <source src="https://assets.coderrocketfuel.com/pomodoro-times-up.mp3"></source>
-          </audio>
+          
           <span className="font-bold">Consigne : </span>
           <span>{currentQuestion?.consigne}</span>
         </div>
@@ -67,7 +65,7 @@ function QuestionView() {
           {currentQuestion?.suggestions?.map((item, index) => (
             <div className="flex items-center" key={index}>
               <span
-                className={`p-3 text-white font-bold ${
+                className={` p-3 text-sm text-white font-bold ${
                   !item?.isCorrect ? `bg-red-500` : `bg-green-500`
                 } `}
               >

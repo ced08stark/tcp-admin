@@ -16,20 +16,50 @@ import {
 } from "../../../featured/questionSlice";
 import QuestionView from "../../../components/QuestionView";
 import QuestionsRowSelect from "../../../components/QuestionsRowSelect";
+import { selectSerie } from "../../../featured/serieSlice";
 
 
+let serieTable = []
 function QuestionsPage() {
   const router = useRouter();
   const token = GetCookies("token");
   const [isLoading, setIsLoading] = useState(false);
   const [questions, setQuestions] = useState([]);
-  const dispatch = useDispatch();
+
   const currentQuestion = useSelector(selectQuestion);
   const selectLists = useSelector(selectQuestionsSelect);
-  
+  const serie = useSelector(selectSerie);
+
+  function uniqueArray(array1, array2) {
+    const uniqueArray = [...new Set([...array1, ...array2])];
+    return uniqueArray;
+  }
+
+
+
+  const Update = async () => {
+    const data = await instance
+      .patch(
+        `/api/serie/series/${serie._id}`,
+        {
+          libelle: serie.libelle,
+          questions: selectLists,
+        },
+        {
+          headers: {
+            Authorization: `basic ${token}`,
+          },
+        }
+      )
+      .catch((err) => console.log(err.message));
+      console.log(data);
+        if(data){
+          alert('serie update success')
+          router.push('/dashboard')
+        }
+  };
 
   const getQuestion = async() =>{
-
     const data = await instance
         .get(
           "/api/question/questions",
@@ -43,16 +73,18 @@ function QuestionsPage() {
         console.log(data)
       if(data){
         setQuestions(data?.data)
+        
       }
 
   }
+
   useEffect(()=>{
     getQuestion()
   }, [] )
   return (
     <div className="flex h-auto m-2 lg:m-4 lg:mx-10 flex-col">
       <div className="flex items-center justify-end m-2">
-        <span className="font-bold">{selectLists?.length} / 40 questions</span>
+        <span className="font-bold">{serie?.questions?.length? serie?.questions?.length : '0'} / 40 questions</span>
       </div>
 
       {/* <div className="w-full flex items-center">
@@ -82,7 +114,7 @@ function QuestionsPage() {
         </table>
         <div className="w-[200px]"></div>
       </div> */}
-      <div className="flex h-screen ">
+      <div className="flex ">
         <div
           className={`flex flex-col overflow-x-auto  lg:overflow-y-auto ${
             currentQuestion ? `lg:w-[70%]` : `lg:w-full`
@@ -91,7 +123,46 @@ function QuestionsPage() {
           <div className="sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
               <div className="overflow-x-auto">
-                <table className="min-w-full text-left text-sm font-light">
+                 {/* <table className="min-w-full text-left text-sm font-light">
+                  <thead className="border-b font-medium bg-gray-50 dark:border-neutral-500">
+                    <tr>
+                      <th scope="col" className="px-6 py-4">
+                        #
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        consigne
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        categorie
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        discipline
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        duree
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        points
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        select
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {serie?.questions?.map((item, index) => (
+                      <QuestionsRowSelect
+                        setQuestions={setQuestions}
+                        item={item}
+                        key={index}
+                        id={index + 1}
+                      />
+                    ))}
+                  </tbody>
+    
+                </table> */}
+                <span className="text-black text-xl mt-10">list des questions de la disciplne</span>
+                <table className="min-w-full text-left text-sm font-light ">
                   <thead className="border-b font-medium bg-gray-50 dark:border-neutral-500">
                     <tr>
                       <th scope="col" className="px-6 py-4">
@@ -123,11 +194,41 @@ function QuestionsPage() {
                         setQuestions={setQuestions}
                         item={item}
                         key={index}
-                        id={index+1}
+                        id={index + 1}
                       />
                     ))}
                   </tbody>
                 </table>
+                <div className="h-[80px] flex items-center justify-center w-full">
+                  {!isLoading ? (
+                    <button
+                      onClick={() => Update()}
+                      className="bg-green-500 inline-block text-white text-sm font-medium px-10 py-2 cursor-pointer border-0 shadow-sm shadow-black/40  relative 
+        before:absolute before:w-full before:h-full before:inset-0  
+        before:bg-white/20 before:scale-0 hover:before:scale-100 before:transition-all 
+        before:rounded-full hover:before:rounded-none rounded-md"
+                    >
+                      update serie
+                    </button>
+                  ) : (
+                    <button
+                      disabled
+                      className="bg-green-500 flex items-center space-x-2 text-white text-sm font-medium px-10 py-2 cursor-pointer border-0 shadow-sm shadow-black/40  relative 
+        before:absolute before:w-full before:h-full before:inset-0  
+        before:bg-white/20 before:scale-0 hover:before:scale-100 before:transition-all 
+        before:rounded-full hover:before:rounded-none rounded-md"
+                    >
+                      <span>update serie</span>
+
+                      <div
+                        class="spinner-border spinner-border-sm text-white"
+                        role="status"
+                      >
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -135,20 +236,16 @@ function QuestionsPage() {
         {currentQuestion && (
           <div className="hidden lg:flex flex-1 space-y-2 flex-col bg-white p-3  h-full">
             <div className="w-full h-[100px] m-3 justify-center flex">
-              
-                <Image
-                  className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
-                  src={`${baseUrlImg}${currentQuestion?.libelle}`}
-                  alt="Next.js Logo"
-                  width={180}
-                  height={37}
-                  priority
-                />
-             
-              
+              <Image
+                className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+                src={`${baseUrlImg}${currentQuestion?.libelle}`}
+                alt="Next.js Logo"
+                width={180}
+                height={37}
+                priority
+              />
             </div>
             <div>
-              
               <span className="font-bold">Consigne : </span>
               <span>{currentQuestion?.consigne}</span>
             </div>

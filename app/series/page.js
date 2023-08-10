@@ -1,11 +1,19 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { selectSerie } from "../../featured/serieSlice";
 
-export default function Home() {
+export default function Serie() {
+  const serie = useSelector(selectSerie);
   //const router = useRouter()
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between pt-12 p-4 lg:p-12">
-      <div className="mb-32 w-full grid text-center lg:mb-0 lg:grid-cols-2 lg:text-left">
+    <main className="flex space-y-8 flex-col items-center justify-between pt-12 p-4  lg:p-12">
+      <div className=" w-full flex space-x-4 items-center justify-center">
+        <h1 className="text-xl font-bold">serie:</h1>
+        <span className="font-bold text-3xl text-gray-900">{serie?.libelle}</span>
+      </div>  
+      <div className="  w-full grid text-center lg:mb-0 lg:grid-cols-2 lg:text-left">
         <Link
           href="/series/question"
           className="group  overflow-hidden relative hover:bg-white rounded-lg border border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
@@ -13,7 +21,6 @@ export default function Home() {
           <div className="z-20">
             <h2 className={`mb-3 text-2xl font-semibold`}>
               Comprehension ecrite{" "}
-              
             </h2>
             <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
               Find in-depth information about Next.js features and API.
@@ -39,7 +46,6 @@ export default function Home() {
           <div className="z-20">
             <h2 className={`mb-3 text-2xl font-semibold`}>
               Comprehension orale{" "}
-              
             </h2>
             <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
               Learn about Next.js in an interactive course with&nbsp;quizzes!
@@ -66,7 +72,6 @@ export default function Home() {
           <div className="z-20">
             <h2 className={`mb-3 text-2xl font-semibold`}>
               Expression ecrite{" "}
-             
             </h2>
             <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
               Explore the Next.js 13 playground.
@@ -91,10 +96,7 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <div className="z-20">
-            <h2 className={`mb-3 text-2xl font-semibold`}>
-              Expression orale{" "}
-              
-            </h2>
+            <h2 className={`mb-3 text-2xl font-semibold`}>Expression orale </h2>
             <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
               Instantly deploy your Next.js site to a shareable URL with Vercel.
             </p>
@@ -115,8 +117,3 @@ export default function Home() {
     </main>
   );
 }
-
-Home.getLayout = function getLayout(page) {
-  // Retourner la page sans utiliser le layout RootLayout
-  return page;
-};
