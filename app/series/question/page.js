@@ -38,6 +38,7 @@ function QuestionsPage() {
 
 
   const Update = async () => {
+    setIsLoading(true)
     const data = await instance
       .patch(
         `/api/serie/series/${serie._id}`,
@@ -52,7 +53,7 @@ function QuestionsPage() {
         }
       )
       .catch((err) => console.log(err.message));
-      console.log(data);
+      setIsLoading(false)
         if(data){
           alert('serie update success')
           router.push('/dashboard')
