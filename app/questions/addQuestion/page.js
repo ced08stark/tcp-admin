@@ -173,7 +173,7 @@ function AddQuestion() {
       .catch((err) => console.log(err.message));
     setIsLoading(false);
     if (data) {
-      alert("serie update success");
+      alert("create question success");
       router.push("/dashboard");
     }
     
@@ -257,7 +257,7 @@ function AddQuestion() {
     setIsLoading(false);
     
     if (data) {
-      alert('create question success')
+     
       let newTab = []
       questions ? newTab = questions : newTab = []
       newTab.push(data?.data)
@@ -265,7 +265,7 @@ function AddQuestion() {
       Update(newTab)
     } else {
       console.log(formData)
-      alert("echec d'ajout");
+      alert("echec de creation de la question");
     }
   };
 
