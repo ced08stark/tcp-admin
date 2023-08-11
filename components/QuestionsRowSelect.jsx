@@ -35,7 +35,7 @@ function QuestionsRowSelect({item, id}) {
         
     }
     //console.log(question)
-    console.log(selectList)
+    //console.log(selectList)
   }
 
   useEffect(()=>{

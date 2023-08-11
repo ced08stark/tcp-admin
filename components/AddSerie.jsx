@@ -15,6 +15,21 @@ function AddSerie(props) {
       lightbox.classList.add("scale-0");
       setSerie({...serie, numero: ""})
     };
+
+    const getSeries = async () => {
+      const data = await instance
+        .get("/api/serie/series", {
+          headers: {
+            Authorization: `basic ${token}`,
+          },
+        })
+        .catch((err) => console.log(err.message));
+      console.log(data);
+      if (data) {
+        props.setSeries(data?.data);
+      }
+    };
+
     const Created = async() =>{
       setIsLoading(true);
       const data = await instance
@@ -33,7 +48,7 @@ function AddSerie(props) {
         .catch((err) => console.log(err.message));
         setIsLoading(false);
         if(data){
-            props.setSeries([...props.series, serie])
+            getSeries()
             close()
         }
         else{

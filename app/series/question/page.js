@@ -21,19 +21,22 @@ import { selectSerie } from "../../../featured/serieSlice";
 
 let serieTable = []
 function QuestionsPage() {
+  
   const router = useRouter();
   const token = GetCookies("token");
   const [isLoading, setIsLoading] = useState(false);
   const [questions, setQuestions] = useState([]);
 
+
   const currentQuestion = useSelector(selectQuestion);
   const selectLists = useSelector(selectQuestionsSelect);
   const serie = useSelector(selectSerie);
-
-  function uniqueArray(array1, array2) {
-    const uniqueArray = [...new Set([...array1, ...array2])];
-    return uniqueArray;
+  const [series, setSeries] = useState([]);
+  const Add = async() =>{
+      let modal = document.querySelector("#lightbox");
+      modal.classList.remove("scale-0");
   }
+
 
 
 
@@ -194,7 +197,7 @@ function QuestionsPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {questions?.map((item, index) => (
+                    {serie?.questions?.map((item, index) => (
                       <QuestionsRowSelect
                         setQuestions={setQuestions}
                         item={item}
@@ -301,6 +304,7 @@ function QuestionsPage() {
           </div>
         )}
       </div>
+      
       <QuestionView />
     </div>
   );

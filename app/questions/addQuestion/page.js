@@ -4,6 +4,15 @@ import { useRouter } from "next/navigation";
 import AddSerie from "../../../components/AddSerie";
 import GetCookies from "../../../hooks/getCookies";
 import { instance } from "../../../hooks/Axios";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setQuestion,
+  selectQuestion,
+  selectQuestionsSelect,
+} from "../../../featured/questionSlice";
+import QuestionView from "../../../components/QuestionView";
+import QuestionsRowSelect from "../../../components/QuestionsRowSelect";
+import { selectSerie } from "../../../featured/serieSlice";
 
 
 function AddQuestion() {
@@ -11,15 +20,42 @@ function AddQuestion() {
   const router = useRouter();
   const token = GetCookies("token");
   const [isLoading, setIsLoading] = useState(false);
+  const [suggestion1, setSuggestion1] = useState({
+    text: null,
+    isCorrect: false,
+  });
+  const [suggestion2, setSuggestion2] = useState({
+    text: null,
+    isCorrect: false,
+  });
+  const [suggestion3, setSuggestion3] = useState({
+    text: null,
+    isCorrect: false,
+  });
+  const [suggestion4, setSuggestion4] = useState({
+    text: null,
+    isCorrect: false,
+  });
   const [suggestion, setSuggestion] = useState({
     suggestion1: { text: null, isCorrect: false },
     suggestion2: { text: null, isCorrect: false },
     suggestion3: { text: null, isCorrect: false },
-    suggestion4: { text: null, isCorrect: true },
+    suggestion4: { text: null, isCorrect: false },
   });
   let point = null
   let duree = null;
+  
+  const [category, setCategory] = useState({
+      libelle: null,
+      point: null,
+      duree: null
+  });
+  const [discipline, setDiscipline] = useState({
+    libelle: null,
+    duree: null,
+  });
   const [question, setQuestion] = useState({
+    numero: null,
     consigne: null,
     libelle: null,
     discipline: {
@@ -33,89 +69,177 @@ function AddQuestion() {
     suggestions: [],
     duree: 3,
   });
+  const [exist, setExist] = useState(false);
+  const [questions, setQuestions] = useState([]);
+  const currentQuestion = useSelector(selectQuestion);
+  const selectLists = useSelector(selectQuestionsSelect);
+  const [currentSerie, setCurrentSerie] = useState({
+    _id: null,
+    libelle: null,
+    questions: null
+  })
+  const [series, setSeries] = useState([]);
+  const Add = async () => {
+    let modal = document.querySelector("#lightbox");
+    modal.classList.remove("scale-0");
+  };
+
+  const getSeries = async () => {
+    const data = await instance
+      .get("/api/serie/series", {
+        headers: {
+          Authorization: `basic ${token}`,
+        },
+      })
+      .catch((err) => console.log(err.message));
+    console.log(data);
+    if (data) {
+      setSeries(data?.data);
+    }
+  };
+  const handleSelectSerie = (datas)=>{
+    setExist(false);
+        if(datas != null){
+            for (var data of datas) {
+              if (question?.numero == data?.numero) {
+                setExist(true);
+              }
+            }
+        }
+        
+  }
+  const handleChangeNumber = (numero)=>{
+    setExist(false);
+     if (numero > 0 && numero < 40) {
+       setDiscipline({ ...discipline, libelle: "Comprehension Orale" });
+     } else if (numero > 39 && numero < 80) {
+       setDiscipline({ ...discipline, libelle: "Comprehension Ecrite" });
+     } else if (numero > 79 && numero < 90) {
+       setDiscipline({ ...discipline, libelle: "Expression Orale" });
+     } else if (numero > 89 && numero < 100)  {
+       setDiscipline({ ...discipline, libelle: "Expression Ecrite" });
+     } else {
+       setDiscipline({ ...discipline, libelle: null });
+     }
+
+    if ((numero > 0 && numero < 5) || (numero > 39 && numero < 45)) {
+      setCategory({ ...category, libelle: "A1", duree: 15, point: 3 });
+    }
+    else if ((numero > 4 && numero < 11) || (numero > 44 && numero < 51)) {
+      setCategory({ ...category, libelle: "A2", duree: 30, point: 9 });
+    } else if ((numero > 10 && numero < 20) || (numero > 50 && numero < 60)) {
+      setCategory({ ...category, libelle: "B1", duree: 45, point: 15 });
+    } else if ((numero > 19 && numero < 26) || (numero > 59 && numero < 66)) {
+      setCategory({ ...category, libelle: "B2", duree: 90, point: 21 });
+    } else if ((numero > 25 && numero < 30) || (numero > 65 && numero < 70)) {
+      setCategory({ ...category, libelle: "B2", duree: 120, point: 21 });
+    } else if ((numero > 29 && numero < 36) || (numero > 69 && numero < 76)) {
+      setCategory({ ...category, libelle: "C1", duree: 150, point: 26 });
+    } else if ((numero > 35 && numero < 40) || (numero > 75 && numero < 80)) {
+      setCategory({ ...category, libelle: "C2", duree: 180, point: 33 });
+    } else {
+      setCategory({ ...category, libelle: null });
+    }
+    setQuestion({...question, numero: numero})
+   
+
+    if(questions != null){
+        for (var data of questions) {
+          if (numero == data?.numero) {
+            setExist(true);
+          }
+        }
+    }
+      
+    
+  }
+
+  const Update = async (tab) => {
+    console.log(currentSerie)
+    setIsLoading(true);
+    const data = await instance
+      .patch(
+        `/api/serie/series/${currentSerie._id}`,
+        {
+          libelle: currentSerie?.libelle,
+          questions: tab,
+        },
+        {
+          headers: {
+            Authorization: `basic ${token}`,
+          },
+        }
+      )
+      .catch((err) => console.log(err.message));
+    setIsLoading(false);
+    if (data) {
+      alert("serie update success");
+      router.push("/dashboard");
+    }
+    
+  };
+
+  const selectResponse = (id) =>{
+      setSuggestion1({
+        ...suggestion1,
+        isCorrect: false,
+      });
+      setSuggestion2({
+        ...suggestion2,
+        isCorrect: false,
+      });
+      setSuggestion3({
+        ...suggestion3,
+        isCorrect: false,
+      });
+      setSuggestion4({
+        ...suggestion4,
+        isCorrect: false,
+      });
+      if(id == 1){
+          setSuggestion1({
+            ...suggestion1,
+             isCorrect: true 
+          });
+      }
+      else if(id == 2){
+          setSuggestion2({
+            ...suggestion2,
+            isCorrect: true
+          });
+      }
+      else if(id == 3){
+          setSuggestion3({
+            ...suggestion3,
+            isCorrect: true
+          });
+      }
+      else{
+        setSuggestion4({
+          ...suggestion4,
+          isCorrect: true
+        });
+      }
+  }
+
   const Created = async () => {
-    switch (question?.discipline.libelle) {
-      case "Comprehension Ecrite":
-        duree = 40
-        break;
-      case "Comprehension Orale":
-        duree = 15;
-        break;
-      case "Expression Orale":
-        duree = 30;
-        break;
-      case "Expression Ecrite":
-        duree = 30;
-        break;
-
-      default:
-        break;
-    }
-    switch (question?.categorie.libelle) {
-      case "A1":
-        point = 5;
-        break;
-      case "A2":
-        point = 10;
-        break;
-      case "B1":
-        point = 15;
-        break;
-      case "B2":
-       point = 20;
-        break;
-      case "C1":
-        point = 25;
-        break;
-      case "C2":
-        point = 30;
-        break;
-
-      default:
-        break;
-    }
-    let s = [
-      suggestion.suggestion1,
-      suggestion.suggestion2,
-      suggestion.suggestion3,
-      suggestion.suggestion4,
-    ];
+    
     const formData = new FormData();
+    formData.append("numero", question?.numero);
     formData.append("consigne", question?.consigne);
     formData.append("files", question?.libelle);
-    // for (var i = 0; i < s.length; i++) {
-    //   formData.append("suggestions", {
-    //     text: s[i].text,
-    //     isCorrect: s[i].isCorrect,
-    //   });
-    // }
-    formData.append("suggestions[0][text]", s[0].text);
-    formData.append("suggestions[0][isCorrect]", s[0].isCorrect);
-    formData.append("suggestions[1][text]", s[1].text);
-    formData.append("suggestions[1][isCorrect]", s[1].isCorrect);
-    formData.append("suggestions[2][text]", s[2].text);
-    formData.append("suggestions[2][isCorrect]", s[2].isCorrect);
-    formData.append("suggestions[3][text]", s[3].text);
-    formData.append("suggestions[3][isCorrect]", s[3].isCorrect);
-    formData.append("categorie[libelle]", question?.categorie?.libelle);
-    formData.append("categorie[point]", point);
-    formData.append("discipline[libelle]", question?.discipline?.libelle);
-    formData.append("discipline[duree]", duree);
-
-    //formData.append('suggestions', JSON.stringify(s));
-    //formData.append("discipline", question?.discipline);
-    // for (var key in question?.discipline) {
-    //   if (question?.discipline.hasOwnProperty(key)) {
-    //     formData.append(key, question?.discipline[key]);
-    //   }
-    // }
-    // for (var key in question?.categorie) {
-    //   if (question?.categorie.hasOwnProperty(key)) {
-    //     formData.append(key, question?.categorie[key]);
-    //   }
-    // }
-
-    //formData.append("categorie", question?.categorie);
+    formData.append("suggestions[0][text]", suggestion1.text);
+    formData.append("suggestions[0][isCorrect]", suggestion1.isCorrect);
+    formData.append("suggestions[1][text]", suggestion2.text);
+    formData.append("suggestions[1][isCorrect]", suggestion2.isCorrect);
+    formData.append("suggestions[2][text]", suggestion3.text);
+    formData.append("suggestions[2][isCorrect]", suggestion3.isCorrect);
+    formData.append("suggestions[3][text]", suggestion4.text);
+    formData.append("suggestions[3][isCorrect]", suggestion4.isCorrect);
+    formData.append("categorie[libelle]", category?.libelle);
+    formData.append("categorie[point]", category?.point);
+    formData.append("discipline[libelle]", discipline?.libelle);
+    formData.append("discipline[duree]", category?.duree);
     formData.append("duree", question?.duree);
     setIsLoading(true);
     const data = await instance
@@ -131,15 +255,23 @@ function AddQuestion() {
       )
       .catch((err) => console.log(err));
     setIsLoading(false);
+    
     if (data) {
+      alert('create question success')
+      let newTab = []
+      questions ? newTab = questions : newTab = []
+      newTab.push(data?.data)
       
-      alert('add question success')
-      router.back()
+      Update(newTab)
     } else {
       console.log(formData)
-      alert("echec");
+      alert("echec d'ajout");
     }
   };
+
+  useEffect(() => {
+    getSeries();
+  }, []);
 
   
 
@@ -155,8 +287,96 @@ function AddQuestion() {
           </legend>
           <div>
             <fieldset className="border border-solid space-y-2 border-gray-600 p-3">
-              <legend className="text-xs  font-bold">consigne</legend>
+              <legend className="text-xs  font-bold">identification</legend>
 
+              <div className="relative mb-3">
+                <input
+                  type="number"
+                  min={1}
+                  onChange={(e) => {
+                    handleChangeNumber(parseInt(e.target.value));
+                  }}
+                  className="peer p-2 block min-h-[auto] bg-white w-1/2 lg:w-1/3 text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                  placeholder="entrer le numero de la question"
+                />
+              </div>
+              {question?.numero ? (
+                category?.libelle && !exist ? (
+                  <>
+                    <div className="flex space-x-4">
+                      <input
+                        disabled
+                        type="text"
+                        value={discipline?.libelle}
+                        className="peer p-2 block min-h-[auto] bg-white w-full text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                        placeholder="entrer le numero de la question"
+                      />
+                      <input
+                        disabled
+                        type="text"
+                        value={category?.libelle}
+                        className="peer p-2 block min-h-[auto] bg-white w-full text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                        placeholder="entrer le numero de la question"
+                      />
+                    </div>
+                    <div className="flex space-x-4">
+                      <input
+                        disabled
+                        type="text"
+                        value={`${category?.duree} secondes`}
+                        className="peer p-2 block min-h-[auto] bg-white w-full text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                        placeholder="entrer le numero de la question"
+                      />
+                      <input
+                        disabled
+                        type="text"
+                        value={`${category?.point} points`}
+                        className="peer p-2 block min-h-[auto] bg-white w-full text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                        placeholder="entrer le numero de la question"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <span className="text-red-500">
+                    ce numero n{`'`}est pas valide pour la serie
+                  </span>
+                )
+              ) : (
+                <span></span>
+              )}
+            </fieldset>
+          </div>
+          <div>
+            <fieldset className="border border-solid space-y-2 border-gray-600 p-3">
+              <legend className="text-xs  font-bold">serie</legend>
+              <div className="flex items-center space-x-2">
+                <select
+                  onChange={(e) => {
+                    handleSelectSerie(JSON.parse(e.target.value)?.questions);
+                    setQuestions(JSON.parse(e.target.value)?.questions);
+                    setCurrentSerie(JSON.parse(e.target.value));
+                  }}
+                  id="hs-select-label"
+                  className="py-2 px-4 pr-9 block flex-1 bg-white  rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                >
+                  <option selected>Select serie</option>
+                  {series?.map((item, index) => (
+                    <option key={index} value={JSON.stringify(item)}>
+                      {item?.libelle}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  onClick={() => Add()}
+                  className="bg-green-500 inline-block text-white text-sm font-medium px-10 py-2 cursor-pointer border-0 shadow-sm shadow-black/40  relative 
+        before:absolute before:w-full before:h-full before:inset-0  
+        before:bg-white/20 before:scale-0 hover:before:scale-100 before:transition-all 
+        before:rounded-full hover:before:rounded-none rounded-md"
+                >
+                  nouvelle serie
+                </button>
+              </div>
+              <legend className="text-xs  font-bold">consigne</legend>
               <div className="relative mb-3">
                 <input
                   type="text"
@@ -165,10 +385,10 @@ function AddQuestion() {
                   }}
                   className="peer p-2 block min-h-[auto] bg-white w-full rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
                   placeholder="entrer la consigne"
-                  
                 />
               </div>
-              <div className="flex space-x-4">
+
+              {/* <div className="flex space-x-4">
                 <select
                   onChange={(e) => {
                     setQuestion({
@@ -211,13 +431,8 @@ function AddQuestion() {
                   <option value="Expression Ecrite">Expression Ecrite</option>
                   <option value="Expression Orale">Expression Orale</option>
                 </select>
-              </div>
-            </fieldset>
-          </div>
-
-          <div>
-            <fieldset className="border border-solid space-y-2 border-gray-600 p-3">
-              <legend className="text-xs  font-bold">Upload file</legend>
+              </div> */}
+              <legend className="text-xs  font-bold">upload file</legend>
               <div className="col-span-full">
                 <label
                   htmlFor="cover-photo"
@@ -272,62 +487,98 @@ function AddQuestion() {
               <legend className="text-xs font-bold">suggestions</legend>
 
               <div className="flex space-x-4">
-                <div className="relative mb-3 w-full">
+                <div className="relative  w-full mb-3">
                   <textarea
                     onChange={(e) =>
-                      setSuggestion({
-                        ...suggestion,
-                        suggestion1: { text: e.target.value, isCorrect: false },
-                      })
-                    }
-                    className="bg-white peer block min-h-[auto] w-full rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none "
-                    rows="2"
-                    placeholder="reponse 1"
-                  ></textarea>
-                </div>
-                <div className="relative w-full mb-3">
-                  <textarea
-                    onChange={(e) =>
-                      setSuggestion({
-                        ...suggestion,
-                        suggestion2: { text: e.target.value, isCorrect: false },
+                      setSuggestion1({
+                        ...suggestion1,
+                        text: e.target.value,
                       })
                     }
                     className="bg-white peer block min-h-[auto] w-full rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none "
                     id="exampleFormControlTextarea1"
                     rows="2"
-                    placeholder="Reponse 2"
+                    placeholder="reponse 1 ici"
                   ></textarea>
+                  <input
+                    onClick={() => selectResponse(1)}
+                    className="absolute bottom-0 right-0 "
+                    type="radio"
+                    name="suggestion"
+                    //value={true}
+                    id="reponse1"
+                  />
+                </div>
+                <div className="relative  w-full mb-3">
+                  <textarea
+                    onChange={(e) =>
+                      setSuggestion2({
+                        ...suggestion2,
+                        text: e.target.value,
+                      })
+                    }
+                    className="bg-white peer block min-h-[auto] w-full rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none "
+                    id="exampleFormControlTextarea1"
+                    rows="2"
+                    placeholder="reponse 2 ici"
+                  ></textarea>
+                  <input
+                    onClick={() => selectResponse(2)}
+                    className="absolute bottom-0 right-0 "
+                    type="radio"
+                    name="suggestion"
+                    //value={true}
+                    //checked={true}
+                    id="reponse2"
+                  />
                 </div>
               </div>
               <div className="flex space-x-4">
-                <div className="relative mb-3 w-full">
+                <div className="relative  w-full mb-3">
                   <textarea
                     onChange={(e) =>
-                      setSuggestion({
-                        ...suggestion,
-                        suggestion3: { text: e.target.value, isCorrect: false },
+                      setSuggestion3({
+                        ...suggestion3,
+                        text: e.target.value,
                       })
                     }
                     className="bg-white peer block min-h-[auto] w-full rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none "
                     id="exampleFormControlTextarea1"
                     rows="2"
-                    placeholder="reponse 3"
+                    placeholder="reponse 3 ici"
                   ></textarea>
+                  <input
+                    onClick={() => selectResponse(3)}
+                    className="absolute bottom-0 right-0 "
+                    type="radio"
+                    name="suggestion"
+                    //value={true}
+                    //checked={true}
+                    id="reponse3"
+                  />
                 </div>
-                <div className="relative w-full mb-3">
+                <div className="relative  w-full mb-3">
                   <textarea
                     onChange={(e) =>
-                      setSuggestion({
-                        ...suggestion,
-                        suggestion4: { text: e.target.value, isCorrect: true },
+                      setSuggestion4({
+                        ...suggestion4,
+                        text: e.target.value,
                       })
                     }
                     className="bg-white peer block min-h-[auto] w-full rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none "
                     id="exampleFormControlTextarea1"
                     rows="2"
-                    placeholder="reponse juste ici"
+                    placeholder="reponse 4 ici"
                   ></textarea>
+                  <input
+                    onClick={() => selectResponse(4)}
+                    className="absolute bottom-0 right-0 "
+                    type="radio"
+                    name="suggestion"
+                    //value={true}
+                    //checked={true}
+                    id="reponse4"
+                  />
                 </div>
               </div>
             </fieldset>
@@ -364,7 +615,7 @@ function AddQuestion() {
           </div>
         </fieldset>
       </div>
-      
+      {<AddSerie setSeries={setSeries} series={series} />}
     </div>
   );
 }
