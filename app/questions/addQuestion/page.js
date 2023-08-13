@@ -13,6 +13,8 @@ import {
 import QuestionView from "../../../components/QuestionView";
 import QuestionsRowSelect from "../../../components/QuestionsRowSelect";
 import { selectSerie } from "../../../featured/serieSlice";
+import { OurUploadButton } from "../../../components/UploadButton";
+import { UploadButton } from "@uploadthing/react";
 
 
 function AddQuestion() {
@@ -42,7 +44,7 @@ function AddQuestion() {
     suggestion3: { text: null, isCorrect: false },
     suggestion4: { text: null, isCorrect: false },
   });
-  let point = null
+  let point = null;
   let duree = null;
   
   const [category, setCategory] = useState({
@@ -156,6 +158,7 @@ function AddQuestion() {
 
   const Update = async (tab) => {
     console.log(currentSerie)
+    console.log(tab)
     setIsLoading(true);
     const data = await instance
       .patch(
@@ -175,6 +178,9 @@ function AddQuestion() {
     if (data) {
       alert("create question success");
       router.push("/dashboard");
+    }
+    else{
+      alert('echec')
     }
     
   };
@@ -223,11 +229,12 @@ function AddQuestion() {
   }
 
   const Created = async () => {
-    
+    //console.log(currentQuestion)
     const formData = new FormData();
     formData.append("numero", question?.numero);
     formData.append("consigne", question?.consigne);
-    formData.append("files", question?.libelle);
+    //formData.append("files", question?.libelle);
+    formData.append("libelle", currentQuestion?.libelle);
     formData.append("suggestions[0][text]", suggestion1.text);
     formData.append("suggestions[0][isCorrect]", suggestion1.isCorrect);
     formData.append("suggestions[1][text]", suggestion2.text);
@@ -241,15 +248,33 @@ function AddQuestion() {
     formData.append("discipline[libelle]", discipline?.libelle);
     formData.append("discipline[duree]", category?.duree);
     formData.append("duree", question?.duree);
+    console.log(image)
     setIsLoading(true);
     const data = await instance
       .post(
         "/api/question/created",
-        formData,
+        //formData
+        {
+          numero: question?.numero,
+          consigne: question?.consigne,
+          libelle: image,
+          discipline: {
+            libelle: discipline?.libelle,
+            duree: category?.duree,
+          },
+          categorie: {
+            libelle: category?.libelle,
+            point: category?.point,
+          },
+          suggestions: [
+            suggestion1, suggestion2, suggestion3, suggestion4
+          ],
+          duree: question?.duree,
+        },
         {
           headers: {
             Authorization: `basic ${token}`,
-            "Content-type": "multipart/form-data",
+            /*"Content-type": "multipart/form-data",*/
           },
         }
       )
@@ -269,7 +294,8 @@ function AddQuestion() {
     }
   };
 
-  useEffect(() => {
+  const [image, setImage] = useState('')
+ useEffect(() => {
     getSeries();
   }, []);
 
@@ -458,7 +484,22 @@ function AddQuestion() {
                         className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                       >
                         <span>Upload a file</span>
-                        <input
+                        <UploadButton
+                          endpoint="imageUploader"
+                          onClientUploadComplete={(res) => {
+                            if (res) {
+                              
+                              setImage(res[0].fileUrl);
+                              alert("Upload Completed");
+                            }
+                            // Do something with the response
+                          }}
+                          onUploadError={(error) => {
+                            // Do something with the error.
+                            alert(`ERROR! ${error.message}`);
+                          }}
+                        />
+                        {/* <input
                           id="file-upload"
                           name="file-upload"
                           type="file"
@@ -470,13 +511,13 @@ function AddQuestion() {
                               libelle: fileRef.current.files[0],
                             })
                           }
-                        />
+                        /> */}
                       </label>
-                      <p className="pl-1">or drag and drop</p>
+                      {/* <p className="pl-1">or drag and drop</p> */}
                     </div>
-                    <p className="text-xs leading-5 text-gray-600">
+                    {/* <p className="text-xs leading-5 text-gray-600">
                       PNG, JPG, GIF up to 10MB Or mp4 file
-                    </p>
+                    </p> */}
                   </div>
                 </div>
               </div>
@@ -584,6 +625,7 @@ function AddQuestion() {
             </fieldset>
           </div>
           <div className="h-[80px] flex items-center justify-center w-full">
+            
             {!isLoading ? (
               <button
                 onClick={() => Created()}
@@ -612,6 +654,7 @@ function AddQuestion() {
                 </div>
               </button>
             )}
+            
           </div>
         </fieldset>
       </div>

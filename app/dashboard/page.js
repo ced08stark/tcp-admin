@@ -9,6 +9,7 @@ import AddSerie from "../../components/AddSerie";
 import GetCookies from "../../hooks/getCookies";
 import { instance } from "../../hooks/Axios";
 
+
 export default function Home() {
   const router = useRouter()
   const token = GetCookies("token");

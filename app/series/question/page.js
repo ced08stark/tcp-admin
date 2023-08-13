@@ -87,6 +87,7 @@ function QuestionsPage() {
   }, [] )
   return (
     <div className="flex h-auto m-2 lg:m-4 lg:mx-10 flex-col">
+      
       <div className="flex items-center justify-end m-2">
         <span className="font-bold">
           {selectLists?.length ? selectLists?.length : "0"} / 40 questions
@@ -246,7 +247,7 @@ function QuestionsPage() {
             <div className="w-full h-[100px] m-3 justify-center flex">
               <Image
                 className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
-                src={`${baseUrlImg}${currentQuestion?.libelle}`}
+                src={`${currentQuestion?.libelle}`}
                 alt="Next.js Logo"
                 width={180}
                 height={37}

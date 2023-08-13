@@ -5,6 +5,7 @@ const nextConfig = {
       "tecdn.b-cdn.net",
       "tcp-services-huga.onrender.com",
       "assets.coderrocketfuel.com",
+      "uploadthing.com",
     ],
   },
 };

@@ -64,6 +64,7 @@ function QuestionsRows({item, setQuestions, id}) {
       className="even:bg-gray-100 border-b dark:border-neutral-500 transition duration-300 ease-in-out hover:even:bg-white hover:bg-neutral-100 cursor-pointer"
     >
       <td className="whitespace-nowrap px-6 py-4 font-medium">{id}</td>
+      <td className="whitespace-nowrap px-6 py-4">{item?.numero}</td>
       <td className="whitespace-nowrap px-6 py-4">{item?.consigne}</td>
       <td className="whitespace-nowrap px-6 py-4">
         {item?.categorie?.libelle}

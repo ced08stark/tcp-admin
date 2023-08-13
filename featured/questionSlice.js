@@ -1,7 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  question: null,
+  question: {
+    numero: null,
+    consigne: null,
+    libelle: 'https://uploadthing.com/f/ec7c0678-c83b-4231-b4fb-1196556805fe_im.png',
+    discipline: {
+      libelle: null,
+      duree: null,
+    },
+    categorie: {
+      libelle: null,
+      point: null,
+    },
+    suggestions: [],
+    duree: 3,
+  },
   questionsSelect: [],
 };
 
