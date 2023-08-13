@@ -56,6 +56,7 @@ function QuestionsRowSelect({item, id}) {
       className="even:bg-gray-100 border-b dark:border-neutral-500 transition duration-300 ease-in-out hover:even:bg-white hover:bg-neutral-100 cursor-pointer"
     >
       <td className="whitespace-nowrap px-6 py-4 font-medium">{id}</td>
+      <td className="whitespace-nowrap px-6 py-4">{item?.numero}</td>
       <td className="whitespace-nowrap px-6 py-4">{item?.consigne}</td>
       <td className="whitespace-nowrap px-6 py-4">
         {item?.categorie?.libelle}
@@ -67,6 +68,7 @@ function QuestionsRowSelect({item, id}) {
       <td className="whitespace-nowrap px-6 py-4">
         {item?.categorie?.point} point
       </td>
+      <td className="whitespace-nowrap px-6 py-4">{serie?.libelle}</td>
       <td className="whitespace-nowrap px-6 py-4">
         <div className="mb-[0.125rem] flex items-center justify-center min-h-[1.5rem] pl-[1.5rem] w-full">
           <input

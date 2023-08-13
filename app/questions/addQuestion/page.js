@@ -85,6 +85,7 @@ function AddQuestion() {
     let modal = document.querySelector("#lightbox");
     modal.classList.remove("scale-0");
   };
+  const [check, setCheck] = useState(false)
 
   const getSeries = async () => {
     const data = await instance
@@ -185,7 +186,9 @@ function AddQuestion() {
     
   };
 
+
   const selectResponse = (id) =>{
+      setCheck(true)
       setSuggestion1({
         ...suggestion1,
         isCorrect: false,
@@ -230,6 +233,10 @@ function AddQuestion() {
 
   const Created = async () => {
     //console.log(currentQuestion)
+    if(!check){
+        alert('veuillez selectionner la bonne reponse')
+    }
+    else{
     const formData = new FormData();
     formData.append("numero", question?.numero);
     formData.append("consigne", question?.consigne);
@@ -292,6 +299,7 @@ function AddQuestion() {
       console.log(formData)
       alert("echec de creation de la question");
     }
+  }
   };
 
   const [image, setImage] = useState('')

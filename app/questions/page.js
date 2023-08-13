@@ -27,6 +27,7 @@ function QuestionsPage() {
     name: 'consigne',
     value: ''
   })
+  
    const [suggestion1, setSuggestion1] = useState({
      text: null,
      isCorrect: false,
@@ -125,9 +126,7 @@ function QuestionsPage() {
     setIsLoading(false);
     
     if (data) {
-      let newTab = []
-      questions ? newTab = questions : newTab = []
-      newTab.push(data?.data)
+      getQuestion()
       alert('update question success')
     } else {
       console.log(formData)
@@ -477,7 +476,7 @@ function QuestionsPage() {
                 <textarea
                   onChange={(e) =>
                     setSuggestion2({
-                      ...suggestion3,
+                      ...suggestion2,
                       text: e.target.value,
                       isCorrect: suggestions2[1]?.isCorrect,
                     })

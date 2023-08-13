@@ -17,6 +17,7 @@ import {
 import QuestionView from "../../../components/QuestionView";
 import QuestionsRowSelect from "../../../components/QuestionsRowSelect";
 import { selectSerie } from "../../../featured/serieSlice";
+import * as Icons from "@heroicons/react/24/outline";
 
 
 let serieTable = []
@@ -26,8 +27,10 @@ function QuestionsPage() {
   const token = GetCookies("token");
   const [isLoading, setIsLoading] = useState(false);
   const [questions, setQuestions] = useState([]);
-
-
+   const [filter, setFilter] = useState({
+     name: "consigne",
+     value: "",
+   });
   const currentQuestion = useSelector(selectQuestion);
   const selectLists = useSelector(selectQuestionsSelect);
   const serie = useSelector(selectSerie);
@@ -36,9 +39,6 @@ function QuestionsPage() {
       let modal = document.querySelector("#lightbox");
       modal.classList.remove("scale-0");
   }
-
-
-
 
   const Update = async () => {
     setIsLoading(true)
@@ -87,8 +87,34 @@ function QuestionsPage() {
   }, [] )
   return (
     <div className="flex h-auto m-2 lg:m-4 lg:mx-10 flex-col">
-      
-      <div className="flex items-center justify-end m-2">
+      <div className="flex items-center justify-between m-2">
+        <div className="flex space-x-2 items-center">
+          <div className="relative flex items-center justify-center">
+            <div className="px-2 py-2 rounded-full bg-white cursor-pointer">
+              <Icons.AdjustmentsHorizontalIcon className="w-5 h-5 bottom-1 right-1 text-gray-400" />
+            </div>
+            <select
+              onChange={(e) => setFilter({ ...filter, name: e.target.value })}
+              className="absolute opacity-0 px-10 cursor-pointer"
+            >
+              <option>filter by</option>
+              <option value="consigne">consigne</option>
+              <option value="numero">numero</option>
+              <option value="categorie">categorie</option>
+              <option value="discipline">discipline</option>
+              <option value="point">point</option>
+            </select>
+          </div>
+          <div className="relative">
+            <input
+              type="search"
+              onChange={(e) => setFilter({ ...filter, value: e.target.value })}
+              placeholder={`recherche par ${filter.name}`}
+              className="p-1 text-sm outline-none rounded-lg w-[200px]  md:w-[250px]"
+            />
+            <Icons.MagnifyingGlassIcon className="w-5 h-5 absolute bottom-1 right-1 text-gray-400" />
+          </div>
+        </div>
         <span className="font-bold">
           {selectLists?.length ? selectLists?.length : "0"} / 40 questions
         </span>
@@ -124,7 +150,7 @@ function QuestionsPage() {
       <div className="flex ">
         <div
           className={`flex flex-col overflow-x-auto  lg:overflow-y-auto ${
-            currentQuestion ? `lg:w-[70%]` : `lg:w-full`
+            currentQuestion?.consigne ? `lg:w-[70%]` : `lg:w-full`
           }  bg-white`}
         >
           <div className="sm:-mx-6 lg:-mx-8">
@@ -178,6 +204,9 @@ function QuestionsPage() {
                         #
                       </th>
                       <th scope="col" className="px-6 py-4">
+                        numero
+                      </th>
+                      <th scope="col" className="px-6 py-4">
                         consigne
                       </th>
                       <th scope="col" className="px-6 py-4">
@@ -193,19 +222,54 @@ function QuestionsPage() {
                         points
                       </th>
                       <th scope="col" className="px-6 py-4">
+                        serie
+                      </th>
+                      <th scope="col" className="px-6 py-4">
                         select
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {serie?.questions?.map((item, index) => (
+                    {serie?.questions?.length > 0 ? (
+                      serie?.questions
+                        ?.filter((item) =>
+                          filter.name == "consigne"
+                            ? item?.consigne.includes(filter.value)
+                            : filter.name == "numero"
+                            ? item?.numero.toString().includes(filter.value)
+                            : filter.name == "categorie"
+                            ? item?.categorie?.libelle
+                                .toLowerCase()
+                                .includes(filter.value)
+                            : filter.name == "discipline"
+                            ? item?.discipline?.libelle
+                                .toLowerCase()
+                                .includes(filter.value)
+                            : filter.name == "point"
+                            ? item?.categorie?.point
+                                .toString()
+                                .includes(filter.value)
+                            : item
+                        )
+                        .map((item, index) => (
+                          <QuestionsRowSelect
+                            setQuestions={setQuestions}
+                            item={item}
+                            key={index}
+                            id={index + 1}
+                          />
+                        ))
+                    ) : (
+                      <></>
+                    )}
+                    {/* {serie?.questions?.map((item, index) => (
                       <QuestionsRowSelect
                         setQuestions={setQuestions}
                         item={item}
                         key={index}
                         id={index + 1}
                       />
-                    ))}
+                    ))} */}
                   </tbody>
                 </table>
                 <div className="h-[80px] flex items-center justify-center w-full">
@@ -242,7 +306,7 @@ function QuestionsPage() {
             </div>
           </div>
         </div>
-        {currentQuestion && (
+        {currentQuestion.consigne && (
           <div className="hidden lg:flex flex-1 space-y-2 flex-col bg-white p-3  h-full">
             <div className="w-full h-[100px] m-3 justify-center flex">
               <Image
@@ -305,7 +369,7 @@ function QuestionsPage() {
           </div>
         )}
       </div>
-      
+
       <QuestionView />
     </div>
   );
