@@ -38,14 +38,7 @@ function AddQuestion() {
     text: null,
     isCorrect: false,
   });
-  const [suggestion, setSuggestion] = useState({
-    suggestion1: { text: null, isCorrect: false },
-    suggestion2: { text: null, isCorrect: false },
-    suggestion3: { text: null, isCorrect: false },
-    suggestion4: { text: null, isCorrect: false },
-  });
-  let point = null;
-  let duree = null;
+  
   
   const [category, setCategory] = useState({
       libelle: null,

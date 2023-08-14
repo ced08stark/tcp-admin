@@ -19,7 +19,7 @@ import { UploadButton } from "@uploadthing/react";
 
 
 function QuestionsPage() {
-  const fileRef = useRef(null);
+  //const fileRef = useRef(null);
   const router = useRouter();
   const token = GetCookies("token");
   const [isLoading, setIsLoading] = useState(false);
