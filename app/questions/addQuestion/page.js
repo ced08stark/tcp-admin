@@ -10,12 +10,9 @@ import {
   selectQuestion,
   selectQuestionsSelect,
 } from "../../../featured/questionSlice";
-import QuestionView from "../../../components/QuestionView";
-import QuestionsRowSelect from "../../../components/QuestionsRowSelect";
-import { selectSerie } from "../../../featured/serieSlice";
-import { OurUploadButton } from "../../../components/UploadButton";
+
 import { UploadButton } from "@uploadthing/react";
-import { useDropzone } from "react-dropzone";
+
 
 
 
@@ -23,8 +20,7 @@ import { useDropzone } from "react-dropzone";
 // You need to import our styles for the button to look right. Best to import in the root /layout.tsx but this is fine
 import "@uploadthing/react/styles.css";
 //import { OurFileRouter } from "../../api/uploadthing/core";
-import { Uploader, UploadDropzone } from "../../api/uploadthing";
-import { useUploadThing } from "../../api/useUploadThing";
+
 
 function AddQuestion() {
   const fileRef = useRef(null);
