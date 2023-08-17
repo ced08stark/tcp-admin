@@ -32,24 +32,24 @@ export const useUploadThing = <T extends string>({
 
   const permittedFileInfo = useEndpointMetadata(endpoint);
 
-  const startUpload = useEvent(async (files) => {
-    setUploading(true);
-    try {
-      const res = await DANGEROUS__uploadFiles(files, endpoint);
-      setUploading(false);
-      onClientUploadComplete?.(res);
-      return res;
-    } catch (e) {
-      setUploading(false);
-      onUploadError?.(e as Error);
-      return;
-    }
-  });
-  return {
-    startUpload,
-    isUploading,
-    permittedFileInfo,
-  } as const;
+  // const startUpload = useEvent(async (files) => {
+  //   setUploading(true);
+  //   try {
+  //     const res = await DANGEROUS__uploadFiles(files, endpoint);
+  //     setUploading(false);
+  //     onClientUploadComplete?.(res);
+  //     return res;
+  //   } catch (e) {
+  //     setUploading(false);
+  //     onUploadError?.(e as Error);
+  //     return;
+  //   }
+  // });
+  // return {
+  //   startUpload,
+  //   isUploading,
+  //   permittedFileInfo,
+  // } as const;
 };
 
 export const generateReactHelpers = <TRouter extends FileRouter>() => {
