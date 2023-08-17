@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import AddSerie from "../../../components/AddSerie";
 import GetCookies from "../../../hooks/getCookies";
@@ -15,10 +15,16 @@ import QuestionsRowSelect from "../../../components/QuestionsRowSelect";
 import { selectSerie } from "../../../featured/serieSlice";
 import { OurUploadButton } from "../../../components/UploadButton";
 import { UploadButton } from "@uploadthing/react";
+import { useDropzone } from "react-dropzone";
+
+
+
 
 // You need to import our styles for the button to look right. Best to import in the root /layout.tsx but this is fine
 import "@uploadthing/react/styles.css";
-
+//import { OurFileRouter } from "../../api/uploadthing/core";
+import { Uploader, UploadDropzone } from "../../api/uploadthing";
+import { useUploadThing } from "../../api/useUploadThing";
 
 function AddQuestion() {
   const fileRef = useRef(null);
@@ -299,6 +305,31 @@ function AddQuestion() {
   };
 
   const [image, setImage] = useState('')
+  const [files, setFiles] = useState([]);
+  const onDrop = useCallback((acceptedFiles) => {
+    setFiles(acceptedFiles);
+  }, []);
+ 
+  // const { getRootProps, getInputProps } = useDropzone({
+  //   onDrop,
+  //  // accept: fileTypes ? generateClientDropzoneAccept(fileTypes) : undefined,
+  // });
+ 
+  // const { startUpload } = useUploadThing("mediaPost", {
+  //   onClientUploadComplete: () => {
+  //     alert("uploaded successfully!");
+  //   },
+  //   onUploadError: () => {
+  //     alert("error occurred while uploading");
+  //   },
+  // });
+
+  // const handleFileChange = (event) => {
+  //   setFile(event.target.files[0]);
+  // };
+
+
+
  useEffect(() => {
     getSeries();
   }, []);
@@ -306,7 +337,9 @@ function AddQuestion() {
   
 
   return (
-    <div className="flex h-auto m-1 lg:m-4 lg:mx-10 justify-center">
+    <div
+      className="flex h-auto m-1 lg:m-4 lg:mx-10 justify-center"
+    >
       <div className="flex flex-col w-full  lg:w-[80%]">
         <p className=" text-sm text-center text-gray-900 font-bold m-3">
           Create Question Step
@@ -489,10 +522,9 @@ function AddQuestion() {
                       >
                         <span>Upload a file</span>
                         <UploadButton
-                          endpoint="imageUploader"
+                          endpoint="mediaPost"
                           onClientUploadComplete={(res) => {
                             if (res) {
-                              
                               setImage(res[0].fileUrl);
                               alert("Upload Completed");
                             }
@@ -503,6 +535,7 @@ function AddQuestion() {
                             alert(`ERROR! ${error.message}`);
                           }}
                         />
+                        {/* <input type="file" {...getInputProps} /> */}
                         {/* <input
                           id="file-upload"
                           name="file-upload"
@@ -629,7 +662,6 @@ function AddQuestion() {
             </fieldset>
           </div>
           <div className="h-[80px] flex items-center justify-center w-full">
-            
             {!isLoading ? (
               <button
                 onClick={() => Created()}
@@ -658,7 +690,6 @@ function AddQuestion() {
                 </div>
               </button>
             )}
-            
           </div>
         </fieldset>
       </div>

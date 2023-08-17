@@ -4,7 +4,8 @@ const initialState = {
   question: {
     numero: null,
     consigne: null,
-    libelle: 'https://uploadthing.com/f/ec7c0678-c83b-4231-b4fb-1196556805fe_im.png',
+    libelle:
+      "https://uploadthing.com/f/ec7c0678-c83b-4231-b4fb-1196556805fe_im.png",
     discipline: {
       libelle: null,
       duree: null,
@@ -13,6 +14,10 @@ const initialState = {
       libelle: null,
       point: null,
     },
+    suggestion1: { text: null, isCorrect: false },
+    suggestion2: { text: null, isCorrect: false },
+    suggestion3: { text: null, isCorrect: false },
+    suggestion4: { text: null, isCorrect: false },
     suggestions: [],
     duree: 3,
   },

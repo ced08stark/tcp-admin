@@ -1,14 +1,16 @@
 import React, {useState} from 'react'
 import * as Icons from "@heroicons/react/24/outline"
 import { useDispatch, useSelector } from "react-redux";
-import { setQuestion } from "../featured/questionSlice";
+import { setQuestion, selectQuestion } from "../featured/questionSlice";
 import GetCookies from "../hooks/getCookies";
 import { instance } from "../hooks/Axios";
 
 function QuestionsRows({item, setQuestions, id}) {
   const token = GetCookies("token");
   const [isLoading, setIsLoading] = useState(false);
-
+  const currentQuestion = useSelector(selectQuestion)
+  const dispatch = useDispatch();
+  
   const getQuestions = async() =>{
 
     const data = await instance
@@ -46,18 +48,18 @@ function QuestionsRows({item, setQuestions, id}) {
     if(data){
       setQuestion({})
       getQuestions()
-      alert('delete question success')
     }
     else{
       alert('delete question failed')
     }
   }
   const show = async () => {
-    dispatch(setQuestion(item));
+    //dispatch(setQuestion(item));
+    dispatch(setQuestion({...currentQuestion, _id: item._id, libelle: item.libelle, consigne: item.consigne, numero: item.numero, categorie: item.categorie, discipline: item.discipline, duree: item.duree, suggestions: item.suggestions}))
     let modal = document.querySelector("#lightbox");
     modal.classList.remove("scale-0");
   };
-  const dispatch = useDispatch();
+  
   return (
     <tr
       onClick={() => show()}

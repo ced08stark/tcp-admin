@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { selectSerie } from "../../featured/serieSlice";
 
+
 export default function Serie() {
   const serie = useSelector(selectSerie);
   //const router = useRouter()

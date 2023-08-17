@@ -8,7 +8,7 @@ import SerieComponent from "../../components/SerieComponent"
 import AddSerie from "../../components/AddSerie";
 import GetCookies from "../../hooks/getCookies";
 import { instance } from "../../hooks/Axios";
-
+import {OurUploadButton} from "../../components/UploadButton"
 
 export default function Home() {
   const router = useRouter()
@@ -53,7 +53,7 @@ export default function Home() {
         <div className="w-full flex overflow-x-auto pb-2 no-scrollbar">
           <div className="flex flex-nowrap">
             {series?.map((item, index) => (
-              <SerieComponent item={item}  key={index} />
+              <SerieComponent setSeries={setSeries} item={item}  key={index} />
             ))}
             <div
               onClick={() => Add()}
@@ -65,6 +65,7 @@ export default function Home() {
         </div>
       </div>
       <div className="mb-32 w-full grid text-center lg:mb-0 lg:grid-cols-2 lg:text-left p-4 lg:p-2">
+        
         <Link
           href="/questions"
           className="group  overflow-hidden relative hover:bg-white rounded-lg border border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
