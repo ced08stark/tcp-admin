@@ -109,7 +109,7 @@ function QuestionsPage() {
       .patch(
         `/api/question/questions/${currentQuestion?._id}`,
         {
-          libelle: image != "" ? image : currentQuestion.libelle,
+          libelle: image != "null" ? image : currentQuestion.libelle,
           consigne: currentQuestion.consigne,
           numero: currentQuestion.numero,
           categorie: currentQuestion.categorie,
@@ -134,7 +134,7 @@ function QuestionsPage() {
 
     if (data) {
       getQuestion();
-      setImage("");
+      setImage("null");
       setSuggestion1({ text: "" });
       setSuggestion2({ text: "" });
       setSuggestion3({ text: "" });
@@ -450,7 +450,7 @@ function QuestionsPage() {
                   <div className="w-full h-[100px] m-3 justify-center flex">
                     <Image
                       className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
-                      src={`${image ? image : currentQuestion?.libelle}`}
+                      src={`${image != "null" ? image : currentQuestion?.libelle}`}
                       alt="Next.js Logo"
                       width={180}
                       height={37}

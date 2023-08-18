@@ -105,7 +105,7 @@ function QuestionsPage() {
       .patch(
         `/api/question/questions/${currentQuestion?._id}`,
         {
-          libelle: image != "" ? image : currentQuestion.libelle,
+          libelle: image != "null" ? image : currentQuestion.libelle,
           consigne: currentQuestion.consigne,
           numero: currentQuestion.numero,
           categorie: currentQuestion.categorie,
@@ -137,7 +137,7 @@ function QuestionsPage() {
     
     if (data) {
       getQuestion()
-      setImage("")
+      setImage("null")
       setSuggestion1({ text: "" });
       setSuggestion2({ text: "" });
       setSuggestion3({ text: "" });
