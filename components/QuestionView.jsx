@@ -261,8 +261,10 @@ function QuestionView({setQuestions}) {
             </div>
           </div>
         </div>
-        <div className="flex w-full space-x-1">
-          <span className="font-bold text-sm md:text-base">Consigne : </span>
+        <div className="flex items-center w-full space-x-1">
+          <span className="font-bold text-sm md:text-base pr-2">
+            Consigne :{" "}
+          </span>
 
           <input
             type="text"
@@ -279,7 +281,9 @@ function QuestionView({setQuestions}) {
           />
         </div>
         <div className="flex">
-          <span className="font-bold text-sm md:text-base">Discipline : </span>
+          <span className="font-bold text-sm md:text-base pr-2">
+            Discipline :{" "}
+          </span>
           <input
             type="text"
             value={currentQuestion?.discipline?.libelle}
@@ -287,7 +291,9 @@ function QuestionView({setQuestions}) {
           />
         </div>
         <div className="flex">
-          <span className="font-bold text-sm md:text-base">Categorie : </span>
+          <span className="font-bold text-sm md:text-base pr-2">
+            Categorie :{" "}
+          </span>
           <input
             className="flex-1"
             type="text"
@@ -295,7 +301,7 @@ function QuestionView({setQuestions}) {
           />
         </div>
         <div className="flex">
-          <span className="font-bold text-sm md:text-base">Duree : </span>
+          <span className="font-bold text-sm md:text-base pr-2">Duree : </span>
           <input
             type="text"
             value={currentQuestion?.duree}
