@@ -38,7 +38,7 @@ function QuestionsPage() {
   const [questions, setQuestions] = useState([]);
   const dispatch = useDispatch();
   const [suggestions2, setSuggestions2] = useState([]);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState("");
   const handleUpdate = async () => {
     console.log(currentQuestion);
     // dispatch(
@@ -109,7 +109,7 @@ function QuestionsPage() {
       .patch(
         `/api/question/questions/${currentQuestion?._id}`,
         {
-          libelle: image ? image : currentQuestion.libelle,
+          libelle: image != "" ? image : currentQuestion.libelle,
           consigne: currentQuestion.consigne,
           numero: currentQuestion.numero,
           categorie: currentQuestion.categorie,
@@ -134,7 +134,7 @@ function QuestionsPage() {
 
     if (data) {
       getQuestion();
-      setImage(null);
+      setImage("");
       setSuggestion1({ text: "" });
       setSuggestion2({ text: "" });
       setSuggestion3({ text: "" });
@@ -323,7 +323,7 @@ function QuestionsPage() {
                   </tbody>
     
                 </table> */}
-                <span className="text-black text-xl mt-10">
+                <span className="text-black text-xl px-4 mt-10">
                   list des questions de la disciplne
                 </span>
                 <table className="min-w-full text-left text-sm font-light">
