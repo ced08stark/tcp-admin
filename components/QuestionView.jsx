@@ -191,7 +191,7 @@ function QuestionView({setQuestions}) {
             <div className="w-full h-[100px] m-3 justify-center flex">
               <Image
                 className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
-                src={`${image != "null" ? image :currentQuestion?.libelle}`}
+                src={`${image != "null" ? image : currentQuestion?.libelle}`}
                 alt="Next.js Logo"
                 width={180}
                 height={37}
@@ -261,8 +261,8 @@ function QuestionView({setQuestions}) {
             </div>
           </div>
         </div>
-        <div className="flex w-full">
-          <span className="font-bold">Consigne : </span>
+        <div className="flex w-full space-x-1">
+          <span className="font-bold text-sm md:text-base">Consigne : </span>
 
           <input
             type="text"
@@ -279,7 +279,7 @@ function QuestionView({setQuestions}) {
           />
         </div>
         <div className="flex">
-          <span className="font-bold">Discipline : </span>
+          <span className="font-bold text-sm md:text-base">Discipline : </span>
           <input
             type="text"
             value={currentQuestion?.discipline?.libelle}
@@ -287,7 +287,7 @@ function QuestionView({setQuestions}) {
           />
         </div>
         <div className="flex">
-          <span className="font-bold">Categorie : </span>
+          <span className="font-bold text-sm md:text-base">Categorie : </span>
           <input
             className="flex-1"
             type="text"
@@ -295,7 +295,7 @@ function QuestionView({setQuestions}) {
           />
         </div>
         <div className="flex">
-          <span className="font-bold">Duree : </span>
+          <span className="font-bold text-sm md:text-base">Duree : </span>
           <input
             type="text"
             value={currentQuestion?.duree}

@@ -68,7 +68,6 @@ function SerieComponent({item, setSeries}) {
 
    
     const handleSerie = () => {
-        
         dispatch(setSerie(item))
         dispatch(setQuestionsSelect(item?.questions))
         router.push("/series")
