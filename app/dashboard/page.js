@@ -9,6 +9,7 @@ import AddSerie from "../../components/AddSerie";
 import GetCookies from "../../hooks/getCookies";
 import { instance } from "../../hooks/Axios";
 import {OurUploadButton} from "../../components/UploadButton"
+import AudioPlayer from "../../components/AudioPlayer"
 
 export default function Home() {
   const router = useRouter()
@@ -150,10 +151,8 @@ export default function Home() {
           </div>
         </Link>
         <Link
-          href="/"
+          href="/users"
           className="group rounded-lg relative overflow-hidden hover:bg-white border border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
-          target="_blank"
-          rel="noopener noreferrer"
         >
           <div className="z-20">
             <h2 className={`mb-3 text-2xl font-semibold`}>
@@ -178,6 +177,7 @@ export default function Home() {
           </div>
         </Link>
       </div>
+      
       {<AddSerie setSeries={setSeries} series={series}  />}
     </main>
   );

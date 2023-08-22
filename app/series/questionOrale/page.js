@@ -1,7 +1,6 @@
-
 "use client";
 import QuestionsRows from "../../../components/QuestionsRows";
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import SerieComponent from "../../../components/SerieComponent";
@@ -12,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setQuestion,
   selectQuestion,
-  selectQuestionsSelect
+  selectQuestionsSelect,
 } from "../../../featured/questionSlice";
 import QuestionView from "../../../components/QuestionView";
 import QuestionsRowSelect from "../../../components/QuestionsRowSelect";
@@ -20,25 +19,24 @@ import { selectSerie } from "../../../featured/serieSlice";
 import * as Icons from "@heroicons/react/24/outline";
 import { OurFileRouter } from "../../api/uploadthing/core";
 import { UploadButton } from "@uploadthing/react";
+import AudioPlayer from "../../../components/AudioPlayer";
 
-
-let serieTable = []
+let serieTable = [];
 function QuestionsPage() {
-  
   const router = useRouter();
   const token = GetCookies("token");
   const [isLoading, setIsLoading] = useState(false);
-   const [filter, setFilter] = useState({
-     name: "consigne",
-     value: "",
-   });
+  const [filter, setFilter] = useState({
+    name: "consigne",
+    value: "",
+  });
   const currentQuestion = useSelector(selectQuestion);
   const selectLists = useSelector(selectQuestionsSelect);
   const serie = useSelector(selectSerie);
   const [questions, setQuestions] = useState([]);
   const dispatch = useDispatch();
   const [suggestions2, setSuggestions2] = useState([]);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState("null");
   const handleUpdate = async () => {
     console.log(currentQuestion);
     // dispatch(
@@ -164,13 +162,13 @@ function QuestionsPage() {
   const [images, setImages] = useState(null);
   const [series, setSeries] = useState([]);
 
-  const Add = async() =>{
-      let modal = document.querySelector("#lightbox");
-      modal.classList.remove("scale-0");
-  }
+  const Add = async () => {
+    let modal = document.querySelector("#lightbox");
+    modal.classList.remove("scale-0");
+  };
 
   const Update = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const data = await instance
       .patch(
         `/api/serie/series/${serie._id}`,
@@ -185,35 +183,30 @@ function QuestionsPage() {
         }
       )
       .catch((err) => console.log(err.message));
-      setIsLoading(false)
-        if(data){
-          alert('serie update success')
-          router.push('/dashboard')
-        }
+    setIsLoading(false);
+    if (data) {
+      alert("serie update success");
+      router.push("/dashboard");
+    }
   };
 
-  const getQuestion = async() =>{
+  const getQuestion = async () => {
     const data = await instance
-        .get(
-          "/api/question/questions",
-          {
-            headers: {
-              Authorization: `basic ${token}`,
-            },
-          }
-        )
-        .catch((err) => console.log(err.message));
-        console.log(data)
-      if(data){
-        setQuestions(data?.data)
-        
-      }
+      .get("/api/question/questions", {
+        headers: {
+          Authorization: `basic ${token}`,
+        },
+      })
+      .catch((err) => console.log(err.message));
+    console.log(data);
+    if (data) {
+      setQuestions(data?.data);
+    }
+  };
 
-  }
-
-  useEffect(()=>{
-    getQuestion()
-  }, [] )
+  useEffect(() => {
+    getQuestion();
+  }, []);
   return (
     <div className="flex h-auto m-2 lg:m-4 lg:mx-10 flex-col">
       <div className="flex items-center justify-between m-2">
@@ -245,7 +238,12 @@ function QuestionsPage() {
           </div>
         </div>
         <span className="font-bold">
-          {selectLists?.length ? selectLists?.length : "0"} / 40 questions
+          {selectLists?.filter(
+            (item) => item?.discipline?.libelle == "Comprehension Orale"
+          )?.length > 0
+            ? selectLists?.length
+            : "0"}{" "}
+          / 40 questions
         </span>
       </div>
 
@@ -361,24 +359,27 @@ function QuestionsPage() {
                   <tbody>
                     {serie?.questions?.length > 0 ? (
                       serie?.questions
-                        ?.filter((item) =>
-                          filter.name == "consigne"
-                            ? item?.consigne.includes(filter.value)
-                            : filter.name == "numero"
-                            ? item?.numero.toString().includes(filter.value)
-                            : filter.name == "categorie"
-                            ? item?.categorie?.libelle
-                                .toLowerCase()
-                                .includes(filter.value)
-                            : filter.name == "discipline"
-                            ? item?.discipline?.libelle
-                                .toLowerCase()
-                                .includes(filter.value)
-                            : filter.name == "point"
-                            ? item?.categorie?.point
-                                .toString()
-                                .includes(filter.value)
-                            : item
+                        ?.filter(
+                          (item) =>
+                            item?.discipline?.libelle ==
+                              "Comprehension Orale" &&
+                            (filter.name == "consigne"
+                              ? item?.consigne?.includes(filter.value)
+                              : filter.name == "numero"
+                              ? item?.numero.toString().includes(filter.value)
+                              : filter.name == "categorie"
+                              ? item?.categorie?.libelle
+                                  .toLowerCase()
+                                  .includes(filter.value)
+                              : filter.name == "discipline"
+                              ? item?.discipline?.libelle
+                                  .toLowerCase()
+                                  .includes(filter.value)
+                              : filter.name == "point"
+                              ? item?.categorie?.point
+                                  .toString()
+                                  .includes(filter.value)
+                              : item)
                         )
                         .map((item, index) => (
                           <QuestionsRowSelect
@@ -390,7 +391,9 @@ function QuestionsPage() {
                         ))
                     ) : (
                       <>
-                        <tr className="text-center"><td>no data table</td></tr>
+                        <tr className="text-center">
+                          <td>no data table</td>
+                        </tr>
                       </>
                     )}
 
@@ -448,14 +451,25 @@ function QuestionsPage() {
               <div className="mt-2 bg-white flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                 <div className="text-center">
                   <div className="w-full h-[100px] m-3 justify-center flex">
-                    <Image
-                      className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
-                      src={`${image != "null" ? image : currentQuestion?.libelle}`}
-                      alt="Next.js Logo"
-                      width={180}
-                      height={37}
-                      priority
-                    />
+                    {currentQuestion?.discipline?.libelle ==
+                    "Comprehension Ecrite" ? (
+                      <Image
+                        className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+                        src={`${
+                          image != "null" ? image : currentQuestion?.libelle
+                        }`}
+                        alt="Next.js Logo"
+                        width={180}
+                        height={37}
+                        priority
+                      />
+                    ) : (
+                      <AudioPlayer
+                        url={`${
+                          image != "null" ? image : currentQuestion?.libelle
+                        }`}
+                      />
+                    )}
                   </div>
                   <div className="col-span-full">
                     <label
@@ -709,4 +723,3 @@ function QuestionsPage() {
 }
 
 export default QuestionsPage;
-

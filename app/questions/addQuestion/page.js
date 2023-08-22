@@ -333,9 +333,7 @@ function AddQuestion() {
   
 
   return (
-    <div
-      className="flex h-auto m-1 lg:m-4 lg:mx-10 justify-center"
-    >
+    <div className="flex h-auto m-1 lg:m-4 lg:mx-10 justify-center">
       <div className="flex flex-col w-full  lg:w-[80%]">
         <p className=" text-sm text-center text-gray-900 font-bold m-3">
           Create Question Step
@@ -517,20 +515,40 @@ function AddQuestion() {
                         className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                       >
                         <span>Upload a file</span>
-                        <UploadButton
-                          endpoint="mediaPost"
-                          onClientUploadComplete={(res) => {
-                            if (res) {
-                              setImage(res[0].fileUrl);
-                              alert("Upload Completed");
-                            }
-                            // Do something with the response
-                          }}
-                          onUploadError={(error) => {
-                            // Do something with the error.
-                            alert(`ERROR! ${error.message}`);
-                          }}
-                        />
+                        {discipline?.libelle == null ||
+                        discipline?.libelle ==
+                          "Comprehension Ecrite" ? (
+                          <UploadButton
+                            endpoint="imageUploader"
+                            onClientUploadComplete={(res) => {
+                              if (res) {
+                                setImage(res[0].fileUrl);
+                                alert("Upload Completed");
+                              }
+                              // Do something with the respons
+                            }}
+                            onUploadError={(error) => {
+                              // Do something with the error.
+                              alert(`ERROR! ${error.message}`);
+                            }}
+                          />
+                        ) : (
+                          <UploadButton
+                            endpoint="mediaPost"
+                            onClientUploadComplete={(res) => {
+                              if (res) {
+                                setImage(res[0].fileUrl);
+                                alert("Upload Completed");
+                              }
+                              // Do something with the response
+                            }}
+                            onUploadError={(error) => {
+                              // Do something with the error.
+                              alert(`ERROR! ${error.message}`);
+                            }}
+                          />
+                        )}
+
                         {/* <input type="file" {...getInputProps} /> */}
                         {/* <input
                           id="file-upload"

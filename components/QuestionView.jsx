@@ -10,6 +10,7 @@ import { setQuestion, selectQuestion } from "../featured/questionSlice";
 
 import { UploadButton } from "@uploadthing/react";
 import "@uploadthing/react/styles.css";
+import AudioPlayer from "./AudioPlayer";
 
 function QuestionView({setQuestions}) {
   const dispatch = useDispatch();
@@ -189,14 +190,21 @@ function QuestionView({setQuestions}) {
         <div className="mt-2 bg-white flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
           <div className="text-center">
             <div className="w-full h-[100px] m-3 justify-center flex">
-              <Image
-                className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
-                src={`${image != "null" ? image : currentQuestion?.libelle}`}
-                alt="Next.js Logo"
-                width={180}
-                height={37}
-                priority
-              />
+              {currentQuestion?.discipline?.libelle ==
+              "Comprehension Ecrite" ? (
+                <Image
+                  className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+                  src={`${image != "null" ? image : currentQuestion?.libelle}`}
+                  alt="Next.js Logo"
+                  width={180}
+                  height={37}
+                  priority
+                />
+              ) : (
+                <AudioPlayer
+                  url={`${image != "null" ? image : currentQuestion?.libelle}`}
+                />
+              )}
             </div>
             <div className="col-span-full">
               <label

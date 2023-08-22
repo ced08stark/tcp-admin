@@ -12,11 +12,13 @@ export default function Serie() {
     <main className="flex space-y-8 flex-col items-center justify-between pt-12 p-4  lg:p-12">
       <div className=" w-full flex space-x-4 items-center justify-center">
         <h1 className="text-xl font-bold">serie:</h1>
-        <span className="font-bold text-3xl text-gray-900">{serie?.libelle}</span>
-      </div>  
+        <span className="font-bold text-3xl text-gray-900">
+          {serie?.libelle}
+        </span>
+      </div>
       <div className="  w-full grid text-center lg:mb-0 lg:grid-cols-2 lg:text-left">
         <Link
-          href="/series/question"
+          href="/series/questionEcrite"
           className="group  overflow-hidden relative hover:bg-white rounded-lg border border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
         >
           <div className="z-20">
@@ -39,10 +41,8 @@ export default function Serie() {
           </div>
         </Link>
         <Link
-          href="/"
+          href="/series/questionOrale"
           className="group rounded-lg overflow-hidden border relative hover:bg-white border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30 flex justify-between"
-          target="_blank"
-          rel="noopener noreferrer"
         >
           <div className="z-20">
             <h2 className={`mb-3 text-2xl font-semibold`}>

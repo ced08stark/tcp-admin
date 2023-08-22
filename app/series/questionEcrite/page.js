@@ -1,68 +1,71 @@
+
 "use client";
-import QuestionsRows from "../../components/QuestionsRows";
-import React, {useState, useEffect, useRef} from "react";
+import QuestionsRows from "../../../components/QuestionsRows";
+import React, {useState, useEffect} from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import SerieComponent from "../../components/SerieComponent";
-import AddSerie from "../../components/AddSerie";
-import GetCookies from "../../hooks/getCookies";
-import { instance, baseUrlImg } from "../../hooks/Axios";
+import SerieComponent from "../../../components/SerieComponent";
+import AddSerie from "../../../components/AddSerie";
+import GetCookies from "../../../hooks/getCookies";
+import { instance, baseUrlImg } from "../../../hooks/Axios";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setQuestion,
   selectQuestion,
-  selectQuestionsSelect,
-} from "../../featured/questionSlice";
-import QuestionView from "../../components/QuestionView";
-import * as Icons from "@heroicons/react/24/outline"
+  selectQuestionsSelect
+} from "../../../featured/questionSlice";
+import QuestionView from "../../../components/QuestionView";
+import QuestionsRowSelect from "../../../components/QuestionsRowSelect";
+import { selectSerie } from "../../../featured/serieSlice";
+import * as Icons from "@heroicons/react/24/outline";
+import { OurFileRouter } from "../../api/uploadthing/core";
 import { UploadButton } from "@uploadthing/react";
-import "@uploadthing/react/styles.css";
-import AudioPlayer from "../../components/AudioPlayer";
+import AudioPlayer from "../../../components/AudioPlayer";
 
-
+let serieTable = []
 function QuestionsPage() {
-  //const fileRef = useRef(null);
+  
   const router = useRouter();
   const token = GetCookies("token");
   const [isLoading, setIsLoading] = useState(false);
-  const [filter, setFilter] = useState({
-    name: 'consigne',
-    value: ''
-  })
-  
-   
+   const [filter, setFilter] = useState({
+     name: "consigne",
+     value: "",
+   });
+  const currentQuestion = useSelector(selectQuestion);
+  const selectLists = useSelector(selectQuestionsSelect);
+  const serie = useSelector(selectSerie);
   const [questions, setQuestions] = useState([]);
   const dispatch = useDispatch();
-  const currentQuestion = useSelector(selectQuestion);
   const [suggestions2, setSuggestions2] = useState([]);
-  const [image, setImage] = useState("null")
-  const handleUpdate = async() =>{
-    console.log(currentQuestion)
+  const [image, setImage] = useState("null");
+  const handleUpdate = async () => {
+    console.log(currentQuestion);
     // dispatch(
     //   setQuestion({
     //     ...currentQuestion,
-        // libelle: currentQuestion.libelle,
-        // consigne: currentQuestion.consigne,
-        // numero: currentQuestion.numero,
-        // categorie: currentQuestion.categorie,
-        // discipline: currentQuestion.discipline,
-        // duree: currentQuestion.duree,
-        // suggestion1: suggestion1?.text
-        //   ? suggestion1
-        //   : currentQuestion.suggestions[0],
-        // suggestion2: suggestion2?.text
-        //   ? suggestion2
-        //   : currentQuestion.suggestions[1],
-        // suggestion3: suggestion3?.text
-        //   ? suggestion3
-        //   : currentQuestion.suggestions[2],
-        // suggestion4: suggestion4?.text
-        //   ? suggestion4
-        //   : currentQuestion.suggestions[3],
+    // libelle: currentQuestion.libelle,
+    // consigne: currentQuestion.consigne,
+    // numero: currentQuestion.numero,
+    // categorie: currentQuestion.categorie,
+    // discipline: currentQuestion.discipline,
+    // duree: currentQuestion.duree,
+    // suggestion1: suggestion1?.text
+    //   ? suggestion1
+    //   : currentQuestion.suggestions[0],
+    // suggestion2: suggestion2?.text
+    //   ? suggestion2
+    //   : currentQuestion.suggestions[1],
+    // suggestion3: suggestion3?.text
+    //   ? suggestion3
+    //   : currentQuestion.suggestions[2],
+    // suggestion4: suggestion4?.text
+    //   ? suggestion4
+    //   : currentQuestion.suggestions[3],
     //   })
     // );
     const formData = new FormData();
-    console.log(currentQuestion)
+    console.log(currentQuestion);
     /*console.log(suggestions?.length)
     formData.append("numero", currentQuestion?.numero);
     formData.append("consigne", question?.consigne);
@@ -112,19 +115,12 @@ function QuestionsPage() {
           categorie: currentQuestion.categorie,
           discipline: currentQuestion.discipline,
           duree: currentQuestion.duree,
-          suggestions: [suggestion1?.text
-            ? suggestion1
-            : currentQuestion.suggestions[0],
-           suggestion2?.text
-            ? suggestion2
-            : currentQuestion.suggestions[1],
-           suggestion3?.text
-            ? suggestion3
-            : currentQuestion.suggestions[2],
-           suggestion4?.text
-            ? suggestion4
-            : currentQuestion.suggestions[3],]
-          
+          suggestions: [
+            suggestion1?.text ? suggestion1 : currentQuestion.suggestions[0],
+            suggestion2?.text ? suggestion2 : currentQuestion.suggestions[1],
+            suggestion3?.text ? suggestion3 : currentQuestion.suggestions[2],
+            suggestion4?.text ? suggestion4 : currentQuestion.suggestions[3],
+          ],
         },
         {
           headers: {
@@ -135,20 +131,20 @@ function QuestionsPage() {
       )
       .catch((err) => console.log(err));
     setIsLoading(false);
-    
+
     if (data) {
-      getQuestion()
-      setImage("null")
+      getQuestion();
+      setImage("null");
       setSuggestion1({ text: "" });
       setSuggestion2({ text: "" });
       setSuggestion3({ text: "" });
       setSuggestion4({ text: "" });
-      alert('update question success')
+      alert("update question success");
     } else {
-      console.log(formData)
+      console.log(formData);
       alert("echec de update de la question");
     }
-  }
+  };
   const [suggestion1, setSuggestion1] = useState({
     text: null,
     isCorrect: false,
@@ -166,11 +162,37 @@ function QuestionsPage() {
     isCorrect: false,
   });
   const [images, setImages] = useState(null);
- 
-  
+  const [series, setSeries] = useState([]);
+
+  const Add = async() =>{
+      let modal = document.querySelector("#lightbox");
+      modal.classList.remove("scale-0");
+  }
+
+  const Update = async () => {
+    setIsLoading(true)
+    const data = await instance
+      .patch(
+        `/api/serie/series/${serie._id}`,
+        {
+          libelle: serie.libelle,
+          questions: selectLists,
+        },
+        {
+          headers: {
+            Authorization: `basic ${token}`,
+          },
+        }
+      )
+      .catch((err) => console.log(err.message));
+      setIsLoading(false)
+        if(data){
+          alert('serie update success')
+          router.push('/dashboard')
+        }
+  };
 
   const getQuestion = async() =>{
-
     const data = await instance
         .get(
           "/api/question/questions",
@@ -184,29 +206,17 @@ function QuestionsPage() {
         console.log(data)
       if(data){
         setQuestions(data?.data)
+        
       }
 
   }
-  
+
   useEffect(()=>{
     getQuestion()
-    currentQuestion?.suggestions?.map((item, index) =>{
-      setSuggestions2([...suggestions2, {...suggestions2[index], text: item?.text, isCorrect: item?.isCorrect}])
-    })
-  }, [])
+  }, [] )
   return (
-    <div className="flex h-full m-2 lg:m-4 lg:mx-10 flex-col">
+    <div className="flex h-auto m-2 lg:m-4 lg:mx-10 flex-col">
       <div className="flex items-center justify-between m-2">
-        <button
-          onClick={() => router.push("/questions/addQuestion")}
-          type="button"
-          className="font-bold rounded  px-6 pb-2 pt-2.5 text-xs leading-normal  bg-blue-500  text-white  py-2 cursor-pointer border-0 shadow-sm shadow-black/40  relative 
-        before:absolute before:w-full before:h-full before:inset-0  
-        before:bg-white/20 before:scale-0 hover:before:scale-100 before:transition-all 
-        before:rounded-full hover:before:rounded-none rounded-full]"
-        >
-          create question
-        </button>
         <div className="flex space-x-2 items-center">
           <div className="relative flex items-center justify-center">
             <div className="px-2 py-2 rounded-full bg-white cursor-pointer">
@@ -214,7 +224,7 @@ function QuestionsPage() {
             </div>
             <select
               onChange={(e) => setFilter({ ...filter, name: e.target.value })}
-              className="absolute opacity-0 px-10"
+              className="absolute opacity-0 px-10 cursor-pointer"
             >
               <option>filter by</option>
               <option value="consigne">consigne</option>
@@ -234,7 +244,11 @@ function QuestionsPage() {
             <Icons.MagnifyingGlassIcon className="w-5 h-5 absolute bottom-1 right-1 text-gray-400" />
           </div>
         </div>
+        <span className="font-bold">
+          {selectLists?.filter((item)=>item?.discipline?.libelle == "Comprehension Ecrite")?.length > 0 ? selectLists?.length : "0"} / 40 questions
+        </span>
       </div>
+
       {/* <div className="w-full flex items-center">
         <table className="w-[80%]  border">
           <thead className="bg-gray-50">
@@ -264,13 +278,54 @@ function QuestionsPage() {
       </div> */}
       <div className="flex h-screen">
         <div
-          className={`flex flex-col overflow-x-auto w-full  lg:overflow-y-auto ${
+          className={`flex flex-col overflow-x-auto w-full lg:overflow-y-auto ${
             currentQuestion?.consigne ? `lg:w-[70%]` : `lg:w-full`
           }  bg-white`}
         >
           <div className="sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
               <div className="overflow-x-auto">
+                {/* <table className="min-w-full text-left text-sm font-light">
+                  <thead className="border-b font-medium bg-gray-50 dark:border-neutral-500">
+                    <tr>
+                      <th scope="col" className="px-6 py-4">
+                        #
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        consigne
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        categorie
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        discipline
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        duree
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        points
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        select
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {serie?.questions?.map((item, index) => (
+                      <QuestionsRowSelect
+                        setQuestions={setQuestions}
+                        item={item}
+                        key={index}
+                        id={index + 1}
+                      />
+                    ))}
+                  </tbody>
+    
+                </table> */}
+                <span className="text-black text-xl px-4 mt-10">
+                  list des questions de la comprehension ecrite
+                </span>
                 <table className="min-w-full text-left text-sm font-light">
                   <thead className="border-b font-medium bg-gray-50 dark:border-neutral-500">
                     <tr>
@@ -295,14 +350,20 @@ function QuestionsPage() {
                       <th scope="col" className="px-6 py-4">
                         points
                       </th>
-                      <th scope="col" className="px-6 py-4"></th>
+                      <th scope="col" className="px-6 py-4">
+                        serie
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        select
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {questions.length > 0 ? (
-                      questions
+                    {serie?.questions?.length > 0 ? (
+                      serie?.questions
                         ?.filter((item) =>
-                          filter.name == "consigne"
+                          item?.discipline?.libelle == "Comprehension Ecrite" &&
+                          (filter.name == "consigne"
                             ? item?.consigne?.includes(filter.value)
                             : filter.name == "numero"
                             ? item?.numero.toString().includes(filter.value)
@@ -318,10 +379,10 @@ function QuestionsPage() {
                             ? item?.categorie?.point
                                 .toString()
                                 .includes(filter.value)
-                            : item
+                            : item)
                         )
                         .map((item, index) => (
-                          <QuestionsRows
+                          <QuestionsRowSelect
                             setQuestions={setQuestions}
                             item={item}
                             key={index}
@@ -329,10 +390,53 @@ function QuestionsPage() {
                           />
                         ))
                     ) : (
-                      <></>
+                      <>
+                        <tr className="text-center">
+                          <td>no data table</td>
+                        </tr>
+                      </>
                     )}
+
+                    {/* {serie?.questions?.map((item, index) => (
+                      <QuestionsRowSelect
+                        setQuestions={setQuestions}
+                        item={item}
+                        key={index}
+                        id={index + 1}
+                      />
+                    ))} */}
                   </tbody>
                 </table>
+                <div className="h-[80px] flex items-center justify-center w-full">
+                  {!isLoading ? (
+                    <button
+                      onClick={() => Update()}
+                      className="bg-green-500 inline-block text-white text-sm font-medium px-10 py-2 cursor-pointer border-0 shadow-sm shadow-black/40  relative 
+        before:absolute before:w-full before:h-full before:inset-0  
+        before:bg-white/20 before:scale-0 hover:before:scale-100 before:transition-all 
+        before:rounded-full hover:before:rounded-none rounded-md"
+                    >
+                      update serie
+                    </button>
+                  ) : (
+                    <button
+                      disabled
+                      className="bg-green-500 flex items-center space-x-2 text-white text-sm font-medium px-10 py-2 cursor-pointer border-0 shadow-sm shadow-black/40  relative 
+        before:absolute before:w-full before:h-full before:inset-0  
+        before:bg-white/20 before:scale-0 hover:before:scale-100 before:transition-all 
+        before:rounded-full hover:before:rounded-none rounded-md"
+                    >
+                      <span>update serie</span>
+
+                      <div
+                        class="spinner-border spinner-border-sm text-white"
+                        role="status"
+                      >
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -392,39 +496,20 @@ function QuestionsPage() {
                             className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                           >
                             <span>Upload a file</span>
-                            {currentQuestion?.discipline?.libelle == null ||
-                            currentQuestion?.discipline?.libelle ==
-                              "Comprehension Ecrite" ? (
-                              <UploadButton
-                                endpoint="imageUploader"
-                                onClientUploadComplete={(res) => {
-                                  if (res) {
-                                    setImage(res[0].fileUrl);
-                                    alert("Upload Completed");
-                                  }
-                                  // Do something with the respons
-                                }}
-                                onUploadError={(error) => {
-                                  // Do something with the error.
-                                  alert(`ERROR! ${error.message}`);
-                                }}
-                              />
-                            ) : (
-                              <UploadButton
-                                endpoint="mediaPost"
-                                onClientUploadComplete={(res) => {
-                                  if (res) {
-                                    setImage(res[0].fileUrl);
-                                    alert("Upload Completed");
-                                  }
-                                  // Do something with the response
-                                }}
-                                onUploadError={(error) => {
-                                  // Do something with the error.
-                                  alert(`ERROR! ${error.message}`);
-                                }}
-                              />
-                            )}
+                            <UploadButton
+                              endpoint="mediaPost"
+                              onClientUploadComplete={(res) => {
+                                if (res) {
+                                  setImage(res[0].fileUrl);
+                                  alert("Upload Completed");
+                                }
+                                // Do something with the response
+                              }}
+                              onUploadError={(error) => {
+                                // Do something with the error.
+                                alert(`ERROR! ${error.message}`);
+                              }}
+                            />
                             {/* <input
                           id="file-upload"
                           name="file-upload"
@@ -631,9 +716,11 @@ function QuestionsPage() {
           </div>
         )}
       </div>
-      <QuestionView setQuestions={setQuestions} />
+
+      <QuestionView />
     </div>
   );
 }
 
 export default QuestionsPage;
+
