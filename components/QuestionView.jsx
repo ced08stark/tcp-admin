@@ -189,23 +189,6 @@ function QuestionView({setQuestions}) {
         </div>
         <div className="mt-2 bg-white flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
           <div className="text-center">
-            <div className="w-full h-[100px] m-3 justify-center flex">
-              {currentQuestion?.discipline?.libelle ==
-              "Comprehension Ecrite" ? (
-                <Image
-                  className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
-                  src={`${image != "null" ? image : currentQuestion?.libelle}`}
-                  alt="Next.js Logo"
-                  width={180}
-                  height={37}
-                  priority
-                />
-              ) : (
-                <AudioPlayer
-                  url={`${image != "null" ? image : currentQuestion?.libelle}`}
-                />
-              )}
-            </div>
             <div className="col-span-full">
               <label
                 htmlFor="cover-photo"
@@ -213,38 +196,40 @@ function QuestionView({setQuestions}) {
               ></label>
               <div className="mt-2 bg-white flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                 <div className="text-center">
-                  <svg
-                    className="mx-auto h-12 w-12 text-gray-300"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
-                      clip-rule="evenodd"
+                  <div className="w-full  justify-center flex">
+                    <Image
+                      className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+                      src={`${
+                        image != "null" ? image : currentQuestion?.libelle
+                      }`}
+                      alt="Next.js Logo"
+                      width={180}
+                      height={37}
+                      priority
                     />
-                  </svg>
-                  <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                  </div>
+                  <div className="mt-4 flex items-center justify-center text-sm leading-6 text-gray-600">
                     <label
                       htmlFor="file-upload"
                       className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                     >
                       <span>Upload a file</span>
+
                       <UploadButton
-                        endpoint="mediaPost"
+                        endpoint="imageUploader"
                         onClientUploadComplete={(res) => {
                           if (res) {
                             setImage(res[0].fileUrl);
                             alert("Upload Completed");
                           }
-                          // Do something with the response
+                          // Do something with the respons
                         }}
                         onUploadError={(error) => {
                           // Do something with the error.
                           alert(`ERROR! ${error.message}`);
                         }}
                       />
+
                       {/* <input
                           id="file-upload"
                           name="file-upload"
@@ -269,24 +254,109 @@ function QuestionView({setQuestions}) {
             </div>
           </div>
         </div>
-        <div className="flex items-center w-full space-x-1">
-          <span className="font-bold text-sm md:text-base pr-2">
-            Consigne :{" "}
-          </span>
-
-          <input
-            type="text"
-            onChange={(e) => {
-              dispatch(
-                setQuestion({
-                  ...currentQuestion,
-                  consigne: e.target.value,
-                })
-              );
-            }}
-            value={currentQuestion?.consigne}
-            className="flex-1"
-          />
+        <div className="flex w-full">
+          {currentQuestion?.discipline?.libelle == "Comprehension Ecrite" ? (
+            <div>
+              <span className="font-bold">Consigne : </span>
+              <input
+                type="text"
+                onChange={(e) => {
+                  dispatch(
+                    setQuestion({
+                      ...currentQuestion,
+                      consigne: e.target.value,
+                    })
+                  );
+                }}
+                value={currentQuestion?.consigne}
+                className="flex-1"
+              />
+            </div>
+          ) : (
+            <div className="mt-2 bg-white flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+              <div className="text-center">
+                <div className="w-full  justify-center flex">
+                  {currentQuestion?.discipline?.libelle ==
+                  "Comprehension Ecrite" ? (
+                    <Image
+                      className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+                      src={`${
+                        image != "null" ? image : currentQuestion?.consigne
+                      }`}
+                      alt="Next.js Logo"
+                      width={180}
+                      height={37}
+                      priority
+                    />
+                  ) : (
+                    <AudioPlayer
+                      url={`${
+                        image != "null" ? image : currentQuestion?.consigne
+                      }`}
+                    />
+                  )}
+                </div>
+                <div className="mt-4 flex items-center justify-center text-sm leading-6 text-gray-600">
+                  <label
+                    htmlFor="file-upload"
+                    className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                  >
+                    <span>Upload a file of consigne</span>
+                    {currentQuestion?.discipline?.libelle == null ||
+                    currentQuestion?.discipline?.libelle ==
+                      "Comprehension Ecrite" ? (
+                      <UploadButton
+                        endpoint="imageUploader"
+                        onClientUploadComplete={(res) => {
+                          if (res) {
+                            setImage(res[0].fileUrl);
+                            alert("Upload Completed");
+                          }
+                          // Do something with the respons
+                        }}
+                        onUploadError={(error) => {
+                          // Do something with the error.
+                          alert(`ERROR! ${error.message}`);
+                        }}
+                      />
+                    ) : (
+                      <UploadButton
+                        endpoint="mediaPost"
+                        onClientUploadComplete={(res) => {
+                          if (res) {
+                            setImage(res[0].fileUrl);
+                            alert("Upload Completed");
+                          }
+                          // Do something with the response
+                        }}
+                        onUploadError={(error) => {
+                          // Do something with the error.
+                          alert(`ERROR! ${error.message}`);
+                        }}
+                      />
+                    )}
+                    {/* <input
+                          id="file-upload"
+                          name="file-upload"
+                          type="file"
+                          className="sr-only"
+                          ref={fileRef}
+                          onChange={() =>
+                            setQuestion({
+                              ...question,
+                              libelle: fileRef.current.files[0],
+                            })
+                          }
+                        /> */}
+                  </label>
+                  {/* <p className="pl-1">or drag and drop</p> */}
+                </div>
+                {/* <p className="text-xs leading-5 text-gray-600">
+                      PNG, JPG, GIF up to 10MB Or mp4 file
+                    </p> */}
+              </div>
+            </div>
+          )}
         </div>
         <div className="flex">
           <span className="font-bold text-sm md:text-base pr-2">

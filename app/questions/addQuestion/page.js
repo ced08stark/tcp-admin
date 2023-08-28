@@ -435,14 +435,40 @@ function AddQuestion() {
               </div>
               <legend className="text-xs  font-bold">consigne</legend>
               <div className="relative mb-3">
-                <input
+                {discipline?.libelle == null ||
+                discipline?.libelle == "Comprehension Ecrite" ? (
+                  <input
+                    type="text"
+                    onChange={(e) => {
+                      setQuestion({ ...question, consigne: e.target.value });
+                    }}
+                    className="peer p-2 block min-h-[auto] bg-white w-full rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                    placeholder="entrer la consigne"
+                  />
+                ) : (
+                  <UploadButton
+                    endpoint="mediaPost"
+                    onClientUploadComplete={(res) => {
+                      if (res) {
+                        setQuestion({ ...question, consigne: res[0].fileUrl });
+                        alert("Upload Completed");
+                      }
+                      // Do something with the response
+                    }}
+                    onUploadError={(error) => {
+                      // Do something with the error.
+                      alert(`ERROR! ${error.message}`);
+                    }}
+                  />
+                )}
+                {/* <input
                   type="text"
                   onChange={(e) => {
                     setQuestion({ ...question, consigne: e.target.value });
                   }}
                   className="peer p-2 block min-h-[auto] bg-white w-full rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
                   placeholder="entrer la consigne"
-                />
+                /> */}
               </div>
 
               {/* <div className="flex space-x-4">
@@ -516,8 +542,7 @@ function AddQuestion() {
                       >
                         <span>Upload a file</span>
                         {discipline?.libelle == null ||
-                        discipline?.libelle ==
-                          "Comprehension Ecrite" ? (
+                        discipline?.libelle == "Comprehension Ecrite" ? (
                           <UploadButton
                             endpoint="imageUploader"
                             onClientUploadComplete={(res) => {
