@@ -62,9 +62,9 @@ export default function RootLayout({children}) {
               <div className="font-bold text-xl text-gray-900">TCP-ADMIN</div>
               <div
                 id="nav-links"
-                className="z-40 duration-500 md:static absolute bg-white md:min-h-fit min-h-[50vh] md:w-auto  left-0 top-[-100%] w-full flex items-center px-5"
+                className="z-40 duration-500 md:static absolute bg-white md:min-h-fit min-h-[45vh] md:w-auto  left-0 top-[-100%] w-full flex items-center px-5"
               >
-                <ul className="flex w-full xs:flex-col md:flex-row  md:items-center md:gap-[4vw] gap-8">
+                <ul className="flex w-full xs:flex-col md:flex-row  md:items-center md:gap-[4vw] gap-6">
                   <li className="w-full text-gray-900 p-2  rounded-full hover:bg-gray-900 group cursor-pointer">
                     <Link
                       className=" group-hover:font-bold group-hover:px-10 group-hover:text-white "
