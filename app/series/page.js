@@ -1,12 +1,35 @@
 "use client";
 import Image from "next/image";
+import React, {useEffect, useState} from 'react'
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { selectSerie } from "../../featured/serieSlice";
-
+import {
+  setQuestion,
+  selectQuestion,
+  selectQuestionsSelect,
+} from "../../featured/questionSlice";
 
 export default function Serie() {
   const serie = useSelector(selectSerie);
+  const currentQuestion = useSelector(selectQuestion);
+  const dispatch = useDispatch();
+  useEffect(()=>{
+    dispatch(
+      setQuestion({
+        ...currentQuestion,
+        _id: null,
+        libelle:
+          "https://uploadthing.com/f/ec7c0678-c83b-4231-b4fb-1196556805fe_im.png",
+        consigne: null,
+        numero: null,
+        categorie: null,
+        discipline: null,
+        suggestions: [],
+      })
+    );
+  }, [])
+
   //const router = useRouter()
   return (
     <main className="flex space-y-8 flex-col items-center justify-between pt-12 p-4  lg:p-12">
@@ -19,7 +42,7 @@ export default function Serie() {
       <div className="  w-full grid text-center lg:mb-0 lg:grid-cols-2 lg:text-left">
         <Link
           href="/series/questionEcrite"
-          className="group  overflow-hidden relative hover:bg-white rounded-lg border border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
+          className="group  overflow-hidden  hover:bg-white rounded-lg border border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
         >
           <div className="z-20">
             <h2 className={`mb-3 text-2xl font-semibold`}>
@@ -31,7 +54,7 @@ export default function Serie() {
           </div>
           <div className=" absolute lg:relative opacity-20 group-hover:opacity-100">
             <Image
-              className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+              className=" dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
               src="/assets/images/comprehension.jpg"
               alt="Next.js Logo"
               width={180}
@@ -42,7 +65,7 @@ export default function Serie() {
         </Link>
         <Link
           href="/series/questionOrale"
-          className="group rounded-lg overflow-hidden border relative hover:bg-white border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30 flex justify-between"
+          className="group rounded-lg overflow-hidden border  hover:bg-white border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30 flex justify-between"
         >
           <div className="z-20">
             <h2 className={`mb-3 text-2xl font-semibold`}>
@@ -66,7 +89,7 @@ export default function Serie() {
 
         <Link
           href="/"
-          className="group rounded-lg relative overflow-hidden hover:bg-white border m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
+          className="group rounded-lg  overflow-hidden hover:bg-white border m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -80,7 +103,7 @@ export default function Serie() {
           </div>
           <div className=" absolute lg:relative opacity-20 group-hover:opacity-100">
             <Image
-              className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+              className=" dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
               src="/assets/images/form.jpg"
               alt="Next.js Logo"
               width={180}

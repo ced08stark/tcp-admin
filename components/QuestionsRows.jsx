@@ -54,7 +54,7 @@ function QuestionsRows({item, setQuestions, id}) {
     }
   }
   const show = async () => {
-    //dispatch(setQuestion(item));
+    dispatch(setQuestion({}));
     dispatch(setQuestion({...currentQuestion, _id: item._id, libelle: item.libelle, consigne: item.consigne, numero: item.numero, categorie: item.categorie, discipline: item.discipline, duree: item.duree, suggestions: item.suggestions}))
     let modal = document.querySelector("#lightbox");
     modal.classList.remove("scale-0");

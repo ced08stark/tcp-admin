@@ -10,11 +10,19 @@ import GetCookies from "../../hooks/getCookies";
 import { instance } from "../../hooks/Axios";
 import {OurUploadButton} from "../../components/UploadButton"
 import AudioPlayer from "../../components/AudioPlayer"
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setQuestion,
+  selectQuestion,
+  selectQuestionsSelect,
+} from "../../featured/questionSlice";
 
 export default function Home() {
+  const dispatch = useDispatch();
   const router = useRouter()
   const token = GetCookies("token");
   const [isLoading, setIsLoading] = useState(false);
+  const currentQuestion = useSelector(selectQuestion);
   const [series, setSeries] = useState([]);
   const Add = async() =>{
       let modal = document.querySelector("#lightbox");
@@ -37,6 +45,22 @@ export default function Home() {
         setSeries(data?.data)
       }
   };
+
+  useEffect(() => {
+    dispatch(
+      setQuestion({
+        ...currentQuestion,
+        _id: null,
+        libelle:
+          "https://uploadthing.com/f/ec7c0678-c83b-4231-b4fb-1196556805fe_im.png",
+        consigne: null,
+        numero: null,
+        categorie: null,
+        discipline: null,
+        suggestions: [],
+      })
+    );
+  }, []);
 
   useEffect(()=>{
     getSeries()

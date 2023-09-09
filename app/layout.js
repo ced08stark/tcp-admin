@@ -7,11 +7,14 @@ import "../assets/vendor/fonts/boxicons.css";
 import "../assets/vendor/css/core.css";
 import "./globals.css";
 import { Inter } from "next/font/google";
+import React, {useState} from 'react'
 import * as Icons from "@heroicons/react/24/outline";
 import Head from "next/head";
+import Link from "next/link";
 import Image from "next/image";
 import { Provider } from "react-redux";
 import { store } from "../store";
+import { Bars3BottomRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +24,23 @@ const inter = Inter({ subsets: ["latin"] });
 // };
 
 export default function RootLayout({children}) {
+  const [showMenu, setShowMenu] = useState(false)
   
+  const onToggleMenu = () =>{
+    const navLinks = document.getElementById("nav-links");
+      if(showMenu){
+        setShowMenu(false)
+          navLinks.classList.remove("top-[9%]");
+          navLinks.classList.add("top-[-100%]");
+      }
+      else{
+        setShowMenu(true)
+        navLinks.classList.remove("top-[-100%]");
+        navLinks.classList.add("top-[9%]");
+      }
+     
+      console.log(navLinks)
+  }
   return (
     <html lang="en">
       <Provider store={store}>
@@ -38,20 +57,74 @@ export default function RootLayout({children}) {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <body className={inter.className}>
-          <div className="flex justify-between items-center bg-gray-900  p-4 lg:px-10 shadow-lg shadow-white">
-            <div className="font-bold text-xl text-white">TCP-ADMIN</div>
-            <div className="flex items-center space-x-2">
-              <Icons.BellIcon className="w-6 h-6 text-white" />
-              <Image
-                className="relative  dark:invert w-10 h-10 rounded-full"
-                src="https://tecdn.b-cdn.net/img/new/avatars/2.jpg"
-                alt="Next.js Logo"
-                width={180}
-                height={37}
-                priority
-              />
-            </div>
-          </div>
+          <header className="bg-white z-40">
+            <nav className="z-40  flex justify-between items-center mx-auto   p-4 lg:px-10 shadow-lg shadow-white">
+              <div className="font-bold text-xl text-gray-900">TCP-ADMIN</div>
+              <div
+                id="nav-links"
+                className="z-40 duration-500 md:static absolute bg-white md:min-h-fit min-h-[50vh] md:w-auto  left-0 top-[-100%] w-full flex items-center px-5"
+              >
+                <ul className="flex w-full xs:flex-col md:flex-row  md:items-center md:gap-[4vw] gap-8">
+                  <li className="w-full text-gray-900 p-2  rounded-full hover:bg-gray-900 group cursor-pointer">
+                    <Link
+                      className=" group-hover:font-bold group-hover:px-10 group-hover:text-white "
+                      href="/dashboard"
+                    >
+                      dashboard
+                    </Link>
+                  </li>
+                  <li className="w-full text-gray-900 p-2 rounded-full hover:bg-gray-900 group cursor-pointer">
+                    <Link
+                      className=" group-hover:font-bold group-hover:px-10 group-hover:text-white "
+                      href="/questions"
+                    >
+                      questions
+                    </Link>
+                  </li>
+                  <li className="w-full text-gray-900 p-2 rounded-full hover:bg-gray-900 group cursor-pointer">
+                    <Link
+                      className=" group-hover:font-bold group-hover:px-10 group-hover:text-white "
+                      href="/users"
+                    >
+                      users
+                    </Link>
+                  </li>
+                  <li className="w-full text-gray-900 p-2 rounded-full hover:bg-gray-900 group cursor-pointer">
+                    <Link
+                      className=" group-hover:font-bold group-hover:px-10 group-hover:text-white "
+                      href="#"
+                    >
+                      about
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+              <div className="flex items-center gap-6">
+                <Link
+                  href="/"
+                  className="bg-gray-900 text-white px-3 py-1 rounded-full"
+                >
+                  sign out
+                </Link>
+                {!showMenu ? (
+                  <Bars3BottomRightIcon
+                    className="w-8 h-8 cursor-pointer md:hidden"
+                    onClick={() => onToggleMenu()}
+                  />
+                ) : (
+                  <XMarkIcon
+                    className="w-8 h-8 cursor-pointer md:hidden"
+                    onClick={() => onToggleMenu()}
+                  />
+                )}
+                {/* <Bars3BottomRightIcon
+                  className="w-8 h-8 cursor-pointer md:hidden"
+                  onClick={(e) => onToggleMenu(e)}
+                /> */}
+              </div>
+            </nav>
+          </header>
+
           {children}
         </body>
       </Provider>

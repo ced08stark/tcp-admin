@@ -19,6 +19,7 @@ function QuestionView({setQuestions}) {
   const currentQuestion = useSelector(selectQuestion);
   const [image, setImage] = useState("null");
   const token = GetCookies("token");
+  console.log(currentQuestion?.consigne)
   const handleUpdate = async () => {
     console.log(currentQuestion);
     // dispatch(
@@ -276,25 +277,11 @@ function QuestionView({setQuestions}) {
             <div className="mt-2 bg-white flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
               <div className="text-center">
                 <div className="w-full  justify-center flex">
-                  {currentQuestion?.discipline?.libelle ==
-                  "Comprehension Ecrite" ? (
-                    <Image
-                      className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
-                      src={`${
-                        image != "null" ? image : currentQuestion?.consigne
-                      }`}
-                      alt="Next.js Logo"
-                      width={180}
-                      height={37}
-                      priority
-                    />
-                  ) : (
+                  
                     <AudioPlayer
-                      url={`${
-                        image != "null" ? image : currentQuestion?.consigne
-                      }`}
+                      url={currentQuestion?.consigne}
                     />
-                  )}
+                  
                 </div>
                 <div className="mt-4 flex items-center justify-center text-sm leading-6 text-gray-600">
                   <label

@@ -167,7 +167,6 @@ function QuestionsPage() {
   });
   const [images, setImages] = useState(null);
  
-  
 
   const getQuestion = async() =>{
 
@@ -185,7 +184,6 @@ function QuestionsPage() {
       if(data){
         setQuestions(data?.data)
       }
-
   }
   
   useEffect(()=>{
@@ -194,6 +192,7 @@ function QuestionsPage() {
       setSuggestions2([...suggestions2, {...suggestions2[index], text: item?.text, isCorrect: item?.isCorrect}])
     })
   }, [])
+
   return (
     <div className="flex h-full m-2 lg:m-4 lg:mx-10 flex-col">
       <div className="flex items-center justify-between m-2">
@@ -207,7 +206,7 @@ function QuestionsPage() {
         >
           create question
         </button>
-        <div className="flex space-x-2 items-center">
+        <div className="flex space-x-2 items-center z-0">
           <div className="relative flex items-center justify-center">
             <div className="px-2 py-2 rounded-full bg-white cursor-pointer">
               <Icons.AdjustmentsHorizontalIcon className="w-5 h-5 bottom-1 right-1 text-gray-400" />
@@ -224,7 +223,7 @@ function QuestionsPage() {
               <option value="point">point</option>
             </select>
           </div>
-          <div className="relative">
+          <div className="relative -z-10">
             <input
               type="search"
               onChange={(e) => setFilter({ ...filter, value: e.target.value })}
@@ -337,7 +336,7 @@ function QuestionsPage() {
             </div>
           </div>
         </div>
-        {currentQuestion.consigne && (
+        {currentQuestion?.consigne && (
           <div className="xs:hidden lg:scale-100 lg:flex flex-1 space-y-2 flex-col bg-white p-3  h-full overflow-y-auto">
             <div className="col-span-full">
               <div className="mt-2 bg-white flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
@@ -678,6 +677,7 @@ function QuestionsPage() {
             </div>
           </div>
         )}
+        
       </div>
       <QuestionView setQuestions={setQuestions} />
     </div>

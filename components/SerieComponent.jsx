@@ -79,20 +79,18 @@ function SerieComponent({item, setSeries}) {
     >
       <div className="flex items-center justify-between">
         <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert w-16 h-16"
+          className=" dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert w-16 h-16"
           src="/assets/images/folder.png"
           alt="Next.js Logo"
           width={180}
           height={37}
           priority
         />
-        <div className="z-20" onClick={() => handledelete()}>
+        <div className="z-0" onClick={() => handledelete()}>
           {!isLoading ? (
             <button
-              className=" bg-red-500 rounded-md inline-block text-white text-sm font-medium px-2 py-2  border-0 shadow-sm shadow-black/40 uppercase relative 
-        before:absolute before:w-full before:h-full before:inset-0  
-        before:bg-white/20 before:scale-0 hover:before:scale-100 before:transition-all 
-        before:rounded-full hover:before:rounded-none"
+              className=" bg-red-500 rounded-md  text-white text-sm font-medium px-2 py-2  border-0 shadow-sm shadow-black/40 uppercase  
+        "
             >
               <Icons.TrashIcon className="w-4 h-4" />
             </button>
