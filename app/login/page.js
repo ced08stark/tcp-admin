@@ -98,7 +98,4 @@ function Login() {
 
 export default Login;
 
-Login.getLayout = function getLayout(page) {
-  // Retourner la page sans utiliser le layout RootLayout
-  return page;
-};
+

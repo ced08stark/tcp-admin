@@ -3,12 +3,12 @@ import Image from "next/image";
 import React, {useEffect, useState} from 'react'
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { selectSerie } from "../../featured/serieSlice";
+import { selectSerie } from "../../../featured/serieSlice";
 import {
   setQuestion,
   selectQuestion,
   selectQuestionsSelect,
-} from "../../featured/questionSlice";
+} from "../../../featured/questionSlice";
 
 export default function Serie() {
   const serie = useSelector(selectSerie);

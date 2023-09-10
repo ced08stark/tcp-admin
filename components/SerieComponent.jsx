@@ -121,7 +121,7 @@ function SerieComponent({item, setSeries}) {
         </div>
         <div className="flex items-center space-x-2">
           <Icons.TrophyIcon className="w-6 h-6 text-green-500" />
-          <span className=" font-light text-sm">best score: 0 points</span>
+          <span className=" font-light text-sm">best score: 0 marks</span>
         </div>
       </div>
     </div>

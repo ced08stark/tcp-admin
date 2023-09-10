@@ -1,23 +1,23 @@
 "use client";
-import QuestionsRows from "../../components/QuestionsRows";
+import QuestionsRows from "../../../components/QuestionsRows";
 import React, {useState, useEffect, useRef} from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import SerieComponent from "../../components/SerieComponent";
-import AddSerie from "../../components/AddSerie";
-import GetCookies from "../../hooks/getCookies";
-import { instance, baseUrlImg } from "../../hooks/Axios";
+import SerieComponent from "../../../components/SerieComponent";
+import AddSerie from "../../../components/AddSerie";
+import GetCookies from "../../../hooks/getCookies";
+import { instance, baseUrlImg } from "../../../hooks/Axios";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setQuestion,
   selectQuestion,
   selectQuestionsSelect,
-} from "../../featured/questionSlice";
-import QuestionView from "../../components/QuestionView";
+} from "../../../featured/questionSlice";
+import QuestionView from "../../../components/QuestionView";
 import * as Icons from "@heroicons/react/24/outline"
 import { UploadButton } from "@uploadthing/react";
 import "@uploadthing/react/styles.css";
-import AudioPlayer from "../../components/AudioPlayer";
+import AudioPlayer from "../../../components/AudioPlayer";
 
 
 function QuestionsPage() {

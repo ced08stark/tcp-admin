@@ -1,26 +1,26 @@
 
 "use client";
-import QuestionsRows from "../../../components/QuestionsRows";
+import QuestionsRows from "../../../../components/QuestionsRows";
 import React, {useState, useEffect} from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import SerieComponent from "../../../components/SerieComponent";
-import AddSerie from "../../../components/AddSerie";
-import GetCookies from "../../../hooks/getCookies";
-import { instance, baseUrlImg } from "../../../hooks/Axios";
+import SerieComponent from "../../../../components/SerieComponent";
+import AddSerie from "../../../../components/AddSerie";
+import GetCookies from "../../../../hooks/getCookies";
+import { instance, baseUrlImg } from "../../../../hooks/Axios";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setQuestion,
   selectQuestion,
   selectQuestionsSelect
-} from "../../../featured/questionSlice";
-import QuestionView from "../../../components/QuestionView";
-import QuestionsRowSelect from "../../../components/QuestionsRowSelect";
-import { selectSerie } from "../../../featured/serieSlice";
+} from "../../../../featured/questionSlice";
+import QuestionView from "../../../../components/QuestionView";
+import QuestionsRowSelect from "../../../../components/QuestionsRowSelect";
+import { selectSerie } from "../../../../featured/serieSlice";
 import * as Icons from "@heroicons/react/24/outline";
-import { OurFileRouter } from "../../api/uploadthing/core";
+import { OurFileRouter } from "../../../api/uploadthing/core";
 import { UploadButton } from "@uploadthing/react";
-import AudioPlayer from "../../../components/AudioPlayer";
+import AudioPlayer from "../../../../components/AudioPlayer";
 
 let serieTable = []
 function QuestionsPage() {

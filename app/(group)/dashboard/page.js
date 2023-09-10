@@ -4,18 +4,18 @@ import React, {useState, useEffect} from "react"
 import Link from "next/link";
 import * as Icons from "@heroicons/react/24/outline"
 import { useRouter } from "next/navigation"
-import SerieComponent from "../../components/SerieComponent"
-import AddSerie from "../../components/AddSerie";
-import GetCookies from "../../hooks/getCookies";
-import { instance } from "../../hooks/Axios";
-import {OurUploadButton} from "../../components/UploadButton"
-import AudioPlayer from "../../components/AudioPlayer"
+import SerieComponent from "../../../components/SerieComponent"
+import AddSerie from "../../../components/AddSerie";
+import GetCookies from "../../../hooks/getCookies";
+import { instance } from "../../../hooks/Axios";
+import {OurUploadButton} from "../../../components/UploadButton"
+import AudioPlayer from "../../../components/AudioPlayer"
 import { useDispatch, useSelector } from "react-redux";
 import {
   setQuestion,
   selectQuestion,
   selectQuestionsSelect,
-} from "../../featured/questionSlice";
+} from "../../../featured/questionSlice";
 
 export default function Home() {
   const dispatch = useDispatch();

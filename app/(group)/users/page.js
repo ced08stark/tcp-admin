@@ -2,11 +2,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import UserRow from "../../components/UserRow"
-import GetCookies from "../../hooks/getCookies";
-import { instance, baseUrlImg } from "../../hooks/Axios";
+import UserRow from "../../../components/UserRow"
+import GetCookies from "../../../hooks/getCookies";
+import { instance, baseUrlImg } from "../../../hooks/Axios";
 import { useDispatch, useSelector } from "react-redux";
-import UserView from "../../components/UserView"
+import UserView from "../../../components/UserView"
 
 
 function UserPage() {

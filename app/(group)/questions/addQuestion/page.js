@@ -1,19 +1,19 @@
 "use client";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import AddSerie from "../../../components/AddSerie";
-import GetCookies from "../../../hooks/getCookies";
-import { instance } from "../../../hooks/Axios";
+import AddSerie from "../../../../components/AddSerie";
+import GetCookies from "../../../../hooks/getCookies";
+import { instance } from "../../../../hooks/Axios";
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 import {
   setQuestion,
   selectQuestion,
   selectQuestionsSelect,
-} from "../../../featured/questionSlice";
+} from "../../../../featured/questionSlice";
 
 import { UploadButton } from "@uploadthing/react";
-import AudioPlayer from "../../../components/AudioPlayer";
+import AudioPlayer from "../../../../components/AudioPlayer";
 
 
 
