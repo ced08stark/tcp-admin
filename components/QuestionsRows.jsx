@@ -5,14 +5,13 @@ import { setQuestion, selectQuestion } from "../featured/questionSlice";
 import GetCookies from "../hooks/getCookies";
 import { instance } from "../hooks/Axios";
 
-function QuestionsRows({item, setQuestions, id}) {
+function QuestionsRows({item, setQuestions, id, serie}) {
   const token = GetCookies("token");
   const [isLoading, setIsLoading] = useState(false);
   const currentQuestion = useSelector(selectQuestion)
   const dispatch = useDispatch();
   
   const getQuestions = async() =>{
-
     const data = await instance
         .get(
           "/api/question/questions",
@@ -39,20 +38,47 @@ function QuestionsRows({item, setQuestions, id}) {
         {
           headers: {
             Authorization: `basic ${token}`,
-            
           },
         }
       )
       .catch((err) => console.log(err));
     setIsLoading(false);
+    
+
     if(data){
       setQuestion({})
-      getQuestions()
+      Update()
+      
     }
     else{
       alert('delete question failed')
     }
   }
+
+  const Update = async () => {
+    const newTab = serie.questions.filter((i) => i._id != item._id);
+    setIsLoading(true);
+    const data = await instance
+      .patch(
+        `/api/serie/series/${serie._id}`,
+        {
+          libelle: serie.libelle,
+          questions: newTab,
+          eeQuestions: serie.eeQuestions,
+        },
+        {
+          headers: {
+            Authorization: `basic ${token}`,
+          },
+        }
+      )
+      .catch((err) => console.log(err.message));
+    setIsLoading(false);
+    if (data) {
+      alert("delete success");
+      getQuestions();
+    }
+  };
   const show = async () => {
     dispatch(setQuestion({}));
     dispatch(setQuestion({...currentQuestion, _id: item._id, libelle: item.libelle, consigne: item.consigne, numero: item.numero, categorie: item.categorie, discipline: item.discipline, duree: item.duree, suggestions: item.suggestions}))
@@ -74,6 +100,7 @@ function QuestionsRows({item, setQuestions, id}) {
       <td className="whitespace-nowrap px-6 py-4">
         {item?.discipline?.libelle}
       </td>
+      <td className="whitespace-nowrap px-6 py-4">{serie?.libelle}</td>
       <td className="whitespace-nowrap px-6 py-4">{item?.duree} min</td>
       <td className="whitespace-nowrap px-6 py-4">
         {item?.categorie?.point} points

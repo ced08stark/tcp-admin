@@ -10,6 +10,7 @@ import {
   selectQuestionsSelect,
 } from "../../../featured/questionSlice";
 
+
 export default function Serie() {
   const serie = useSelector(selectSerie);
   const currentQuestion = useSelector(selectQuestion);

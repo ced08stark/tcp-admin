@@ -21,6 +21,12 @@ const initialState = {
     suggestions: [],
     duree: 3,
   },
+  EEquestion: {
+    numero: null,
+    consigne: null,
+    typeProduction: null,
+    image: [],
+  },
   questionsSelect: [],
 };
 
@@ -31,13 +37,17 @@ export const questionSlice = createSlice({
     setQuestion: (state, action) => {
       state.question = action.payload;
     },
+    setEEQuestion: (state, action) => {
+      state.EEquestion = action.payload;
+    },
     setQuestionsSelect: (state, action) => {
       state.questionsSelect = action.payload;
     },
   },
 });
 
-export const { setQuestion, setQuestionsSelect } = questionSlice.actions;
+export const { setQuestion, setQuestionsSelect, setEEQuestion } = questionSlice.actions;
 export const selectQuestion = (state) => state.question.question;
+export const selectEEQuestion = (state) => state.question.EEquestion;
 export const selectQuestionsSelect = (state) => state.question.questionsSelect;
 export default questionSlice.reducer;
