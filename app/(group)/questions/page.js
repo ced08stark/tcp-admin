@@ -859,32 +859,34 @@ function QuestionsPage() {
                             numero
                           </th>
                           <th scope="col" className="px-6 py-4">
-                            consigne
-                          </th>
-                          <th scope="col" className="px-6 py-4">
-                            image(s)
+                            serie
                           </th>
                           <th scope="col" className="px-6 py-4">
                             type production
                           </th>
                           <th scope="col" className="px-6 py-4">
-                            serie
+                            task 1
+                          </th>
+                          <th scope="col" className="px-6 py-4">
+                            task 2
+                          </th>
+                          <th scope="col" className="px-6 py-4">
+                            task 3
                           </th>
                           <th scope="col" className="px-6 py-4"></th>
                         </tr>
                       </thead>
                       <tbody>
                         {series?.map((item, index) =>
-                          item?.eeQuestions
-                            ?.map((q, i) => (
-                              <QuestionsRowEE
-                                setQuestions={setQuestions}
-                                serie={item}
-                                item={q}
-                                key={i}
-                                id={i + 1}
-                              />
-                            ))
+                          item?.eeQuestions?.map((q, i) => (
+                            <QuestionsRowEE
+                              setQuestions={setQuestions}
+                              serie={item}
+                              item={q}
+                              key={i}
+                              id={i + 1}
+                            />
+                          ))
                         )}
                         {/* {eeQuestions.length > 0 ? (
                           eeQuestions

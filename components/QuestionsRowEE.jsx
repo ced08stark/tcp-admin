@@ -76,9 +76,7 @@ function QuestionsRowEE({ item, setQuestions, serie, id }) {
       setEEQuestion({
         ...currentQuestion,
         _id: item._id,
-        libelle: item.libelle,
-        consigne: item.consigne,
-        images: item.images,
+        tasks: item.tasks,
         typeProduction: item.typeProduction,
       })
     );
@@ -93,10 +91,55 @@ function QuestionsRowEE({ item, setQuestions, serie, id }) {
     >
       <td className="whitespace-nowrap px-6 py-4 font-medium">{id}</td>
       <td className="whitespace-nowrap px-6 py-4">{item?.numero}</td>
-      <td className="whitespace-nowrap px-6 py-4">{item?.consigne}</td>
-      <td className="whitespace-nowrap px-6 py-4">{item?.images?.length}</td>
+      <td className="whitespace-nowrap px-6 py-4">{serie?.libelle}</td>
       <td className="whitespace-nowrap px-6 py-4">{item?.typeProduction}</td>
-      <td className="whitespace-nowrap px-6 py-4">{serie.libelle}</td>
+      <td className="whitespace-nowrap px-6 py-4 flex-col">
+        <span> consigne: {item?.tasks[0]?.consigne}</span>
+        <br />
+        <span>
+          {" "}
+          images:{" "}
+          {!item?.tasks[0]?.images?.length
+            ? "aucune image"
+            : item?.tasks[0]?.images?.length}
+        </span>
+        <br />
+        <span>
+          min: {item?.tasks[0]?.minWord} | max: {item?.tasks[0]?.minWord}
+        </span>
+        <br />
+      </td>
+      <td className="whitespace-nowrap px-6 py-4 flex-col">
+        <span> consigne: {item?.tasks[1]?.consigne}</span>
+        <br />
+        <span>
+          images:{" "}
+          {!item?.tasks[1]?.images?.length
+            ? "aucune image"
+            : item?.tasks[1]?.images?.length}
+        </span>
+        <br />
+        <span>
+          min: {item?.tasks[1]?.minWord} | max: {item?.tasks[1]?.maxWord}
+        </span>
+        <br />
+      </td>
+      <td className="whitespace-nowrap px-6 py-4 flex-col">
+        <span> consigne: {item?.tasks[2]?.consigne}</span>
+        <br />
+        <span>
+          {" "}
+          images:{" "}
+          {!item?.tasks[2]?.images?.length
+            ? "aucune image"
+            : item?.tasks[2]?.images?.length}
+        </span>
+        <br />
+        <span>
+          min: {item?.tasks[2]?.minWord} | max: {item?.tasks[2]?.maxWord}
+        </span>
+        <br />
+      </td>
       <td className="whitespace-nowrap px-6 py-4">
         {!isLoading ? (
           <button

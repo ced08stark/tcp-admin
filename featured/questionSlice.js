@@ -23,9 +23,8 @@ const initialState = {
   },
   EEquestion: {
     numero: null,
-    consigne: null,
+    tasks: null,
     typeProduction: null,
-    image: [],
   },
   questionsSelect: [],
 };
