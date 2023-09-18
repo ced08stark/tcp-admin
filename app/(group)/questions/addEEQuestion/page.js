@@ -123,23 +123,29 @@ function AddQuestion() {
   const selectLists = useSelector(selectQuestionsSelect);
   const [tache1, setTache1] = useState({
     libelle: 'tache 1',
+    numero: 79,
     consigne: null,
     minWord: null,
     maxWord: null,
+    typeProduction: null,
     images: null
   });
   const [tache2, setTache2] = useState({
     libelle: "tache 2",
+    numero: 80,
     consigne: null,
     minWord: null,
     maxWord: null,
+    typeProduction: null,
     images: [],
   });
   const [tache3, setTache3] = useState({
     libelle: "tache 3",
+    numero: 81,
     consigne: null,
     minWord: null,
     maxWord: null,
+    typeProduction: null,
     images: [],
   });
   const [currentSerie, setCurrentSerie] = useState({
@@ -242,17 +248,15 @@ function AddQuestion() {
 
   const Created = async () => {
     setTache3({ ...tache3, images: Imagesfiles });
-    console.log(question)
+    console.log(tache2)
       setIsLoading(true);
       const data = await instance
         .post(
           "/api/eeQuestion/created",
+          
           //formData
           {
-            numero: question?.numero,
-            consigne: question?.consigne,
             tasks: [tache1, tache2, tache3],
-            typeProduction: question?.typeProduction,
           },
           {
             headers: {
@@ -299,7 +303,7 @@ function AddQuestion() {
           <legend className="text-sm  font-bold">
             Created & Posted question
           </legend>
-          <div>
+          {/* <div>
             <fieldset className="border border-solid space-y-2 border-gray-600 p-3">
               <legend className="text-xs  font-bold">identification</legend>
 
@@ -326,7 +330,7 @@ function AddQuestion() {
                 <span></span>
               )}
             </fieldset>
-          </div>
+          </div> */}
 
           <div>
             <fieldset className="border border-solid space-y-2 border-gray-600 p-3">
@@ -358,60 +362,63 @@ function AddQuestion() {
                   nouvelle serie
                 </button>
               </div>
-              <div className="flex items-center space-x-2">
-                <select
-                  onChange={(e) => {
-                    setQuestion({
-                      ...question,
-                      typeProduction: e.target.value,
-                    });
-                  }}
-                  id="hs-select-label"
-                  className="py-2 px-4 pr-9 block flex-1 bg-white  rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
-                >
-                  <option selected>Select Production type</option>
-                  <option value="Paragraphe">Paragraphe</option>
-                  <option value="Courriel">Courriel</option>
-                  <option value="Lettre">Lettre</option>
-                </select>
-              </div>
-              <fieldset className="flex xs:flex-col md:flex-row w-full  border border-solid space-y-2 border-gray-600 p-3">
-                <div className="w-1/3">
-                  <legend className="text-xl  font-bold">Tache 1</legend>
-                  <input
-                    type="number"
-                    min={80}
-                    onChange={(e) => {
-                      setTache1({
-                        ...tache1,
-                        minWord: parseInt(e.target.value),
-                      });
-                    }}
-                    className="peer p-2 block min-h-[auto] bg-white mb-10  text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
-                    placeholder="mots minimuns"
-                  />
-                  <input
-                    type="number"
-                    min={80}
-                    onChange={(e) => {
-                      setTache1({
-                        ...tache1,
-                        maxWord: parseInt(e.target.value),
-                      });
-                    }}
-                    className="peer p-2 block min-h-[auto] bg-white text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
-                    placeholder="mots maximums"
-                  />
+
+              <fieldset className="w-full  border border-solid space-y-2 border-gray-600 p-3">
+                <div className="flex w-full xs:flex-col md:flex-row">
+                  <div className="w-1/3">
+                    <legend className="text-xl  font-bold">Tache 1</legend>
+                    <input
+                      type="number"
+                      min={80}
+                      onChange={(e) => {
+                        setTache1({
+                          ...tache1,
+                          minWord: parseInt(e.target.value),
+                        });
+                      }}
+                      className="peer p-2 block min-h-[auto] bg-white mb-10  text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                      placeholder="mots minimuns"
+                    />
+                    <input
+                      type="number"
+                      min={80}
+                      onChange={(e) => {
+                        setTache1({
+                          ...tache1,
+                          maxWord: parseInt(e.target.value),
+                        });
+                      }}
+                      className="peer p-2 block min-h-[auto] bg-white text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                      placeholder="mots maximums"
+                    />
+                  </div>
+                  <div className=" mx-auto space-y-2 w-full">
+                    <span>consigne tache 1</span>
+                    <textarea
+                      onChange={(e) =>
+                        setTache1({ ...tache1, consigne: e.target.value })
+                      }
+                      className="w-full h-28 p-1 rounded-lg my-1"
+                      placeholder="votre texte ici"
+                    ></textarea>
+                  </div>
                 </div>
-                <div className=" mx-auto space-y-2 w-full">
-                  <span>consigne tache 1</span>
-                  <textarea
-                    onChange={(e) =>
-                      setTache1({ ...tache1, consigne: e.target.value })
-                    }
-                    className="w-full h-28 p-1 rounded-lg my-1"
-                    placeholder="votre texte ici"
-                  ></textarea>
+                <div className="flex items-center space-x-2">
+                  <select
+                    onChange={(e) => {
+                      setTache1({
+                        ...tache1,
+                        typeProduction: e.target.value,
+                      });
+                    }}
+                    id="hs-select-label"
+                    className="py-2 px-4 pr-9 block flex-1 bg-white  rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                  >
+                    <option selected>Production type</option>
+                    <option value="Paragraphe">Paragraphe</option>
+                    <option value="Courriel">Courriel</option>
+                    <option value="Lettre">Lettre</option>
+                  </select>
                 </div>
               </fieldset>
               <fieldset className="w-full  border border-solid space-y-2 border-gray-600 p-3">
@@ -453,6 +460,23 @@ function AddQuestion() {
                       placeholder="votre texte ici"
                     ></textarea>
                   </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <select
+                    onChange={(e) => {
+                      setTache2({
+                        ...tache2,
+                        typeProduction: e.target.value,
+                      });
+                    }}
+                    id="hs-select-label"
+                    className="py-2 px-4 pr-9 block flex-1 bg-white  rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                  >
+                    <option selected>Production type</option>
+                    <option value="Paragraphe">Paragraphe</option>
+                    <option value="Courriel">Courriel</option>
+                    <option value="Lettre">Lettre</option>
+                  </select>
                 </div>
                 <div className="col-span-full">
                   <label
@@ -557,6 +581,23 @@ function AddQuestion() {
                       placeholder="votre texte ici"
                     ></textarea>
                   </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <select
+                    onChange={(e) => {
+                      setTache3({
+                        ...tache3,
+                        typeProduction: e.target.value,
+                      });
+                    }}
+                    id="hs-select-label"
+                    className="py-2 px-4 pr-9 block flex-1 bg-white  rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                  >
+                    <option selected>Production type</option>
+                    <option value="Paragraphe">Paragraphe</option>
+                    <option value="Courriel">Courriel</option>
+                    <option value="Lettre">Lettre</option>
+                  </select>
                 </div>
                 <div className="col-span-full">
                   <label

@@ -856,13 +856,7 @@ function QuestionsPage() {
                             #
                           </th>
                           <th scope="col" className="px-6 py-4">
-                            numero
-                          </th>
-                          <th scope="col" className="px-6 py-4">
                             serie
-                          </th>
-                          <th scope="col" className="px-6 py-4">
-                            type production
                           </th>
                           <th scope="col" className="px-6 py-4">
                             task 1

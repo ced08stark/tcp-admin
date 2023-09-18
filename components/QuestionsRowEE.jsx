@@ -77,7 +77,6 @@ function QuestionsRowEE({ item, setQuestions, serie, id }) {
         ...currentQuestion,
         _id: item._id,
         tasks: item.tasks,
-        typeProduction: item.typeProduction,
       })
     );
     let modal = document.querySelector("#lightbox");
@@ -90,11 +89,13 @@ function QuestionsRowEE({ item, setQuestions, serie, id }) {
       className="even:bg-gray-100 border-b dark:border-neutral-500 transition duration-300 ease-in-out hover:even:bg-white hover:bg-neutral-100 cursor-pointer"
     >
       <td className="whitespace-nowrap px-6 py-4 font-medium">{id}</td>
-      <td className="whitespace-nowrap px-6 py-4">{item?.numero}</td>
       <td className="whitespace-nowrap px-6 py-4">{serie?.libelle}</td>
-      <td className="whitespace-nowrap px-6 py-4">{item?.typeProduction}</td>
       <td className="whitespace-nowrap px-6 py-4 flex-col">
+        <span> numero: {item?.tasks[1]?.numero}</span>
+        <br />
         <span> consigne: {item?.tasks[0]?.consigne}</span>
+        <br />
+        <span> type production: {item?.tasks[0]?.typeProduction}</span>
         <br />
         <span>
           {" "}
@@ -110,7 +111,11 @@ function QuestionsRowEE({ item, setQuestions, serie, id }) {
         <br />
       </td>
       <td className="whitespace-nowrap px-6 py-4 flex-col">
+        <span> numero: {item?.tasks[1]?.numero}</span>
+        <br />
         <span> consigne: {item?.tasks[1]?.consigne}</span>
+        <br />
+        <span> type production: {item?.tasks[1]?.typeProduction}</span>
         <br />
         <span>
           images:{" "}
@@ -125,7 +130,11 @@ function QuestionsRowEE({ item, setQuestions, serie, id }) {
         <br />
       </td>
       <td className="whitespace-nowrap px-6 py-4 flex-col">
+        <span> numero: {item?.tasks[2]?.numero}</span>
+        <br />
         <span> consigne: {item?.tasks[2]?.consigne}</span>
+        <br />
+        <span> type production: {item?.tasks[2]?.typeProduction}</span>
         <br />
         <span>
           {" "}
