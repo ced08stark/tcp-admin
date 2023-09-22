@@ -46,7 +46,7 @@ function TaskMark({name, consigne, note, images, reponse, min, max, status, note
       <div className="m-3 w-full">
         <textarea
           disabled
-          className={`text-lg w-full h-[300px] font-medium p-3 rounded-xl border-2 ${
+          className={`text-lg xs:w-[90%] lg:w-full h-[300px] font-medium p-3 rounded-xl border-2 ${
             reponse.trim().length > max || reponse.trim().length < min
               ? "border-red-300"
               : "border-green-300"
