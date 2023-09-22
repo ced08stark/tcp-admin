@@ -24,10 +24,42 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const currentQuestion = useSelector(selectQuestion);
   const [series, setSeries] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [tests, setTests] = useState([]);
   const Add = async() =>{
       let modal = document.querySelector("#lightbox");
       modal.classList.remove("scale-0");
   }
+
+  const getTests = async () => {
+    const data = await instance
+      .get(`/api/eeTest/tests`, {
+        headers: {
+          Authorization: `basic ${token}`,
+        },
+      })
+      .catch((err) => console.log(err.message));
+    console.log(data);
+    if (data) {
+      setTests(data?.data);
+    }
+  };
+
+  const getUsers = async () => {
+    const data = await instance
+      .get("/api/user/users", {
+        headers: {
+          Authorization: `basic ${token}`,
+        },
+      })
+      .catch((err) => console.log(err.message));
+    console.log(data);
+    if (data) {
+      setUsers(data?.data);
+    }
+  };
+
 
   const getSeries = async () => {
       const data = await instance
@@ -44,6 +76,19 @@ export default function Home() {
       if(data){
         setSeries(data?.data)
       }
+  };
+  const getQuestions = async () => {
+    const data = await instance
+      .get("/api/question/questions", {
+        headers: {
+          Authorization: `basic ${token}`,
+        },
+      })
+      .catch((err) => console.log(err.message));
+    console.log(data);
+    if (data) {
+      setQuestions(data?.data);
+    }
   };
 
   useEffect(() => {
@@ -64,6 +109,9 @@ export default function Home() {
 
   useEffect(()=>{
     getSeries()
+    getUsers()
+    getTests()
+    getQuestions()
   }, [] )
 
   return (
@@ -78,7 +126,7 @@ export default function Home() {
         <div className="w-full flex overflow-x-auto pb-2 no-scrollbar">
           <div className="flex flex-nowrap">
             {series?.map((item, index) => (
-              <SerieComponent setSeries={setSeries} item={item}  key={index} />
+              <SerieComponent setSeries={setSeries} item={item} key={index} />
             ))}
             <div
               onClick={() => Add()}
@@ -90,7 +138,6 @@ export default function Home() {
         </div>
       </div>
       <div className="mb-32 w-full grid text-center lg:mb-0 lg:grid-cols-2 lg:text-left p-4 lg:p-2">
-        
         <Link
           href="/questions"
           className="group  overflow-hidden relative hover:bg-white rounded-lg border border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
@@ -116,16 +163,21 @@ export default function Home() {
               priority
             />
           </div>
+          <div className="p-3 absolute right-2 bottom-4 rounded-sm text-white text-xl bg-blue-300 group-hover:bg-blue-500 group-hover:rounded-full">
+            <span>
+              {questions.length.toString().length > 1
+                ? questions?.length
+                : "0" + questions?.length}
+            </span>
+          </div>
         </Link>
         <Link
-          href="/"
+          href="/TestExpression"
           className="group rounded-lg overflow-hidden border relative hover:bg-white border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30 flex justify-between"
-          target="_blank"
-          rel="noopener noreferrer"
         >
           <div className="z-20">
             <h2 className={`mb-3 text-2xl font-semibold`}>
-              quizz{" "}
+              Expression Test{" "}
               <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
                 -&gt;
               </span>
@@ -144,11 +196,18 @@ export default function Home() {
               priority
             />
           </div>
+          <div className="p-3 absolute right-2 bottom-4 rounded-sm text-white text-xl bg-blue-300 group-hover:bg-blue-500 group-hover:rounded-full ">
+            <span>
+              {tests?.length.toString().length > 1
+                ? tests?.length
+                : "0" + tests?.length}
+            </span>
+          </div>
         </Link>
 
         <Link
           href="/"
-          className="group rounded-lg relative overflow-hidden hover:bg-white border m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
+          className="group rounded-lg relative overflow-hidden hover:bg-white border m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between "
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -172,6 +231,9 @@ export default function Home() {
               height={37}
               priority
             />
+          </div>
+          <div className="p-3 absolute right-2 bottom-4 rounded-sm text-white text-xl bg-blue-300 group-hover:bg-blue-500 group-hover:rounded-full">
+            04
           </div>
         </Link>
         <Link
@@ -199,10 +261,17 @@ export default function Home() {
               priority
             />
           </div>
+          <div className="p-3 flex items-center justify-center  absolute right-2 bottom-4 text-white text-xl bg-blue-300 group-hover:bg-blue-500 group-hover:rounded-full">
+            <span>
+              {users?.length.toString().length > 1
+                ? users?.length
+                : "0" + users?.length}
+            </span>
+          </div>
         </Link>
       </div>
-      
-      {<AddSerie setSeries={setSeries} series={series}  />}
+
+      {<AddSerie setSeries={setSeries} series={series} />}
     </main>
   );
 }
