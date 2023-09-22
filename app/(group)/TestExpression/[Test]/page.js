@@ -158,7 +158,7 @@ function Test() {
                 dashboard. Perfect choice for your next SaaS application"
         />
       )}
-      <div className="w-[80%] mx-auto my-4 justify-between items-center flex">
+      <div className="xs:w-full lg:w-[80%] mx-auto my-4 justify-between items-center flex">
         <button
           onClick={() => handlePressPrev()}
           className={`px-6 py-2 text-white ${
