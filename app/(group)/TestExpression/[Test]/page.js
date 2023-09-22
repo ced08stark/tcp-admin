@@ -101,7 +101,7 @@ function Test() {
               {parseInt(note1) + parseInt(note2) + parseInt(note3)} / 20
             </span>
             <span
-              className={`text-xs px-3 py-1 rounded-full ${
+              className={`text-xs px-2 md:px-3 py-1 rounded-full ${
                 test?.status == "en cours" ? "bg-green-500" : "bg-gray-900"
               } text-white`}
             >
