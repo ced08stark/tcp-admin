@@ -4,6 +4,8 @@ import { useParams } from "next/navigation";
 import TaskMark from '../../../../components/TaskMark'
 import GetCookies from "../../../../hooks/getCookies";
 import { instance } from "../../../../hooks/Axios";
+import { useRouter } from "next/navigation";
+
 
 function Test() {
   const params = useParams();
@@ -14,6 +16,10 @@ function Test() {
    const [note1, setNote1] = useState(0)
    const [note2, setNote2] = useState(0)
    const [note3, setNote3] = useState(0)
+   const router = useRouter()
+   const [reponse1, setReponse1] = useState("");
+   const [reponse2, setReponse2] = useState("");
+   const [reponse3, setReponse3] = useState("");
 
    const getTest = async () => {
      const data = await instance
@@ -26,6 +32,10 @@ function Test() {
      console.log(data);
      if (data) {
        setTest(data?.data);
+       //console.log(JSON.parse(data?.data?.payload))
+       setReponse1(data ? JSON.parse(data?.data?.payload)?.textOne : '');
+       setReponse2(data ? JSON.parse(data?.data?.payload)?.textTwo : '');
+       setReponse3(data ? JSON.parse(data?.data?.payload)?.textThree : '');
        setNote1(data?.data?.resultat[0]?.note)
        setNote2(data?.data?.resultat[1]?.note);
        setNote3(data?.data?.resultat[2]?.note);
@@ -60,7 +70,7 @@ function Test() {
                 { task: "tache2", note: note2 },
                 { task: "tache3", note: note3 },
               ],
-              payload: "string",
+              payload: test?.payload,
               status: "terminer",
             },
             {
@@ -74,6 +84,7 @@ function Test() {
           console.log(data)
           if(data){
             alert('test envoyer avec success')
+            router.push("/TestExpression");
           }
           else{
             alert('une erreur est survenu lors de l\'envoi ')
@@ -121,9 +132,9 @@ function Test() {
           note={note1}
           setNote={setNote1}
           consigne={test?.serie?.eeQuestions[0]?.tasks[0]?.consigne}
-          reponse="Flowbite is just awesome. It contains tons of predesigned
-                components and pages starting from login screen to complex
-                dashboard. Perfect choice for your next SaaS application"
+          reponse={
+            reponse1
+          }
         />
       )}
       {taskIndex == 1 && (
@@ -137,9 +148,7 @@ function Test() {
           setNote={setNote2}
           status={test?.status}
           noteMax={8}
-          reponse="Flowbite is just awesome. It contains tons of predesigned
-                components and pages starting from login screen to complex
-                dashboard. Perfect choice for your next SaaS application"
+          reponse={reponse2}
         />
       )}
       {taskIndex == 2 && (
@@ -153,9 +162,7 @@ function Test() {
           note={note3}
           setNote={setNote3}
           status={test?.status}
-          reponse="Flowbite is just awesome. It contains tons of predesigned
-                components and pages starting from login screen to complex
-                dashboard. Perfect choice for your next SaaS application"
+          reponse={reponse3}
         />
       )}
       <div className="xs:w-full lg:w-[80%] mx-auto my-4 justify-between items-center flex">

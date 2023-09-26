@@ -38,9 +38,16 @@ function TaskMark({name, consigne, note, images, reponse, min, max, status, note
               </p>
             </blockquote>
           </figure>
-          <button onClick={()=>viewImages()} className="px-4 py-1 bg-blue-500 rounded-md text-white my-4">
-            voir les documents
-          </button>
+          {images?.map((_, i) => (
+            <Link
+              key={i}
+              target="_blank"
+              href={_}
+              className="px-4 py-1 bg-blue-500 rounded-md text-white my-4"
+            >
+              voir le document {i + 1} 
+            </Link>
+          ))}
         </div>
       </div>
       <div className="m-3 w-full">
@@ -51,9 +58,8 @@ function TaskMark({name, consigne, note, images, reponse, min, max, status, note
               ? "border-red-300"
               : "border-green-300"
           }  text-gray-900 dark:text-white`}
-        >
-          {reponse}
-        </textarea>
+          value={reponse}
+        ></textarea>
         <div className="flex items-center justify-between">
           <div
             className={`${

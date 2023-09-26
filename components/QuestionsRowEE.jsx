@@ -86,67 +86,70 @@ function QuestionsRowEE({ item, setQuestions, serie, id }) {
   return (
     <tr
       onClick={() => show()}
-      className="even:bg-gray-100 border-b dark:border-neutral-500 transition duration-300 ease-in-out hover:even:bg-white hover:bg-neutral-100 cursor-pointer"
+      className="even:bg-gray-100  border-b dark:border-neutral-500 transition duration-300 ease-in-out hover:even:bg-white hover:bg-neutral-100 cursor-pointer"
     >
       <td className="whitespace-nowrap px-6 py-4 font-medium">{id}</td>
       <td className="whitespace-nowrap px-6 py-4">{serie?.libelle}</td>
-      <td className="whitespace-nowrap px-6 py-4 flex-col">
-        <span> numero: {item?.tasks[1]?.numero}</span>
+      <td className="whitespace-wrap   px-6 py-4 flex-col">
+        <p> numero: {item?.tasks[0]?.numero}</p>
         <br />
-        <span> consigne: {item?.tasks[0]?.consigne}</span>
+        <p className="font-semibold"> consigne: {item?.tasks[0]?.consigne}</p>
         <br />
-        <span> type production: {item?.tasks[0]?.typeProduction}</span>
+        <p> type production: {item?.tasks[0]?.typeProduction}</p>
         <br />
-        <span>
+        <p>
           {" "}
           images:{" "}
           {!item?.tasks[0]?.images?.length
             ? "aucune image"
             : item?.tasks[0]?.images?.length}
-        </span>
+        </p>
         <br />
-        <span>
+        <p>
           min: {item?.tasks[0]?.minWord} | max: {item?.tasks[0]?.minWord}
-        </span>
+        </p>
         <br />
       </td>
-      <td className="whitespace-nowrap px-6 py-4 flex-col">
-        <span> numero: {item?.tasks[1]?.numero}</span>
+      <td className="whitespace-wrap  px-6 py-4 flex-col">
+        <p> numero: {item?.tasks[1]?.numero}</p>
         <br />
-        <span> consigne: {item?.tasks[1]?.consigne}</span>
+        <p className="font-semibold">
+          {" "}
+          consigne: {item?.tasks[1]?.consigne}
+        </p>
         <br />
-        <span> type production: {item?.tasks[1]?.typeProduction}</span>
+        <p> type production: {item?.tasks[1]?.typeProduction}</p>
         <br />
-        <span>
+        <p>
           images:{" "}
           {!item?.tasks[1]?.images?.length
             ? "aucune image"
             : item?.tasks[1]?.images?.length}
-        </span>
+        </p>
         <br />
-        <span>
+        <p>
           min: {item?.tasks[1]?.minWord} | max: {item?.tasks[1]?.maxWord}
-        </span>
+        </p>
         <br />
       </td>
-      <td className="whitespace-nowrap px-6 py-4 flex-col">
-        <span> numero: {item?.tasks[2]?.numero}</span>
+      <td className="whitespace-wrap px-6 py-4 flex-col">
+        <p> numero: {item?.tasks[2]?.numero}</p>
         <br />
-        <span> consigne: {item?.tasks[2]?.consigne}</span>
+        <p className="font-semibold"> consigne: {item?.tasks[2]?.consigne}</p>
         <br />
-        <span> type production: {item?.tasks[2]?.typeProduction}</span>
+        <p> type production: {item?.tasks[2]?.typeProduction}</p>
         <br />
-        <span>
+        <p>
           {" "}
           images:{" "}
           {!item?.tasks[2]?.images?.length
             ? "aucune image"
             : item?.tasks[2]?.images?.length}
-        </span>
+        </p>
         <br />
-        <span>
+        <p>
           min: {item?.tasks[2]?.minWord} | max: {item?.tasks[2]?.maxWord}
-        </span>
+        </p>
         <br />
       </td>
       <td className="whitespace-nowrap px-6 py-4">

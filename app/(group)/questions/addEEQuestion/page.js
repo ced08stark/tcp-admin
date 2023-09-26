@@ -18,7 +18,7 @@ import AudioPlayer from "../../../../components/AudioPlayer";
 // You need to import our styles for the button to look right. Best to import in the root /layout.tsx but this is fine
 import "@uploadthing/react/styles.css";
 
-const FileComponent = ({setImages, images}) => {
+const FileComponent = ({setImages, images, tache, setTache}) => {
   const [imageFile, setImageFile] = useState("");
   return (
     <div className="mt-2 bg-white flex items-center justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
@@ -58,6 +58,7 @@ const FileComponent = ({setImages, images}) => {
                   if (res) {
                     setImageFile(res[0].fileUrl);
                     setImages([...images, res[0].fileUrl]);
+                    setTache({ ...tache, images: [...tache.images, res[0].fileUrl] });
                     alert("Upload Completed");
                   }
                   // Do something with the respons
@@ -81,9 +82,11 @@ function AddQuestion() {
   const router = useRouter();
   const token = GetCookies("token");
   const [Imagesfiles, setImagesfiles] = useState([])
+  const [Imagesfiles1, setImagesfiles1] = useState([])
+  const [Imagesfiles2, setImagesfiles2] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   // eslint-disable-next-line react/jsx-key
-  const [otherFiles, setOtherFiles] =  useState([<FileComponent images={Imagesfiles} setImages={setImagesfiles}  />]);
+ 
   const [suggestion1, setSuggestion1] = useState({
     text: null,
     isCorrect: false,
@@ -128,7 +131,7 @@ function AddQuestion() {
     minWord: null,
     maxWord: null,
     typeProduction: null,
-    images: null
+    images: []
   });
   const [tache2, setTache2] = useState({
     libelle: "tache 2",
@@ -172,12 +175,46 @@ function AddQuestion() {
           setOtherFiles([
             ...otherFiles,
             // eslint-disable-next-line react/jsx-key
-            <FileComponent images={Imagesfiles} setImages={setImagesfiles} />,
+            <FileComponent
+              images={Imagesfiles}
+              setImages={setImagesfiles}
+              tache={tache3}
+              setTache={setTache3}
+            />,
           ]);
         }
         
         
   }
+
+  const addOtherFile1 = () => {
+    if (otherFiles1?.length >= 3) {
+      alert("pas plus de 3 images");
+    } else {
+      setOtherFiles1([
+        ...otherFiles1,
+        // eslint-disable-next-line react/jsx-key
+        <FileComponent
+          images={Imagesfiles1}
+          tache={tache1}
+          setTache={setTache1}
+          setImages={setImagesfiles1}
+        />,
+      ]);
+    }
+  };
+
+  const addOtherFile2 = () => {
+    if (otherFiles2?.length >= 3) {
+      alert("pas plus de 3 images");
+    } else {
+      setOtherFiles2([
+        ...otherFiles2,
+        // eslint-disable-next-line react/jsx-key
+        <FileComponent images={Imagesfiles2} tache={tache2} setTache={setTache2} setImages={setImagesfiles2} />,
+      ]);
+    }
+  };
 
   const getSeries = async () => {
     const data = await instance
@@ -202,6 +239,7 @@ function AddQuestion() {
       }
     }
   };
+
   const handleChangeNumber = (numero) => {
     setExist(false);
     setQuestion({...question, numero: numero})
@@ -238,7 +276,7 @@ function AddQuestion() {
     setIsLoading(false);
     if (data) {
       alert("create question success");
-      router.push("/dashboard");
+      router.push("/questions");
     } else {
       alert("echec");
     }
@@ -247,8 +285,10 @@ function AddQuestion() {
  
 
   const Created = async () => {
-    setTache3({ ...tache3, images: Imagesfiles });
-    console.log(tache2)
+    // setTache3({ ...tache3, images: Imagesfiles });
+    // setTache2({ ...tache2, images: Imagesfiles2 });
+    // setTache1({ ...tache1, images: Imagesfiles1 });
+    console.log([tache1, tache2, tache3])
       setIsLoading(true);
       const data = await instance
         .post(
@@ -286,6 +326,35 @@ function AddQuestion() {
   const onDrop = useCallback((acceptedFiles) => {
     setFiles(acceptedFiles);
   }, []);
+
+   const [otherFiles, setOtherFiles] = useState([
+     // eslint-disable-next-line react/jsx-key
+     <FileComponent
+       images={Imagesfiles}
+       tache={tache3}
+       setTache={setTache3}
+       setImages={setImagesfiles}
+     />,
+   ]);
+   // eslint-disable-next-line react/jsx-key
+   const [otherFiles1, setOtherFiles1] = useState([
+     // eslint-disable-next-line react/jsx-key
+     <FileComponent
+       images={Imagesfiles1}
+       tache={tache1}
+       setTache={setTache1}
+       setImages={setImagesfiles1}
+     />,
+   ]);
+   const [otherFiles2, setOtherFiles2] = useState([
+     // eslint-disable-next-line react/jsx-key
+     <FileComponent
+       images={Imagesfiles2}
+       tache={tache2}
+       setTache={setTache2}
+       setImages={setImagesfiles2}
+     />,
+   ]);
 
   
 
@@ -420,6 +489,22 @@ function AddQuestion() {
                     <option value="Lettre">Lettre</option>
                   </select>
                 </div>
+                <div className="col-span-full">
+                  <label
+                    htmlFor="cover-photo"
+                    className="block text-sm font-medium leading-6 text-gray-900"
+                  ></label>
+
+                  {otherFiles1}
+                  <div
+                    className="w-full flex items-center justify-end "
+                    onClick={() => addOtherFile1()}
+                  >
+                    <span className="px-2 py-1 rounded-md mt-2 bg-gray-900 text-white cursor-pointer">
+                      autre image
+                    </span>
+                  </div>
+                </div>
               </fieldset>
               <fieldset className="w-full  border border-solid space-y-2 border-gray-600 p-3">
                 <div className="flex w-full xs:flex-col md:flex-row">
@@ -484,58 +569,14 @@ function AddQuestion() {
                     className="block text-sm font-medium leading-6 text-gray-900"
                   ></label>
 
-                  <div className="mt-2 bg-white flex items-center justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                    <div className="text-center ">
-                      {tache2?.images.length < 0 ? (
-                        <svg
-                          className="mx-auto h-12 w-12 text-gray-300"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                      ) : (
-                        // <Image
-                        //   src={tache2?.images[0]}
-                        //   className="w-full"
-                        //   alt="Phone image"
-                        //   width={300}
-                        //   height={300}
-                        //   priority
-                        // />
-                        <></>
-                      )}
-                      <div className="mt-4 flex items-center justify-center text-sm leading-6 text-gray-600">
-                        <label
-                          htmlFor="file-upload"
-                          className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                        >
-                          <span>Upload a file</span>
-                          <UploadButton
-                            endpoint="imageUploader"
-                            onClientUploadComplete={(res) => {
-                              if (res) {
-                                setTache2({
-                                  ...tache2,
-                                  images: res[0].fileUrl,
-                                });
-                                alert("Upload Completed");
-                              }
-                              // Do something with the respons
-                            }}
-                            onUploadError={(error) => {
-                              // Do something with the error.
-                              alert(`ERROR! ${error.message}`);
-                            }}
-                          />
-                        </label>
-                      </div>
-                    </div>
+                  {otherFiles2}
+                  <div
+                    className="w-full flex items-center justify-end "
+                    onClick={() => addOtherFile2()}
+                  >
+                    <span className="px-2 py-1 rounded-md mt-2 bg-gray-900 text-white cursor-pointer">
+                      autre image
+                    </span>
                   </div>
                 </div>
               </fieldset>
