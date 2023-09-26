@@ -13,7 +13,19 @@ function UserPage() {
 
     const [users, setUsers] = useState([]);
     const token = GetCookies("token");
-    
+   const getUsers = async () => {
+     const data = await instance
+       .get("/api/user/users", {
+         headers: {
+           Authorization: `basic ${token}`,
+         },
+       })
+       .catch((err) => console.log(err.message));
+     console.log(data);
+     if (data) {
+       setUsers(data?.data);
+     }
+   };
 
     useEffect(() => {
       getUsers();
