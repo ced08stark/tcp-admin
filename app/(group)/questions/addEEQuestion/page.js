@@ -285,10 +285,7 @@ function AddQuestion() {
  
 
   const Created = async () => {
-    // setTache3({ ...tache3, images: Imagesfiles });
-    // setTache2({ ...tache2, images: Imagesfiles2 });
-    // setTache1({ ...tache1, images: Imagesfiles1 });
-    console.log([tache1, tache2, tache3])
+   
       setIsLoading(true);
       const data = await instance
         .post(
