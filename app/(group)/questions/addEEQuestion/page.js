@@ -85,7 +85,6 @@ function AddQuestion() {
   const [Imagesfiles1, setImagesfiles1] = useState([])
   const [Imagesfiles2, setImagesfiles2] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  // eslint-disable-next-line react/jsx-key
  
   const [suggestion1, setSuggestion1] = useState({
     text: null,
@@ -333,7 +332,7 @@ function AddQuestion() {
        setImages={setImagesfiles}
      />,
    ]);
-   // eslint-disable-next-line react/jsx-key
+  
    const [otherFiles1, setOtherFiles1] = useState([
      // eslint-disable-next-line react/jsx-key
      <FileComponent
