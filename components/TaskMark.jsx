@@ -45,7 +45,7 @@ function TaskMark({name, consigne, note, images, reponse, min, max, status, note
               href={_}
               className="px-4 py-1 bg-blue-500 rounded-md text-white my-4"
             >
-              voir le document {i + 1} 
+              voir le document {i + 1}
             </Link>
           ))}
         </div>
@@ -54,7 +54,8 @@ function TaskMark({name, consigne, note, images, reponse, min, max, status, note
         <textarea
           disabled
           className={`text-lg xs:w-[90%] lg:w-full h-[300px] font-medium p-3 rounded-xl border-2 ${
-            reponse.trim().length > max || reponse.trim().length < min
+            reponse.split(/\s+/).length > max ||
+            reponse.split(/\s+/).length < min
               ? "border-red-300"
               : "border-green-300"
           }  text-gray-900 dark:text-white`}
@@ -63,12 +64,13 @@ function TaskMark({name, consigne, note, images, reponse, min, max, status, note
         <div className="flex items-center justify-between">
           <div
             className={`${
-              reponse.trim().length > max || reponse.trim().length < min
+              reponse.split(/\s+/).length > max ||
+              reponse.split(/\s+/).length < min
                 ? "text-red-500"
                 : "text-green-500"
             }`}
           >
-            {reponse.trim().length} / {max} mots
+            {reponse.split(/\s+/).length} / {max} mots
           </div>
           <div className="m-1">
             <span className="text-sm xs:hidden lg:inline">

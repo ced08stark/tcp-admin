@@ -18,7 +18,7 @@ import AudioPlayer from "../../../../components/AudioPlayer";
 // You need to import our styles for the button to look right. Best to import in the root /layout.tsx but this is fine
 import "@uploadthing/react/styles.css";
 
-const FileComponent = ({setImages, images, tache, setTache}) => {
+const FileComponent = ({setImages, images}) => {
   const [imageFile, setImageFile] = useState("");
   return (
     <div className="mt-2 bg-white flex items-center justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
@@ -58,7 +58,6 @@ const FileComponent = ({setImages, images, tache, setTache}) => {
                   if (res) {
                     setImageFile(res[0].fileUrl);
                     setImages([...images, res[0].fileUrl]);
-                    setTache({ ...tache, images: [...tache.images, res[0].fileUrl] });
                     alert("Upload Completed");
                   }
                   // Do something with the respons
@@ -177,8 +176,6 @@ function AddQuestion() {
             <FileComponent
               images={Imagesfiles}
               setImages={setImagesfiles}
-              tache={tache3}
-              setTache={setTache3}
             />,
           ]);
         }
@@ -196,8 +193,6 @@ function AddQuestion() {
         <FileComponent
           images={Imagesfiles1}
           tache={tache1}
-          setTache={setTache1}
-          setImages={setImagesfiles1}
         />,
       ]);
     }
@@ -210,7 +205,7 @@ function AddQuestion() {
       setOtherFiles2([
         ...otherFiles2,
         // eslint-disable-next-line react/jsx-key
-        <FileComponent images={Imagesfiles2} tache={tache2} setTache={setTache2} setImages={setImagesfiles2} />,
+        <FileComponent images={Imagesfiles2} setImages={setImagesfiles2} />,
       ]);
     }
   };
@@ -230,12 +225,8 @@ function AddQuestion() {
   };
   const handleSelectSerie = (datas) => {
     setExist(false);
-    if (datas != null) {
-      for (var data of datas) {
-        if (question?.numero == data?.numero) {
-          setExist(true);
-        }
-      }
+    if (datas == null || datas?.length > 0) {
+      setExist(true);
     }
   };
 
@@ -255,7 +246,6 @@ function AddQuestion() {
 
   const Update = async (tab) => {
     console.log(currentSerie);
-    console.log(tab);
     setIsLoading(true);
     const data = await instance
       .patch(
@@ -284,36 +274,69 @@ function AddQuestion() {
  
 
   const Created = async () => {
-   
-      setIsLoading(true);
-      const data = await instance
-        .post(
-          "/api/eeQuestion/created",
-          
-          //formData
-          {
-            tasks: [tache1, tache2, tache3],
-          },
-          {
-            headers: {
-              Authorization: `basic ${token}`,
-              /*"Content-type": "multipart/form-data",*/
-            },
-          }
-        )
-        .catch((err) => console.log(err));
-      setIsLoading(false);
-
-      if (data) {
-        alert('add question success')
-        let newTab = [];
-        questions ? (newTab = questions) : (newTab = []);
-        newTab.push(data?.data);
-        Update(newTab);
-      } else {
-        
-        alert("echec de creation de la question");
+      if(exist){
+        alert('vous ne pouvez par creer cette expression ecrite dans cette serie')
       }
+      else{
+          setIsLoading(true);
+          const data = await instance
+            .post(
+              "/api/eeQuestion/created",
+
+              //formData
+              {
+                tasks: [
+                  {
+                    libelle: tache1.libelle,
+                    numero: tache1.numero,
+                    consigne: tache1.consigne,
+                    minWord: tache1.minWord,
+                    maxWord: tache1.maxWord,
+                    typeProduction: tache1.typeProduction,
+                    images: Imagesfiles1,
+                  },
+                  {
+                    libelle: tache2.libelle,
+                    numero: tache2.numero,
+                    consigne: tache2.consigne,
+                    minWord: tache2.minWord,
+                    maxWord: tache2.maxWord,
+                    typeProduction: tache2.typeProduction,
+                    images: Imagesfiles2,
+                  },
+                  {
+                    libelle: tache3.libelle,
+                    numero: tache3.numero,
+                    consigne: tache3.consigne,
+                    minWord: tache3.minWord,
+                    maxWord: tache3.maxWord,
+                    typeProduction: tache3.typeProduction,
+                    images: Imagesfiles,
+                  },
+                ],
+              },
+              {
+                headers: {
+                  Authorization: `basic ${token}`,
+                  /*"Content-type": "multipart/form-data",*/
+                },
+              }
+            )
+            .catch((err) => console.log(err));
+          setIsLoading(false);
+
+          if (data) {
+            alert("add question success");
+            let newTab = [];
+            questions ? (newTab = questions) : (newTab = []);
+            newTab.push(data?.data);
+            Update(newTab);
+          } else {
+            alert("echec de creation de la question");
+          }
+      }
+   
+      
     
   };
 
@@ -406,7 +429,8 @@ function AddQuestion() {
                   onChange={(e) => {
                     handleSelectSerie(JSON.parse(e.target.value)?.eeQuestions);
                     setQuestions(JSON.parse(e.target.value)?.eeQuestions);
-                    setCurrentSerie(JSON.parse(e.target.value));
+                    setCurrentSerie(JSON.parse(e.target.value))
+                    
                   }}
                   id="hs-select-label"
                   className="py-2 px-4 pr-9 block flex-1 bg-white  rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
@@ -428,6 +452,9 @@ function AddQuestion() {
                   nouvelle serie
                 </button>
               </div>
+              {
+                exist ? <span className='text-red-500'>cette serie possede deja une Expression Ecrite</span>:<span></span>
+              }
 
               <fieldset className="w-full  border border-solid space-y-2 border-gray-600 p-3">
                 <div className="flex w-full xs:flex-col md:flex-row">

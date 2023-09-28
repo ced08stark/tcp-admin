@@ -57,41 +57,45 @@ function Test() {
     }
   }
   const Send = async ()=>{
-    if(note1 && note2 && note3){
-        setIsLoading(true);
-        const data = await instance
-          .patch(
-            `/api/eeTest/tests/${params?.Test}`,
-            {
-              serie: test?.serie?._id,
-              user: test?.user?._id,
-              resultat: [
-                { task: "tache1", note: note1 },
-                { task: "tache2", note: note2 },
-                { task: "tache3", note: note3 },
-              ],
-              payload: test?.payload,
-              status: "terminer",
+    if (
+      note1 &&
+      note2 &&
+      note3 &&
+      note1 + note2 + note3 >= 0 &&
+      note1 + note2 + note3 <= 20
+    ) {
+      setIsLoading(true);
+      const data = await instance
+        .patch(
+          `/api/eeTest/tests/${params?.Test}`,
+          {
+            serie: test?.serie?._id,
+            user: test?.user?._id,
+            resultat: [
+              { task: "tache1", note: note1 },
+              { task: "tache2", note: note2 },
+              { task: "tache3", note: note3 },
+            ],
+            payload: test?.payload,
+            status: "terminer",
+          },
+          {
+            headers: {
+              Authorization: `basic ${token}`,
             },
-            {
-              headers: {
-                Authorization: `basic ${token}`,
-              },
-            }
-          )
-          .catch((err) => console.log(err.message));
-          setIsLoading(false)
-          console.log(data)
-          if(data){
-            alert('test envoyer avec success')
-            router.push("/TestExpression");
           }
-          else{
-            alert('une erreur est survenu lors de l\'envoi ')
-          }
-    }
-    else{
-      alert('veuillez attribuer une note a chaque tache')
+        )
+        .catch((err) => console.log(err.message));
+      setIsLoading(false);
+      console.log(data);
+      if (data) {
+        alert("test envoyer avec success");
+        router.push("/TestExpression");
+      } else {
+        alert("une erreur est survenu lors de l'envoi ");
+      }
+    } else {
+      alert("veuillez attribuer une note a chaque tache");
     }
      
   }
