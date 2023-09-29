@@ -26,6 +26,9 @@ const initialState = {
     tasks: null,
     typeProduction: null,
   },
+  EOquestion: {
+    tasks: null,
+  },
   questionsSelect: [],
 };
 
@@ -39,14 +42,18 @@ export const questionSlice = createSlice({
     setEEQuestion: (state, action) => {
       state.EEquestion = action.payload;
     },
+    setEOQuestion: (state, action) => {
+      state.EOquestion = action.payload;
+    },
     setQuestionsSelect: (state, action) => {
       state.questionsSelect = action.payload;
     },
   },
 });
 
-export const { setQuestion, setQuestionsSelect, setEEQuestion } = questionSlice.actions;
+export const { setQuestion, setQuestionsSelect, setEEQuestion, setEOQuestion } = questionSlice.actions;
 export const selectQuestion = (state) => state.question.question;
 export const selectEEQuestion = (state) => state.question.EEquestion;
+export const selectEOQuestion = (state) => state.question.EOquestion;
 export const selectQuestionsSelect = (state) => state.question.questionsSelect;
 export default questionSlice.reducer;

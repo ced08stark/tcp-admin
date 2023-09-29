@@ -52,21 +52,21 @@ const FileComponent = ({setImages, images}) => {
             className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
           >
             <span>Upload a file</span>
-              <UploadButton
-                endpoint="imageUploader"
-                onClientUploadComplete={(res) => {
-                  if (res) {
-                    setImageFile(res[0].fileUrl);
-                    setImages([...images, res[0].fileUrl]);
-                    alert("Upload Completed");
-                  }
-                  // Do something with the respons
-                }}
-                onUploadError={(error) => {
-                  // Do something with the error.
-                  alert(`ERROR! ${error.message}`);
-                }}
-              />
+            <UploadButton
+              endpoint="mediaPost"
+              onClientUploadComplete={(res) => {
+                if (res) {
+                  setImageFile(res[0].fileUrl);
+                  setImages([...images, res[0].fileUrl]);
+                  alert("Upload Completed");
+                }
+                // Do something with the respons
+              }}
+              onUploadError={(error) => {
+                // Do something with the error.
+                alert(`ERROR! ${error.message}`);
+              }}
+            />
           </label>
         </div>
       </div>
@@ -118,42 +118,51 @@ function AddQuestion() {
     typeProduction: null
    
   });
-  const [exist, setExist] = useState(false);
+  const [existEE, setExistEE] = useState(false);
+  const [existEO, setExistEO] = useState(false);
   const [questions, setQuestions] = useState([]);
   const currentQuestion = useSelector(selectQuestion);
   const selectLists = useSelector(selectQuestionsSelect);
+  const [typeQuestion, setTypeQuestion] = useState('Expression Ecrite');
   const [tache1, setTache1] = useState({
     libelle: 'tache 1',
     numero: 79,
     consigne: null,
+    fichier: null,
     minWord: null,
     maxWord: null,
     typeProduction: null,
-    images: []
+    images: [],
+    duree: 180
   });
   const [tache2, setTache2] = useState({
     libelle: "tache 2",
     numero: 80,
     consigne: null,
+    fichier: null,
     minWord: null,
     maxWord: null,
     typeProduction: null,
     images: [],
+    duree: 240,
   });
   const [tache3, setTache3] = useState({
     libelle: "tache 3",
     numero: 81,
     consigne: null,
+    fichier: null,
     minWord: null,
     maxWord: null,
     typeProduction: null,
     images: [],
+    duree: 360,
   });
   const [currentSerie, setCurrentSerie] = useState({
     _id: null,
     libelle: null,
     questions: null,
     eeQuestions: null,
+    eoQuestions: null
   });
   const [series, setSeries] = useState([]);
   const Add = async () => {
@@ -223,28 +232,36 @@ function AddQuestion() {
       setSeries(data?.data);
     }
   };
-  const handleSelectSerie = (datas) => {
-    setExist(false);
-    if (datas == null || datas?.length > 0) {
-      setExist(true);
+
+  const handleSelectSerieEE = (datas) => {
+    setExistEE(false);
+    if (datas.eeQuestions == null || datas?.eeQuestions.length > 0) {
+      setExistEE(true);
+    }
+  };
+
+  const handleSelectSerieEO = (datas) => {
+    setExistEO(false);
+    if (datas.eoQuestions == null || datas?.eoQuestions.length > 0) {
+      setExistEO(true);
     }
   };
 
   const handleChangeNumber = (numero) => {
-    setExist(false);
+    setExistEE(false);
     setQuestion({...question, numero: numero})
     
     
     if (questions != null) {
       for (var data of questions) {
         if (numero == data?.numero) {
-          setExist(true);
+          setExistEE(true);
         }
       }
     }
   };
 
-  const Update = async (tab) => {
+  const UpdateEE = async (tab) => {
     console.log(currentSerie);
     setIsLoading(true);
     const data = await instance
@@ -254,6 +271,35 @@ function AddQuestion() {
           libelle: currentSerie?.libelle,
           questions: currentSerie?.questions,
           eeQuestions: tab,
+          eoQuestions: currentSerie?.eoQuestions,
+        },
+        {
+          headers: {
+            Authorization: `basic ${token}`,
+          },
+        }
+      )
+      .catch((err) => console.log(err.message));
+    setIsLoading(false);
+    if (data) {
+      alert("create question success");
+      router.push("/questions");
+    } else {
+      alert("echec");
+    }
+  };
+
+  const UpdateEO = async (tab) => {
+    console.log(currentSerie);
+    setIsLoading(true);
+    const data = await instance
+      .patch(
+        `/api/serie/series/${currentSerie._id}`,
+        {
+          libelle: currentSerie?.libelle,
+          questions: currentSerie?.questions,
+          eeQuestions: currentSerie?.eeQuestions,
+          eoQuestions: tab
         },
         {
           headers: {
@@ -272,16 +318,80 @@ function AddQuestion() {
   };
 
  
+  const CreatedEE = async () => {
+    if (existEE) {
+      alert(
+        "vous ne pouvez par creer cette expression ecrite dans cette serie"
+      );
+    } else {
+      setIsLoading(true);
+      const data = await instance
+        .post(
+          "/api/eeQuestion/created",
+          //formData
+          {
+            tasks: [
+              {
+                libelle: tache1.libelle,
+                numero: tache1.numero,
+                consigne: tache1.consigne,
+                minWord: tache1.minWord,
+                maxWord: tache1.maxWord,
+                typeProduction: tache1.typeProduction,
+                images: Imagesfiles1,
+              },
+              {
+                libelle: tache2.libelle,
+                numero: tache2.numero,
+                consigne: tache2.consigne,
+                minWord: tache2.minWord,
+                maxWord: tache2.maxWord,
+                typeProduction: tache2.typeProduction,
+                images: Imagesfiles2,
+              },
+              {
+                libelle: tache3.libelle,
+                numero: tache3.numero,
+                consigne: tache3.consigne,
+                minWord: tache3.minWord,
+                maxWord: tache3.maxWord,
+                typeProduction: tache3.typeProduction,
+                images: Imagesfiles,
+              },
+            ],
+          },
+          {
+            headers: {
+              Authorization: `basic ${token}`,
+              /*"Content-type": "multipart/form-data",*/
+            },
+          }
+        )
+        .catch((err) => console.log(err));
+      setIsLoading(false);
 
-  const Created = async () => {
-      if(exist){
-        alert('vous ne pouvez par creer cette expression ecrite dans cette serie')
+      if (data) {
+        alert("add question success");
+        let newTab = [];
+        questions ? (newTab = questions) : (newTab = []);
+        newTab.push(data?.data);
+        UpdateEE(newTab);
+      } else {
+        alert("echec de creation de la question");
+      }
+    }
+  };
+
+  const CreatedEO = async () => {
+    console.log([tache1.libelle, tache1.consigne, tache1.duree, Imagesfiles[0]]);
+      if(existEO){
+        alert('vous ne pouvez par creer cette expression orale dans cette serie')
       }
       else{
           setIsLoading(true);
           const data = await instance
             .post(
-              "/api/eeQuestion/created",
+              "/api/eoQuestion/created",
 
               //formData
               {
@@ -290,28 +400,22 @@ function AddQuestion() {
                     libelle: tache1.libelle,
                     numero: tache1.numero,
                     consigne: tache1.consigne,
-                    minWord: tache1.minWord,
-                    maxWord: tache1.maxWord,
-                    typeProduction: tache1.typeProduction,
-                    images: Imagesfiles1,
+                    duree: tache1.duree,
+                    fichier: Imagesfiles1[0]
                   },
                   {
                     libelle: tache2.libelle,
                     numero: tache2.numero,
                     consigne: tache2.consigne,
-                    minWord: tache2.minWord,
-                    maxWord: tache2.maxWord,
-                    typeProduction: tache2.typeProduction,
-                    images: Imagesfiles2,
+                    duree: tache2.duree,
+                    fichier: Imagesfiles2[0],
                   },
                   {
                     libelle: tache3.libelle,
                     numero: tache3.numero,
                     consigne: tache3.consigne,
-                    minWord: tache3.minWord,
-                    maxWord: tache3.maxWord,
-                    typeProduction: tache3.typeProduction,
-                    images: Imagesfiles,
+                    duree: tache3.duree,
+                    fichier: Imagesfiles[0],
                   },
                 ],
               },
@@ -330,7 +434,7 @@ function AddQuestion() {
             let newTab = [];
             questions ? (newTab = questions) : (newTab = []);
             newTab.push(data?.data);
-            Update(newTab);
+            UpdateEO(newTab);
           } else {
             alert("echec de creation de la question");
           }
@@ -384,15 +488,19 @@ function AddQuestion() {
   return (
     <div className="flex h-auto m-1 lg:m-4 lg:mx-10 justify-center">
       <div className="flex flex-col w-full  lg:w-[80%]">
-        
         <p className=" text-sm text-center text-gray-900 font-bold m-3">
-          Create Expression Question Step
+          Create {typeQuestion} Step
         </p>
-        <fieldset className="border-2 border-solid border-r-0 border-b-0 space-y-2 border-gray-200 shadow-black shadow-lg  p-3">
-          <legend className="text-sm  font-bold">
-            Created & Posted question
-          </legend>
-          {/* <div>
+        <select onChange={(e) => setTypeQuestion(e.target.value)}>
+          <option value="Expression Ecrite">Expression Ecrite</option>
+          <option value="Expression Orale">Expression Orale</option>
+        </select>
+        {typeQuestion == "Expression Ecrite" ? (
+          <fieldset className="border-2 border-solid border-r-0 border-b-0 space-y-2 border-gray-200 shadow-black shadow-lg  p-3">
+            <legend className="text-sm  font-bold">
+              Created & Posted expression ecrite
+            </legend>
+            {/* <div>
             <fieldset className="border border-solid space-y-2 border-gray-600 p-3">
               <legend className="text-xs  font-bold">identification</legend>
 
@@ -421,300 +529,504 @@ function AddQuestion() {
             </fieldset>
           </div> */}
 
-          <div>
-            <fieldset className="border border-solid space-y-2 border-gray-600 p-3">
-              <legend className="text-xs  font-bold">serie</legend>
-              <div className="flex items-center space-x-2">
-                <select
-                  onChange={(e) => {
-                    handleSelectSerie(JSON.parse(e.target.value)?.eeQuestions);
-                    setQuestions(JSON.parse(e.target.value)?.eeQuestions);
-                    setCurrentSerie(JSON.parse(e.target.value))
-                    
-                  }}
-                  id="hs-select-label"
-                  className="py-2 px-4 pr-9 block flex-1 bg-white  rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
-                >
-                  <option selected>Select serie</option>
-                  {series?.map((item, index) => (
-                    <option key={index} value={JSON.stringify(item)}>
-                      {item?.libelle}
-                    </option>
-                  ))}
-                </select>
+            <div>
+              <fieldset className="border border-solid space-y-2 border-gray-600 p-3">
+                <legend className="text-xs  font-bold">serie</legend>
+                <div className="flex items-center space-x-2">
+                  <select
+                    onChange={(e) => {
+                      handleSelectSerieEE(
+                        JSON.parse(e.target.value)
+                      );
+                      setQuestions(JSON.parse(e.target.value)?.eeQuestions);
+                      setCurrentSerie(JSON.parse(e.target.value));
+                    }}
+                    id="hs-select-label"
+                    className="py-2 px-4 pr-9 block flex-1 bg-white  rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                  >
+                    <option selected>Select serie</option>
+                    {series?.map((item, index) => (
+                      <option key={index} value={JSON.stringify(item)}>
+                        {item?.libelle}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    onClick={() => Add()}
+                    className="bg-green-500 inline-block text-white text-sm font-medium px-10 py-2 cursor-pointer border-0 shadow-sm shadow-black/40  relative 
+        before:absolute before:w-full before:h-full before:inset-0  
+        before:bg-white/20 before:scale-0 hover:before:scale-100 before:transition-all 
+        before:rounded-full hover:before:rounded-none rounded-md"
+                  >
+                    nouvelle serie
+                  </button>
+                </div>
+                {existEE ? (
+                  <span className="text-red-500">
+                    cette serie possede deja une Expression Ecrite
+                  </span>
+                ) : (
+                  <span></span>
+                )}
+
+                <fieldset className="w-full  border border-solid space-y-2 border-gray-600 p-3">
+                  <div className="flex w-full xs:flex-col md:flex-row">
+                    <div className="w-1/3">
+                      <legend className="text-xl  font-bold">Tache 1</legend>
+                      <input
+                        type="number"
+                        min={80}
+                        onChange={(e) => {
+                          setTache1({
+                            ...tache1,
+                            minWord: parseInt(e.target.value),
+                          });
+                        }}
+                        className="peer p-2 block min-h-[auto] bg-white mb-10  text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                        placeholder="mots minimuns"
+                      />
+                      <input
+                        type="number"
+                        min={80}
+                        onChange={(e) => {
+                          setTache1({
+                            ...tache1,
+                            maxWord: parseInt(e.target.value),
+                          });
+                        }}
+                        className="peer p-2 block min-h-[auto] bg-white text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                        placeholder="mots maximums"
+                      />
+                    </div>
+                    <div className=" mx-auto space-y-2 w-full">
+                      <span>consigne tache 1</span>
+                      <textarea
+                        onChange={(e) =>
+                          setTache1({ ...tache1, consigne: e.target.value })
+                        }
+                        className="w-full h-28 p-1 rounded-lg my-1"
+                        placeholder="votre texte ici"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <select
+                      onChange={(e) => {
+                        setTache1({
+                          ...tache1,
+                          typeProduction: e.target.value,
+                        });
+                      }}
+                      id="hs-select-label"
+                      className="py-2 px-4 pr-9 block flex-1 bg-white  rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                    >
+                      <option selected>Production type</option>
+                      <option value="Paragraphe">Paragraphe</option>
+                      <option value="Courriel">Courriel</option>
+                      <option value="Lettre">Lettre</option>
+                    </select>
+                  </div>
+                  <div className="col-span-full">
+                    <label
+                      htmlFor="cover-photo"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    ></label>
+
+                    {otherFiles1}
+                    <div
+                      className="w-full flex items-center justify-end "
+                      onClick={() => addOtherFile1()}
+                    >
+                      <span className="px-2 py-1 rounded-md mt-2 bg-gray-900 text-white cursor-pointer">
+                        autre image
+                      </span>
+                    </div>
+                  </div>
+                </fieldset>
+                <fieldset className="w-full  border border-solid space-y-2 border-gray-600 p-3">
+                  <div className="flex w-full xs:flex-col md:flex-row">
+                    <div className="w-1/3">
+                      <legend className="text-xl  font-bold">Tache 2</legend>
+                      <input
+                        type="number"
+                        min={80}
+                        onChange={(e) => {
+                          setTache2({
+                            ...tache2,
+                            minWord: parseInt(e.target.value),
+                          });
+                        }}
+                        className="peer p-2 block min-h-[auto] bg-white mb-10  text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                        placeholder="mots minimuns"
+                      />
+                      <input
+                        type="number"
+                        min={80}
+                        onChange={(e) => {
+                          setTache2({
+                            ...tache2,
+                            maxWord: parseInt(e.target.value),
+                          });
+                        }}
+                        className="peer p-2 block min-h-[auto] bg-white text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                        placeholder="mots maximums"
+                      />
+                    </div>
+                    <div className="xs:my-3 sm:my-0 mx-auto space-y-2 w-full">
+                      <span>consigne tache 2</span>
+                      <textarea
+                        onChange={(e) =>
+                          setTache2({ ...tache2, consigne: e.target.value })
+                        }
+                        className="w-full h-28 p-1 rounded-lg my-1"
+                        placeholder="votre texte ici"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <select
+                      onChange={(e) => {
+                        setTache2({
+                          ...tache2,
+                          typeProduction: e.target.value,
+                        });
+                      }}
+                      id="hs-select-label"
+                      className="py-2 px-4 pr-9 block flex-1 bg-white  rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                    >
+                      <option selected>Production type</option>
+                      <option value="Paragraphe">Paragraphe</option>
+                      <option value="Courriel">Courriel</option>
+                      <option value="Lettre">Lettre</option>
+                    </select>
+                  </div>
+                  <div className="col-span-full">
+                    <label
+                      htmlFor="cover-photo"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    ></label>
+
+                    {otherFiles2}
+                    <div
+                      className="w-full flex items-center justify-end "
+                      onClick={() => addOtherFile2()}
+                    >
+                      <span className="px-2 py-1 rounded-md mt-2 bg-gray-900 text-white cursor-pointer">
+                        autre image
+                      </span>
+                    </div>
+                  </div>
+                </fieldset>
+                <fieldset className="w-full border border-solid space-y-2 border-gray-600 p-3">
+                  <div className="flex w-full xs:flex-col md:flex-row">
+                    <div className="w-1/3">
+                      <legend className="text-xl  font-bold">Tache 3</legend>
+                      <input
+                        type="number"
+                        min={80}
+                        onChange={(e) => {
+                          setTache3({
+                            ...tache3,
+                            minWord: parseInt(e.target.value),
+                          });
+                        }}
+                        className="peer p-2 block min-h-[auto] bg-white mb-10  text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                        placeholder="mots minimuns"
+                      />
+                      <input
+                        type="number"
+                        min={80}
+                        onChange={(e) => {
+                          setTache3({
+                            ...tache3,
+                            maxWord: parseInt(e.target.value),
+                          });
+                        }}
+                        className="peer p-2 block min-h-[auto] bg-white text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                        placeholder="mots maximums"
+                      />
+                    </div>
+                    <div className="relative xs:my-3 sm:my-0 mx-auto space-y-2 w-full">
+                      <span>consigne tache 3</span>
+                      <textarea
+                        onChange={(e) =>
+                          setTache3({
+                            ...tache3,
+                            consigne: e.target.value,
+                          })
+                        }
+                        className="w-full h-28 p-1 rounded-lg my-1"
+                        placeholder="votre texte ici"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <select
+                      onChange={(e) => {
+                        setTache3({
+                          ...tache3,
+                          typeProduction: e.target.value,
+                        });
+                      }}
+                      id="hs-select-label"
+                      className="py-2 px-4 pr-9 block flex-1 bg-white  rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                    >
+                      <option selected>Production type</option>
+                      <option value="Paragraphe">Paragraphe</option>
+                      <option value="Courriel">Courriel</option>
+                      <option value="Lettre">Lettre</option>
+                    </select>
+                  </div>
+                  <div className="col-span-full">
+                    <label
+                      htmlFor="cover-photo"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    ></label>
+
+                    {otherFiles}
+                    <div
+                      className="w-full flex items-center justify-end "
+                      onClick={() => addOtherFile()}
+                    >
+                      <span className="px-2 py-1 rounded-md mt-2 bg-gray-900 text-white cursor-pointer">
+                        autre image
+                      </span>
+                    </div>
+                  </div>
+                </fieldset>
+              </fieldset>
+            </div>
+
+            <div className="h-[80px] flex items-center justify-center w-full">
+              {!isLoading ? (
                 <button
-                  onClick={() => Add()}
+                  onClick={() => CreatedEE()}
                   className="bg-green-500 inline-block text-white text-sm font-medium px-10 py-2 cursor-pointer border-0 shadow-sm shadow-black/40  relative 
         before:absolute before:w-full before:h-full before:inset-0  
         before:bg-white/20 before:scale-0 hover:before:scale-100 before:transition-all 
         before:rounded-full hover:before:rounded-none rounded-md"
                 >
-                  nouvelle serie
+                  create question
                 </button>
-              </div>
-              {
-                exist ? <span className='text-red-500'>cette serie possede deja une Expression Ecrite</span>:<span></span>
-              }
-
-              <fieldset className="w-full  border border-solid space-y-2 border-gray-600 p-3">
-                <div className="flex w-full xs:flex-col md:flex-row">
-                  <div className="w-1/3">
-                    <legend className="text-xl  font-bold">Tache 1</legend>
-                    <input
-                      type="number"
-                      min={80}
-                      onChange={(e) => {
-                        setTache1({
-                          ...tache1,
-                          minWord: parseInt(e.target.value),
-                        });
-                      }}
-                      className="peer p-2 block min-h-[auto] bg-white mb-10  text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
-                      placeholder="mots minimuns"
-                    />
-                    <input
-                      type="number"
-                      min={80}
-                      onChange={(e) => {
-                        setTache1({
-                          ...tache1,
-                          maxWord: parseInt(e.target.value),
-                        });
-                      }}
-                      className="peer p-2 block min-h-[auto] bg-white text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
-                      placeholder="mots maximums"
-                    />
-                  </div>
-                  <div className=" mx-auto space-y-2 w-full">
-                    <span>consigne tache 1</span>
-                    <textarea
-                      onChange={(e) =>
-                        setTache1({ ...tache1, consigne: e.target.value })
-                      }
-                      className="w-full h-28 p-1 rounded-lg my-1"
-                      placeholder="votre texte ici"
-                    ></textarea>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <select
-                    onChange={(e) => {
-                      setTache1({
-                        ...tache1,
-                        typeProduction: e.target.value,
-                      });
-                    }}
-                    id="hs-select-label"
-                    className="py-2 px-4 pr-9 block flex-1 bg-white  rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
-                  >
-                    <option selected>Production type</option>
-                    <option value="Paragraphe">Paragraphe</option>
-                    <option value="Courriel">Courriel</option>
-                    <option value="Lettre">Lettre</option>
-                  </select>
-                </div>
-                <div className="col-span-full">
-                  <label
-                    htmlFor="cover-photo"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  ></label>
-
-                  {otherFiles1}
-                  <div
-                    className="w-full flex items-center justify-end "
-                    onClick={() => addOtherFile1()}
-                  >
-                    <span className="px-2 py-1 rounded-md mt-2 bg-gray-900 text-white cursor-pointer">
-                      autre image
-                    </span>
-                  </div>
-                </div>
-              </fieldset>
-              <fieldset className="w-full  border border-solid space-y-2 border-gray-600 p-3">
-                <div className="flex w-full xs:flex-col md:flex-row">
-                  <div className="w-1/3">
-                    <legend className="text-xl  font-bold">Tache 2</legend>
-                    <input
-                      type="number"
-                      min={80}
-                      onChange={(e) => {
-                        setTache2({
-                          ...tache2,
-                          minWord: parseInt(e.target.value),
-                        });
-                      }}
-                      className="peer p-2 block min-h-[auto] bg-white mb-10  text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
-                      placeholder="mots minimuns"
-                    />
-                    <input
-                      type="number"
-                      min={80}
-                      onChange={(e) => {
-                        setTache2({
-                          ...tache2,
-                          maxWord: parseInt(e.target.value),
-                        });
-                      }}
-                      className="peer p-2 block min-h-[auto] bg-white text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
-                      placeholder="mots maximums"
-                    />
-                  </div>
-                  <div className="xs:my-3 sm:my-0 mx-auto space-y-2 w-full">
-                    <span>consigne tache 2</span>
-                    <textarea
-                      onChange={(e) =>
-                        setTache2({ ...tache2, consigne: e.target.value })
-                      }
-                      className="w-full h-28 p-1 rounded-lg my-1"
-                      placeholder="votre texte ici"
-                    ></textarea>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <select
-                    onChange={(e) => {
-                      setTache2({
-                        ...tache2,
-                        typeProduction: e.target.value,
-                      });
-                    }}
-                    id="hs-select-label"
-                    className="py-2 px-4 pr-9 block flex-1 bg-white  rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
-                  >
-                    <option selected>Production type</option>
-                    <option value="Paragraphe">Paragraphe</option>
-                    <option value="Courriel">Courriel</option>
-                    <option value="Lettre">Lettre</option>
-                  </select>
-                </div>
-                <div className="col-span-full">
-                  <label
-                    htmlFor="cover-photo"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  ></label>
-
-                  {otherFiles2}
-                  <div
-                    className="w-full flex items-center justify-end "
-                    onClick={() => addOtherFile2()}
-                  >
-                    <span className="px-2 py-1 rounded-md mt-2 bg-gray-900 text-white cursor-pointer">
-                      autre image
-                    </span>
-                  </div>
-                </div>
-              </fieldset>
-              <fieldset className="w-full border border-solid space-y-2 border-gray-600 p-3">
-                <div className="flex w-full xs:flex-col md:flex-row">
-                  <div className="w-1/3">
-                    <legend className="text-xl  font-bold">Tache 3</legend>
-                    <input
-                      type="number"
-                      min={80}
-                      onChange={(e) => {
-                        setTache3({
-                          ...tache3,
-                          minWord: parseInt(e.target.value),
-                        });
-                      }}
-                      className="peer p-2 block min-h-[auto] bg-white mb-10  text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
-                      placeholder="mots minimuns"
-                    />
-                    <input
-                      type="number"
-                      min={80}
-                      onChange={(e) => {
-                        setTache3({
-                          ...tache3,
-                          maxWord: parseInt(e.target.value),
-                        });
-                      }}
-                      className="peer p-2 block min-h-[auto] bg-white text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
-                      placeholder="mots maximums"
-                    />
-                  </div>
-                  <div className="relative xs:my-3 sm:my-0 mx-auto space-y-2 w-full">
-                    <span>consigne tache 3</span>
-                    <textarea
-                      onChange={(e) =>
-                        setTache3({
-                          ...tache3,
-                          consigne: e.target.value,
-                        })
-                      }
-                      className="w-full h-28 p-1 rounded-lg my-1"
-                      placeholder="votre texte ici"
-                    ></textarea>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <select
-                    onChange={(e) => {
-                      setTache3({
-                        ...tache3,
-                        typeProduction: e.target.value,
-                      });
-                    }}
-                    id="hs-select-label"
-                    className="py-2 px-4 pr-9 block flex-1 bg-white  rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
-                  >
-                    <option selected>Production type</option>
-                    <option value="Paragraphe">Paragraphe</option>
-                    <option value="Courriel">Courriel</option>
-                    <option value="Lettre">Lettre</option>
-                  </select>
-                </div>
-                <div className="col-span-full">
-                  <label
-                    htmlFor="cover-photo"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  ></label>
-
-                  {otherFiles}
-                  <div
-                    className="w-full flex items-center justify-end "
-                    onClick={() => addOtherFile()}
-                  >
-                    <span className="px-2 py-1 rounded-md mt-2 bg-gray-900 text-white cursor-pointer">
-                      autre image
-                    </span>
-                  </div>
-                </div>
-              </fieldset>
-            </fieldset>
-          </div>
-
-          <div className="h-[80px] flex items-center justify-center w-full">
-            {!isLoading ? (
-              <button
-                onClick={() => Created()}
-                className="bg-green-500 inline-block text-white text-sm font-medium px-10 py-2 cursor-pointer border-0 shadow-sm shadow-black/40  relative 
+              ) : (
+                <button
+                  disabled
+                  className="bg-green-500 flex items-center space-x-2 text-white text-sm font-medium px-10 py-2 cursor-pointer border-0 shadow-sm shadow-black/40  relative 
         before:absolute before:w-full before:h-full before:inset-0  
         before:bg-white/20 before:scale-0 hover:before:scale-100 before:transition-all 
         before:rounded-full hover:before:rounded-none rounded-md"
-              >
-                create question
-              </button>
-            ) : (
-              <button
-                disabled
-                className="bg-green-500 flex items-center space-x-2 text-white text-sm font-medium px-10 py-2 cursor-pointer border-0 shadow-sm shadow-black/40  relative 
-        before:absolute before:w-full before:h-full before:inset-0  
-        before:bg-white/20 before:scale-0 hover:before:scale-100 before:transition-all 
-        before:rounded-full hover:before:rounded-none rounded-md"
-              >
-                <span>create question</span>
-                <div
-                  class="spinner-border spinner-border-sm text-white"
-                  role="status"
                 >
-                  <span class="visually-hidden">Loading...</span>
+                  <span>create question</span>
+                  <div
+                    class="spinner-border spinner-border-sm text-white"
+                    role="status"
+                  >
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </button>
+              )}
+            </div>
+          </fieldset>
+        ) : (
+          <fieldset className="border-2 border-solid border-r-0 border-b-0 space-y-2 border-gray-200 shadow-black shadow-lg  p-3">
+            <legend className="text-sm  font-bold">
+              Created & Posted expression orale
+            </legend>
+            {/* <div>
+            <fieldset className="border border-solid space-y-2 border-gray-600 p-3">
+              <legend className="text-xs  font-bold">identification</legend>
+              <div className="relative mb-3">
+                <input
+                  type="number"
+                  min={80}
+                  onChange={(e) => {
+                    handleChangeNumber(parseInt(e.target.value));
+                  }}
+                  className="peer p-2 block min-h-[auto] bg-white w-1/2 lg:w-1/3 text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                  placeholder="entrer le numero de la question"
+                />
+              </div>
+              {question?.numero ? (
+                !exist ? (
+                  <></>
+                ) : (
+                  <span className="text-red-500">
+                    ce numero n{`'`}est pas valide pour la serie
+                  </span>
+                )
+              ) : (
+                <span></span>
+              )}
+            </fieldset>
+          </div> */
+          }
+
+            <div>
+              <fieldset className="border border-solid space-y-2 border-gray-600 p-3">
+                <legend className="text-xs  font-bold">serie</legend>
+                <div className="flex items-center space-x-2">
+                  <select
+                    onChange={(e) => {
+                      handleSelectSerieEO(
+                        JSON.parse(e.target.value)
+                      );
+                      setQuestions(JSON.parse(e.target.value)?.eoQuestions);
+                      setCurrentSerie(JSON.parse(e.target.value));
+                    }}
+                    id="hs-select-label"
+                    className="py-2 px-4 pr-9 block flex-1 bg-white  rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                  >
+                    <option selected>Select serie</option>
+                    {series?.map((item, index) => (
+                      <option key={index} value={JSON.stringify(item)}>
+                        {item?.libelle}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    onClick={() => Add()}
+                    className="bg-green-500 inline-block text-white text-sm font-medium px-10 py-2 cursor-pointer border-0 shadow-sm shadow-black/40  relative 
+        before:absolute before:w-full before:h-full before:inset-0  
+        before:bg-white/20 before:scale-0 hover:before:scale-100 before:transition-all 
+        before:rounded-full hover:before:rounded-none rounded-md"
+                  >
+                    nouvelle serie
+                  </button>
                 </div>
-              </button>
-            )}
-          </div>
-        </fieldset>
+                {existEO ? (
+                  <span className="text-red-500">
+                    cette serie possede deja une Expression Orale
+                  </span>
+                ) : (
+                  <span></span>
+                )}
+
+                <fieldset className="w-full  border border-solid space-y-2 border-gray-600 p-3">
+                  <div className="flex w-full xs:flex-col ">
+                    <div className="">
+                      <legend className="text-xl  font-bold">Tache 1</legend>
+                    </div>
+                    <div className=" mx-auto w-full">
+                      <span>consigne tache 1</span>
+                      <textarea
+                        onChange={(e) =>
+                          setTache1({ ...tache1, consigne: e.target.value })
+                        }
+                        className="w-full h-28 p-1 rounded-lg my-1"
+                        placeholder="votre texte ici"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div className="col-span-full">
+                    <label
+                      htmlFor="cover-photo"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    ></label>
+
+                    {otherFiles1}
+                    {/* <div
+                      className="w-full flex items-center justify-end "
+                      onClick={() => addOtherFile1()}
+                    >
+                      <span className="px-2 py-1 rounded-md mt-2 bg-gray-900 text-white cursor-pointer">
+                        autre image
+                      </span>
+                    </div> */}
+                  </div>
+                </fieldset>
+                <fieldset className="w-full  border border-solid space-y-2 border-gray-600 p-3">
+                  <div className="flex w-full xs:flex-col">
+                    <div className="">
+                      <legend className="text-xl  font-bold">Tache 2</legend>
+                    </div>
+                    <div className="xs:my-3 sm:my-0 mx-auto space-y-2 w-full">
+                      <span>consigne tache 2</span>
+                      <textarea
+                        onChange={(e) =>
+                          setTache2({ ...tache2, consigne: e.target.value })
+                        }
+                        className="w-full h-28 p-1 rounded-lg my-1"
+                        placeholder="votre texte ici"
+                      ></textarea>
+                    </div>
+                  </div>
+                  
+                  <div className="col-span-full">
+                    <label
+                      htmlFor="cover-photo"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    ></label>
+
+                    {otherFiles2}
+                    
+                  </div>
+                </fieldset>
+                <fieldset className="w-full border border-solid space-y-2 border-gray-600 p-3">
+                  <div className="flex w-full xs:flex-col">
+                    <div className="">
+                      <legend className="text-xl  font-bold">Tache 3</legend>
+                    </div>
+                    <div className="relative xs:my-3 sm:my-0 mx-auto space-y-2 w-full">
+                      <span>consigne tache 3</span>
+                      <textarea
+                        onChange={(e) =>
+                          setTache3({
+                            ...tache3,
+                            consigne: e.target.value,
+                          })
+                        }
+                        className="w-full h-28 p-1 rounded-lg my-1"
+                        placeholder="votre texte ici"
+                      ></textarea>
+                    </div>
+                  </div>
+                  
+                  <div className="col-span-full">
+                    <label
+                      htmlFor="cover-photo"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    ></label>
+
+                    {otherFiles}
+                    
+                  </div>
+                </fieldset>
+              </fieldset>
+            </div>
+
+            <div className="h-[80px] flex items-center justify-center w-full">
+              {!isLoading ? (
+                <button
+                  onClick={() => CreatedEO()}
+                  className="bg-green-500 inline-block text-white text-sm font-medium px-10 py-2 cursor-pointer border-0 shadow-sm shadow-black/40  relative 
+        before:absolute before:w-full before:h-full before:inset-0  
+        before:bg-white/20 before:scale-0 hover:before:scale-100 before:transition-all 
+        before:rounded-full hover:before:rounded-none rounded-md"
+                >
+                  create question
+                </button>
+              ) : (
+                <button
+                  disabled
+                  className="bg-green-500 flex items-center space-x-2 text-white text-sm font-medium px-10 py-2 cursor-pointer border-0 shadow-sm shadow-black/40  relative 
+        before:absolute before:w-full before:h-full before:inset-0  
+        before:bg-white/20 before:scale-0 hover:before:scale-100 before:transition-all 
+        before:rounded-full hover:before:rounded-none rounded-md"
+                >
+                  <span>create question</span>
+                  <div
+                    class="spinner-border spinner-border-sm text-white"
+                    role="status"
+                  >
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </button>
+              )}
+            </div>
+          </fieldset>
+        )}
       </div>
+
       {<AddSerie setSeries={setSeries} series={series} />}
     </div>
   );
