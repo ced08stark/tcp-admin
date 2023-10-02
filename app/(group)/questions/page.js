@@ -16,11 +16,13 @@ import {
 } from "../../../featured/questionSlice";
 import QuestionView from "../../../components/QuestionView";
 import QuestionsRowEE from '../../../components/QuestionsRowEE'
+import QuestionsRowEO from '../../../components/QuestionsRowEO'
 import * as Icons from "@heroicons/react/24/outline"
 import { UploadButton } from "@uploadthing/react";
 import "@uploadthing/react/styles.css";
 import AudioPlayer from "../../../components/AudioPlayer";
 import TabView from '../../../components/TabView'
+import { selectSerie } from "../../../featured/serieSlice";
 
 function QuestionsPage() {
   //const fileRef = useRef(null);
@@ -31,15 +33,50 @@ function QuestionsPage() {
     name: 'consigne',
     value: ''
   })
-  
+  const serie = useSelector(selectSerie);
   const [eeQuestions, setEEQuestions] = useState([]);
-  const [questions, setQuestions] = useState([]);
+  //const [questions, setQuestions] = useState([]);
   const dispatch = useDispatch();
   const currentQuestion = useSelector(selectQuestion);
   const [suggestions2, setSuggestions2] = useState([]);
   const [image, setImage] = useState("null")
+
+   const Update = async (questions) => {
+    alert(JSON.stringify(questions))
+     setIsLoading(true);
+     const data = await instance
+       .patch(
+         `/api/serie/series/${serie._id}`,
+         {
+           libelle: serie.libelle,
+           questions: questions,
+           eoQuestions: serie.eoQuestions,
+           eeQuestions: serie.eeQuestions
+         },
+         {
+           headers: {
+             Authorization: `basic ${token}`,
+           },
+         }
+       )
+       .catch((err) => console.log(err.message));
+     setIsLoading(false);
+     if (data) {
+       setQuestion({})
+       router.push('/dashboard')
+       alert("serie update success");
+       getSeries();
+       setImage("null");
+       setSuggestion1({ text: "" });
+       setSuggestion2({ text: "" });
+       setSuggestion3({ text: "" });
+       setSuggestion4({ text: "" });
+       
+     }
+   };
+
   const handleUpdate = async() =>{
-    console.log(currentQuestion)
+    
     // dispatch(
     //   setQuestion({
     //     ...currentQuestion,
@@ -64,7 +101,7 @@ function QuestionsPage() {
     //   })
     // );
     const formData = new FormData();
-    console.log(currentQuestion)
+    //alert(JSON.stringify(currentQuestion))
     /*console.log(suggestions?.length)
     formData.append("numero", currentQuestion?.numero);
     formData.append("consigne", question?.consigne);
@@ -104,29 +141,23 @@ function QuestionsPage() {
     formData.append("discipline[duree]", currentQuestion?.discipline?.duree);
     formData.append("duree", currentQuestion?.duree);*/
     setIsLoading(true);
+    
     const data = await instance
       .patch(
         `/api/question/questions/${currentQuestion?._id}`,
         {
-          libelle: image != "null" ? image : currentQuestion.libelle,
+          libelle: image == "null" ? currentQuestion.libelle :  image,
           consigne: currentQuestion.consigne,
           numero: currentQuestion.numero,
           categorie: currentQuestion.categorie,
           discipline: currentQuestion.discipline,
           duree: currentQuestion.duree,
-          suggestions: [suggestion1?.text
-            ? suggestion1
-            : currentQuestion.suggestions[0],
-           suggestion2?.text
-            ? suggestion2
-            : currentQuestion.suggestions[1],
-           suggestion3?.text
-            ? suggestion3
-            : currentQuestion.suggestions[2],
-           suggestion4?.text
-            ? suggestion4
-            : currentQuestion.suggestions[3],]
-          
+          suggestions: [
+            suggestion1?.text ? suggestion1 : currentQuestion.suggestions[0],
+            suggestion2?.text ? suggestion2 : currentQuestion.suggestions[1],
+            suggestion3?.text ? suggestion3 : currentQuestion.suggestions[2],
+            suggestion4?.text ? suggestion4 : currentQuestion.suggestions[3],
+          ],
         },
         {
           headers: {
@@ -139,18 +170,15 @@ function QuestionsPage() {
     setIsLoading(false);
     
     if (data) {
-      getQuestion()
-      setImage("null")
-      setSuggestion1({ text: "" });
-      setSuggestion2({ text: "" });
-      setSuggestion3({ text: "" });
-      setSuggestion4({ text: "" });
-      alert('update question success')
+      Update(data.data)
+      
     } else {
       console.log(formData)
       alert("echec de update de la question");
     }
   }
+
+
   const [suggestion1, setSuggestion1] = useState({
     text: null,
     isCorrect: false,
@@ -186,6 +214,8 @@ function QuestionsPage() {
     }
   };
 
+  
+
   const getQuestion = async() =>{
 
     const data = await instance
@@ -198,7 +228,6 @@ function QuestionsPage() {
           }
         )
         .catch((err) => console.log(err.message));
-        console.log(data)
       if(data){
         setQuestions(data?.data)
       }
@@ -219,8 +248,8 @@ function QuestionsPage() {
   
   useEffect(()=>{
     getSeries();
-    getQuestion()
-    getEEQuestions()
+    // getEEQuestions()
+    console.log(series)
     currentQuestion?.suggestions?.map((item, index) =>{
       setSuggestions2([...suggestions2, {...suggestions2[index], text: item?.text, isCorrect: item?.isCorrect}])
     })
@@ -373,7 +402,6 @@ function QuestionsPage() {
                             )
                             .map((q, i) => (
                               <QuestionsRows
-                                setQuestions={setQuestions}
                                 serie={item}
                                 item={q}
                                 key={i}
@@ -882,6 +910,17 @@ function QuestionsPage() {
                             />
                           ))
                         )}
+                        {series?.map((item, index) =>
+                          item?.eoQuestions?.map((q, i) => (
+                            <QuestionsRowEO
+                              //setQuestions={setQuestions}
+                              serie={item}
+                              item={q}
+                              key={i}
+                              id={i + 1}
+                            />
+                          ))
+                        )}
                         {/* {eeQuestions.length > 0 ? (
                           eeQuestions
                             ?.filter((item) =>
@@ -1271,7 +1310,7 @@ function QuestionsPage() {
         </div>
       )}
 
-      <QuestionView setQuestions={setQuestions} />
+      <QuestionView  />
     </div>
   );
 }

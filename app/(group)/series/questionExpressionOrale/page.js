@@ -20,8 +20,8 @@ import * as Icons from "@heroicons/react/24/outline";
 import { OurFileRouter } from "../../../api/uploadthing/core";
 import { UploadButton } from "@uploadthing/react";
 import AudioPlayer from "../../../../components/AudioPlayer";
-import QuestionsRowEE from "../../../../components/QuestionsRowEE"
-import QuestionsRowEO from '../../../../components/QuestionsRowEO'
+import QuestionsRowEE from "../../../../components/QuestionsRowEE";
+import QuestionsRowEO from "../../../../components/QuestionsRowEO";
 
 let serieTable = [];
 function QuestionsPage() {
@@ -209,8 +209,6 @@ function QuestionsPage() {
   //   }
   // };
 
-  
-
   useEffect(() => {
     getEEQuestions();
   }, []);
@@ -312,16 +310,15 @@ function QuestionsPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {serie?.eeQuestions?.map((q, i) => (
-                        <QuestionsRowEE
-                          setQuestions={setQuestions}
-                          serie={serie}
-                          item={q}
-                          key={i}
-                          id={i + 1}
-                        />
-                      ))
-                      }
+                    {serie?.eoQuestions?.map((q, i) => (
+                      <QuestionsRowEO
+                        //setQuestions={setQuestions}
+                        serie={serie}
+                        item={q}
+                        key={i}
+                        id={i + 1}
+                      />
+                    ))}
                     {/* {eeQuestions.length > 0 ? (
                           eeQuestions
                             ?.filter((item) =>

@@ -113,7 +113,7 @@ export default function Serie() {
         </Link>
 
         <Link
-          href="/"
+          href="/series/questionExpressionOrale"
           className="group rounded-lg relative overflow-hidden hover:bg-white border border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
         >
           <div className="z-20">

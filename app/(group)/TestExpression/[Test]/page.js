@@ -57,13 +57,8 @@ function Test() {
     }
   }
   const Send = async ()=>{
-    if (
-      note1 &&
-      note2 &&
-      note3 &&
-      note1 + note2 + note3 >= 0 &&
-      note1 + note2 + note3 <= 20
-    ) {
+    if (note1 && note2 && note3) {
+      if((parseInt(note1) + parseInt(note2) + parseInt(note3)) >= 0 && (parseInt(note1) + parseInt(note2) + parseInt(note3)) <= 20){
       setIsLoading(true);
       const data = await instance
         .patch(
@@ -94,6 +89,9 @@ function Test() {
       } else {
         alert("une erreur est survenu lors de l'envoi ");
       }
+    }else{
+      alert('note incorrect')
+    }
     } else {
       alert("veuillez attribuer une note a chaque tache");
     }

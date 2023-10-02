@@ -392,27 +392,26 @@ function AddQuestion() {
           const data = await instance
             .post(
               "/api/eoQuestion/created",
-
               //formData
               {
                 tasks: [
                   {
                     libelle: tache1.libelle,
-                    numero: tache1.numero,
+                    numero: 82,
                     consigne: tache1.consigne,
                     duree: tache1.duree,
                     fichier: Imagesfiles1[0]
                   },
                   {
                     libelle: tache2.libelle,
-                    numero: tache2.numero,
+                    numero: 83,
                     consigne: tache2.consigne,
                     duree: tache2.duree,
                     fichier: Imagesfiles2[0],
                   },
                   {
                     libelle: tache3.libelle,
-                    numero: tache3.numero,
+                    numero: 84,
                     consigne: tache3.consigne,
                     duree: tache3.duree,
                     fichier: Imagesfiles[0],

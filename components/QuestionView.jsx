@@ -12,7 +12,7 @@ import { UploadButton } from "@uploadthing/react";
 import "@uploadthing/react/styles.css";
 import AudioPlayer from "./AudioPlayer";
 
-function QuestionView({setQuestions}) {
+function QuestionView() {
   const dispatch = useDispatch();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +21,7 @@ function QuestionView({setQuestions}) {
   const token = GetCookies("token");
   console.log(currentQuestion?.consigne)
   const handleUpdate = async () => {
-    console.log(currentQuestion);
+    //console.log(currentQuestion);
     // dispatch(
     //   setQuestion({
     //     ...currentQuestion,

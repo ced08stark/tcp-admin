@@ -2,10 +2,11 @@ import React, {useState} from 'react'
 import * as Icons from "@heroicons/react/24/outline"
 import { useDispatch, useSelector } from "react-redux";
 import { setQuestion, selectQuestion } from "../featured/questionSlice";
+import { setSerie } from '../featured/serieSlice';
 import GetCookies from "../hooks/getCookies";
 import { instance } from "../hooks/Axios";
 
-function QuestionsRows({item, setQuestions, id, serie}) {
+function QuestionsRows({item, id, serie}) {
   const token = GetCookies("token");
   const [isLoading, setIsLoading] = useState(false);
   const currentQuestion = useSelector(selectQuestion)
@@ -25,7 +26,7 @@ function QuestionsRows({item, setQuestions, id, serie}) {
         console.log(data)
       if(data){
         
-        setQuestions(data?.data)
+       
       }
 
   }
@@ -46,7 +47,7 @@ function QuestionsRows({item, setQuestions, id, serie}) {
     
 
     if(data){
-      setQuestion({})
+      //setQuestion({})
       Update()
       
     }
@@ -65,6 +66,7 @@ function QuestionsRows({item, setQuestions, id, serie}) {
           libelle: serie.libelle,
           questions: newTab,
           eeQuestions: serie.eeQuestions,
+          eoQuestions: serie.eoQuestions
         },
         {
           headers: {
@@ -76,12 +78,14 @@ function QuestionsRows({item, setQuestions, id, serie}) {
     setIsLoading(false);
     if (data) {
       alert("delete success");
-      getQuestions();
+      //getSeries()
+      //getQuestions();
     }
   };
   const show = async () => {
+    dispatch(setSerie(serie));
     dispatch(setQuestion({}));
-    dispatch(setQuestion({...currentQuestion, _id: item._id, libelle: item.libelle, consigne: item.consigne, numero: item.numero, categorie: item.categorie, discipline: item.discipline, duree: item.duree, suggestions: item.suggestions}))
+    // dispatch(setQuestion({...currentQuestion, _id: item._id, libelle: item.libelle, consigne: item.consigne, numero: item.numero, categorie: item.categorie, discipline: item.discipline, duree: item.duree, suggestions: item.suggestions}))
     let modal = document.querySelector("#lightbox");
     modal.classList.remove("scale-0");
   };

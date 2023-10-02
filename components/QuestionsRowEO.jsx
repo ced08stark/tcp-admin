@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectEEQuestion, setEEQuestion } from "../featured/questionSlice";
 import GetCookies from "../hooks/getCookies";
 import { instance } from "../hooks/Axios";
+import AudioPlayer from "./AudioPlayer";
 
-function QuestionsRowEE({ item, setQuestions, serie, id }) {
+function QuestionsRowEO({ item, setQuestions, serie, id }) {
   const token = GetCookies("token");
   const [isLoading, setIsLoading] = useState(false);
   const currentQuestion = useSelector(selectEEQuestion);
@@ -13,7 +14,7 @@ function QuestionsRowEE({ item, setQuestions, serie, id }) {
 
   const getQuestions = async () => {
     const data = await instance
-      .get("/api/eeQuestion/questions", {
+      .get("/api/eoQuestion/questions", {
         headers: {
           Authorization: `basic ${token}`,
         },
@@ -21,7 +22,7 @@ function QuestionsRowEE({ item, setQuestions, serie, id }) {
       .catch((err) => console.log(err.message));
     console.log(data);
     if (data) {
-      alert(data?.data?.length)
+      alert(data?.data?.length);
       setQuestions(data?.data);
     }
   };
@@ -29,7 +30,7 @@ function QuestionsRowEE({ item, setQuestions, serie, id }) {
   const handledelete = async () => {
     setIsLoading(true);
     const data = await instance
-      .delete(`/api/eeQuestion/questions/${item._id}`, {
+      .delete(`/api/eoQuestion/questions/${item._id}`, {
         headers: {
           Authorization: `basic ${token}`,
         },
@@ -39,36 +40,35 @@ function QuestionsRowEE({ item, setQuestions, serie, id }) {
     if (data) {
       Update();
       setEEQuestion({});
-      
     } else {
       alert("delete question failed");
     }
   };
- const Update = async () => {
-  const newTab = serie.eeQuestions.filter((i) => i._id != item._id)
-   setIsLoading(true);
-   const data = await instance
-     .patch(
-       `/api/serie/series/${serie._id}`,
-       {
-         libelle: serie.libelle,
-         questions: serie.questions,
-         eeQuestions: newTab,
-         eoQuestions: serie.eoQuestions,
-       },
-       {
-         headers: {
-           Authorization: `basic ${token}`,
-         },
-       }
-     )
-     .catch((err) => console.log(err.message));
-   setIsLoading(false);
-   if (data) {
-     alert("delete success");
-     getQuestions();
-   }
- };
+  const Update = async () => {
+    const newTab = serie.eoQuestions.filter((i) => i._id != item._id);
+    setIsLoading(true);
+    const data = await instance
+      .patch(
+        `/api/serie/series/${serie._id}`,
+        {
+          libelle: serie.libelle,
+          questions: serie.questions,
+          eoQuestions: newTab,
+          eeQuestions: serie.eeQuestions
+        },
+        {
+          headers: {
+            Authorization: `basic ${token}`,
+          },
+        }
+      )
+      .catch((err) => console.log(err.message));
+    setIsLoading(false);
+    if (data) {
+      alert("delete success");
+      getQuestions();
+    }
+  };
 
   const show = async () => {
     dispatch(setEEQuestion({}));
@@ -95,62 +95,27 @@ function QuestionsRowEE({ item, setQuestions, serie, id }) {
         <br />
         <p className="font-semibold"> consigne: {item?.tasks[0]?.consigne}</p>
         <br />
-        <p> type production: {item?.tasks[0]?.typeProduction}</p>
+        <p>duree: {item?.tasks[0]?.duree} secondes</p>
         <br />
-        <p>
-          {" "}
-          images:{" "}
-          {!item?.tasks[0]?.images?.length
-            ? "aucune image"
-            : item?.tasks[0]?.images?.length}
-        </p>
-        <br />
-        <p>
-          min: {item?.tasks[0]?.minWord} | max: {item?.tasks[0]?.minWord}
-        </p>
-        <br />
+        <AudioPlayer url={`${item?.tasks[0]?.fichier}`} />
       </td>
-      <td className="whitespace-wrap  px-6 py-4 flex-col">
+      <td className="whitespace-wrap   px-6 py-4 flex-col">
         <p> numero: {item?.tasks[1]?.numero}</p>
         <br />
-        <p className="font-semibold">
-          {" "}
-          consigne: {item?.tasks[1]?.consigne}
-        </p>
+        <p className="font-semibold"> consigne: {item?.tasks[1]?.consigne}</p>
         <br />
-        <p> type production: {item?.tasks[1]?.typeProduction}</p>
+        <p>duree: {item?.tasks[1]?.duree} secondes</p>
         <br />
-        <p>
-          images:{" "}
-          {!item?.tasks[1]?.images?.length
-            ? "aucune image"
-            : item?.tasks[1]?.images?.length}
-        </p>
-        <br />
-        <p>
-          min: {item?.tasks[1]?.minWord} | max: {item?.tasks[1]?.maxWord}
-        </p>
-        <br />
+        <AudioPlayer url={`${item?.tasks[1]?.fichier}`} />
       </td>
-      <td className="whitespace-wrap px-6 py-4 flex-col">
+      <td className="whitespace-wrap   px-6 py-4 flex-col">
         <p> numero: {item?.tasks[2]?.numero}</p>
         <br />
         <p className="font-semibold"> consigne: {item?.tasks[2]?.consigne}</p>
         <br />
-        <p> type production: {item?.tasks[2]?.typeProduction}</p>
+        <p>duree: {item?.tasks[2]?.duree} secondes</p>
         <br />
-        <p>
-          {" "}
-          images:{" "}
-          {!item?.tasks[2]?.images?.length
-            ? "aucune image"
-            : item?.tasks[2]?.images?.length}
-        </p>
-        <br />
-        <p>
-          min: {item?.tasks[2]?.minWord} | max: {item?.tasks[2]?.maxWord}
-        </p>
-        <br />
+        <AudioPlayer url={`${item?.tasks[2]?.fichier}`} />
       </td>
       <td className="whitespace-nowrap px-6 py-4">
         {!isLoading ? (
@@ -178,4 +143,4 @@ function QuestionsRowEE({ item, setQuestions, serie, id }) {
   );
 }
 
-export default QuestionsRowEE;
+export default QuestionsRowEO;
