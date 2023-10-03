@@ -40,7 +40,7 @@ function QuestionsPage() {
   const [suggestions2, setSuggestions2] = useState([]);
   const [image, setImage] = useState("null");
   const handleUpdate = async () => {
-    console.log(currentQuestion);
+    
     // dispatch(
     //   setQuestion({
     //     ...currentQuestion,
@@ -133,7 +133,7 @@ function QuestionsPage() {
     setIsLoading(false);
 
     if (data) {
-      getQuestion();
+      //getQuestion();
       setImage("null");
       setSuggestion1({ text: "" });
       setSuggestion2({ text: "" });
@@ -177,6 +177,8 @@ function QuestionsPage() {
         {
           libelle: serie.libelle,
           questions: selectLists,
+          eeQuestions: serie.eeQuestions,
+          eoQuestions: serie.eoQuestions
         },
         {
           headers: {
@@ -212,7 +214,7 @@ function QuestionsPage() {
   }
 
   useEffect(()=>{
-    getQuestion()
+   // getQuestion()
   }, [] )
   return (
     <div className="flex h-auto m-2 lg:m-4 lg:mx-10 flex-col">

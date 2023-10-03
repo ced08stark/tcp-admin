@@ -172,7 +172,7 @@ function QuestionsPage() {
     modal.classList.remove("scale-0");
   };
 
-  const getEEQuestions = async () => {
+  const getEOQuestions = async () => {
     const data = await instance
       .get("/api/eeQuestion/questions", {
         headers: {
@@ -210,7 +210,7 @@ function QuestionsPage() {
   // };
 
   useEffect(() => {
-    getEEQuestions();
+    //getEEQuestions();
   }, []);
   return (
     <div className="flex h-auto m-2 lg:m-4 lg:mx-10 flex-col">

@@ -76,7 +76,9 @@ function AddQuestion() {
   const [currentSerie, setCurrentSerie] = useState({
     _id: null,
     libelle: null,
-    questions: null
+    questions: null,
+    eeQuestions: null,
+    eoQuestions: null
   })
   const [series, setSeries] = useState([]);
   const Add = async () => {
@@ -165,6 +167,8 @@ function AddQuestion() {
         {
           libelle: currentSerie?.libelle,
           questions: tab,
+          eeQuestions: currentSerie?.eeQuestions,
+          eoQuestions: currentSerie?.eoQuestions
         },
         {
           headers: {
@@ -176,7 +180,7 @@ function AddQuestion() {
     setIsLoading(false);
     if (data) {
       alert("create question success");
-      router.push("/dashboard");
+      router.push("/questions");
     }
     else{
       alert('echec')
@@ -290,7 +294,7 @@ function AddQuestion() {
      
       let newTab = []
       questions ? newTab = questions : newTab = []
-      newTab.push(data?.data)
+      newTab.push(data?.data._id)
       
       Update(newTab)
     } else {
@@ -435,13 +439,14 @@ function AddQuestion() {
               </div>
               <legend className="text-xs  font-bold">consigne</legend>
               <div className="relative mb-3 mx-auto space-y-2 w-full ">
-                {question?.consigne ? (
+                {discipline?.libelle == "Comprehension Orale" ? 
+                question?.consigne ? (
                   <div className="w-full  justify-center flex items-center">
                     <AudioPlayer url={question?.consigne} />
                   </div>
                 ) : (
                   <></>
-                )}
+                ) : <></>}
                 {discipline?.libelle == null ||
                 discipline?.libelle == "Comprehension Ecrite" ? (
                   <input

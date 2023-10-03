@@ -5,6 +5,7 @@ import { setQuestion, selectQuestion } from "../featured/questionSlice";
 import { setSerie } from '../featured/serieSlice';
 import GetCookies from "../hooks/getCookies";
 import { instance } from "../hooks/Axios";
+import AudioPlayer from './AudioPlayer';
 
 function QuestionsRows({item, id, serie}) {
   const token = GetCookies("token");
@@ -85,7 +86,7 @@ function QuestionsRows({item, id, serie}) {
   const show = async () => {
     dispatch(setSerie(serie));
     dispatch(setQuestion({}));
-    // dispatch(setQuestion({...currentQuestion, _id: item._id, libelle: item.libelle, consigne: item.consigne, numero: item.numero, categorie: item.categorie, discipline: item.discipline, duree: item.duree, suggestions: item.suggestions}))
+     dispatch(setQuestion({...currentQuestion, _id: item._id, libelle: item.libelle, consigne: item.consigne, numero: item.numero, categorie: item.categorie, discipline: item.discipline, duree: item.duree, suggestions: item.suggestions}))
     let modal = document.querySelector("#lightbox");
     modal.classList.remove("scale-0");
   };
@@ -97,7 +98,7 @@ function QuestionsRows({item, id, serie}) {
     >
       <td className="whitespace-nowrap px-6 py-4 font-medium">{id}</td>
       <td className="whitespace-nowrap px-6 py-4">{item?.numero}</td>
-      <td className="whitespace-nowrap px-6 py-4">{item?.consigne}</td>
+      <td className="whitespace-nowrap px-6 py-4">{item?.discipline?.libelle == "Comprehension Ecrite" ? item?.consigne : <AudioPlayer url={`${item?.consigne}`} />}</td>
       <td className="whitespace-nowrap px-6 py-4">
         {item?.categorie?.libelle}
       </td>

@@ -1,9 +1,12 @@
 import React, {useState} from 'react'
+import { setQuestion } from '../featured/questionSlice';
+import { useDispatch } from 'react-redux';
 
 function TabView({item, setItem, currentItem}) {
     
-
+    const dispatch = useDispatch()
     const handleChangeTab = ()=>{
+       // dispatch(setQuestion({}))
         if(currentItem === 'Comprehension Question'){
             setItem("Expression Question");
         }

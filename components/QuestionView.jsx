@@ -123,7 +123,7 @@ function QuestionView() {
          .catch((err) => console.log(err.message));
        console.log(data);
        if (data) {
-         setQuestions(data?.data);
+         //setQuestions(data?.data);
        }
      };
 

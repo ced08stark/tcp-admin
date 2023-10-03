@@ -212,7 +212,7 @@ function QuestionsPage() {
   
 
   useEffect(() => {
-    getEEQuestions();
+    //getEEQuestions();
   }, []);
   return (
     <div className="flex h-auto m-2 lg:m-4 lg:mx-10 flex-col">
@@ -314,7 +314,6 @@ function QuestionsPage() {
                   <tbody>
                     {serie?.eeQuestions?.map((q, i) => (
                         <QuestionsRowEE
-                          setQuestions={setQuestions}
                           serie={serie}
                           item={q}
                           key={i}

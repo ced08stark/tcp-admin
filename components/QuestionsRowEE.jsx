@@ -5,8 +5,9 @@ import { selectEEQuestion, setEEQuestion } from "../featured/questionSlice";
 import GetCookies from "../hooks/getCookies";
 import { instance } from "../hooks/Axios";
 
-function QuestionsRowEE({ item, setQuestions, serie, id }) {
+function QuestionsRowEE({ item,  serie, id }) {
   const token = GetCookies("token");
+  const [series, setSeries] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const currentQuestion = useSelector(selectEEQuestion);
   const dispatch = useDispatch();
@@ -22,7 +23,21 @@ function QuestionsRowEE({ item, setQuestions, serie, id }) {
     console.log(data);
     if (data) {
       alert(data?.data?.length)
-      setQuestions(data?.data);
+      //setQuestions(data?.data);
+    }
+  };
+
+  const getSeries = async () => {
+    const data = await instance
+      .get("/api/serie/series", {
+        headers: {
+          Authorization: `basic ${token}`,
+        },
+      })
+      .catch((err) => console.log(err.message));
+
+    if (data) {
+      setSeries(data?.data);
     }
   };
 

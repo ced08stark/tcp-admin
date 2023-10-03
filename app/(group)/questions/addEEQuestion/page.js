@@ -374,7 +374,7 @@ function AddQuestion() {
         alert("add question success");
         let newTab = [];
         questions ? (newTab = questions) : (newTab = []);
-        newTab.push(data?.data);
+        newTab.push(data?.data._id);
         UpdateEE(newTab);
       } else {
         alert("echec de creation de la question");
@@ -432,7 +432,7 @@ function AddQuestion() {
             alert("add question success");
             let newTab = [];
             questions ? (newTab = questions) : (newTab = []);
-            newTab.push(data?.data);
+            newTab.push(data?.data._id);
             UpdateEO(newTab);
           } else {
             alert("echec de creation de la question");

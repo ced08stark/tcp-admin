@@ -41,15 +41,19 @@ function QuestionsPage() {
   const [suggestions2, setSuggestions2] = useState([]);
   const [image, setImage] = useState("null")
 
-   const Update = async (questions) => {
-    alert(JSON.stringify(questions))
+   const Update = async (datas) => {
+   
+    //alert(JSON.stringify(questions))
+    const newTab = serie.questions.filter((i) => i._id != datas?._id);
+    
+
      setIsLoading(true);
      const data = await instance
        .patch(
          `/api/serie/series/${serie._id}`,
          {
            libelle: serie.libelle,
-           questions: questions,
+           questions: newTab,
            eoQuestions: serie.eoQuestions,
            eeQuestions: serie.eeQuestions
          },
@@ -76,72 +80,9 @@ function QuestionsPage() {
    };
 
   const handleUpdate = async() =>{
-    
-    // dispatch(
-    //   setQuestion({
-    //     ...currentQuestion,
-        // libelle: currentQuestion.libelle,
-        // consigne: currentQuestion.consigne,
-        // numero: currentQuestion.numero,
-        // categorie: currentQuestion.categorie,
-        // discipline: currentQuestion.discipline,
-        // duree: currentQuestion.duree,
-        // suggestion1: suggestion1?.text
-        //   ? suggestion1
-        //   : currentQuestion.suggestions[0],
-        // suggestion2: suggestion2?.text
-        //   ? suggestion2
-        //   : currentQuestion.suggestions[1],
-        // suggestion3: suggestion3?.text
-        //   ? suggestion3
-        //   : currentQuestion.suggestions[2],
-        // suggestion4: suggestion4?.text
-        //   ? suggestion4
-        //   : currentQuestion.suggestions[3],
-    //   })
-    // );
+    alert(currentQuestion?.consigne)
     const formData = new FormData();
-    //alert(JSON.stringify(currentQuestion))
-    /*console.log(suggestions?.length)
-    formData.append("numero", currentQuestion?.numero);
-    formData.append("consigne", question?.consigne);
-    formData.append("files", question?.libelle);
-    formData.append(
-      "suggestions[0][text]",
-      suggestions[0]?.text ? suggestions[0]?.text : suggestions2[0].text
-    );
-    formData.append(
-      "suggestions[0][isCorrect]",
-      suggestions[0]?.isCorrect ? suggestions[0]?.isCorrect : suggestions2[0].isCorrect
-    );
-    formData.append(
-      "suggestions[1][text]",
-      suggestions[1]?.text ? suggestions[1]?.text : suggestions2[1].text
-    );
-    formData.append(
-      "suggestions[1][isCorrect]",
-      suggestions[1]?.isCorrect ? suggestions[1]?.isCorrect : suggestions2[1].isCorrect
-    );
-    formData.append(
-      "suggestions[2][text]",
-      suggestions[2]?.text ? suggestions[2]?.text : suggestions2[2].text
-    );
-    formData.append(
-      "suggestions[2][isCorrect]",
-      suggestions[2]?.isCorrect ? suggestions[2]?.isCorrect : suggestions2[2].isCorrect
-    );
-    formData.append("suggestions[3][text]", suggestions[3]?.text ? suggestions[3]?.text : suggestions2[3].text);
-    formData.append(
-      "suggestions[3][isCorrect]",
-      suggestions[3]?.isCorrect ? suggestions[3]?.isCorrect : suggestions2[3].isCorrect
-    );
-    formData.append("categorie[libelle]", currentQuestion?.categorie?.libelle);
-    formData.append("categorie[point]", currentQuestion?.categorie?.point);
-    formData.append("discipline[libelle]", currentQuestion?.discipline?.libelle);
-    formData.append("discipline[duree]", currentQuestion?.discipline?.duree);
-    formData.append("duree", currentQuestion?.duree);*/
     setIsLoading(true);
-    
     const data = await instance
       .patch(
         `/api/question/questions/${currentQuestion?._id}`,
@@ -170,7 +111,8 @@ function QuestionsPage() {
     setIsLoading(false);
     
     if (data) {
-      Update(data.data)
+      alert(JSON.stringify(data.data))
+     // Update(data.data)
       
     } else {
       console.log(formData)
@@ -216,22 +158,7 @@ function QuestionsPage() {
 
   
 
-  const getQuestion = async() =>{
-
-    const data = await instance
-        .get(
-          "/api/question/questions",
-          {
-            headers: {
-              Authorization: `basic ${token}`,
-            },
-          }
-        )
-        .catch((err) => console.log(err.message));
-      if(data){
-        setQuestions(data?.data)
-      }
-  }
+  
    const getSeries = async () => {
      const data = await instance
        .get("/api/serie/series", {
@@ -240,7 +167,7 @@ function QuestionsPage() {
          },
        })
        .catch((err) => console.log(err.message));
-     console.log(data);
+     
      if (data) {
        setSeries(data?.data);
      }
@@ -248,8 +175,9 @@ function QuestionsPage() {
   
   useEffect(()=>{
     getSeries();
-    // getEEQuestions()
-    console.log(series)
+   // getEEQuestions()
+    //getQuestions()
+    //console.log(series)
     currentQuestion?.suggestions?.map((item, index) =>{
       setSuggestions2([...suggestions2, {...suggestions2[index], text: item?.text, isCorrect: item?.isCorrect}])
     })
@@ -380,27 +308,7 @@ function QuestionsPage() {
                       </thead>
                       <tbody>
                         {series?.map((item, index) =>
-                          item?.questions
-                            ?.filter((item) =>
-                              filter.name == "consigne"
-                                ? item?.consigne?.includes(filter.value)
-                                : filter.name == "numero"
-                                ? item?.numero.toString().includes(filter.value)
-                                : filter.name == "categorie"
-                                ? item?.categorie?.libelle
-                                    .toLowerCase()
-                                    .includes(filter.value)
-                                : filter.name == "discipline"
-                                ? item?.discipline?.libelle
-                                    .toLowerCase()
-                                    .includes(filter.value)
-                                : filter.name == "point"
-                                ? item?.categorie?.point
-                                    .toString()
-                                    .includes(filter.value)
-                                : item
-                            )
-                            .map((q, i) => (
+                          item?.questions?.map((q, i) => (
                               <QuestionsRows
                                 serie={item}
                                 item={q}
@@ -902,7 +810,7 @@ function QuestionsPage() {
                         {series?.map((item, index) =>
                           item?.eeQuestions?.map((q, i) => (
                             <QuestionsRowEE
-                              setQuestions={setQuestions}
+                              //setQuestions={setQuestions}
                               serie={item}
                               item={q}
                               key={i}
