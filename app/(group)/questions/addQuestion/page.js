@@ -115,9 +115,9 @@ function AddQuestion() {
     setExist(false);
      if (numero > 0 && numero < 40) {
        setDiscipline({ ...discipline, libelle: "Comprehension Orale" });
-     } else if (numero > 39 && numero < 80) {
+     } else if (numero > 39 && numero < 79) {
        setDiscipline({ ...discipline, libelle: "Comprehension Ecrite" });
-     } else if (numero > 79 && numero < 90) {
+     } else if (numero > 78 && numero < 90) {
        setDiscipline({ ...discipline, libelle: "Expression Orale" });
      } else if (numero > 89 && numero < 100)  {
        setDiscipline({ ...discipline, libelle: "Expression Ecrite" });
