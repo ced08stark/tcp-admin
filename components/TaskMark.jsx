@@ -84,7 +84,7 @@ function TaskMark({name, consigne, note, images, reponse, min, max, status, note
               value={note ? note : undefined}
               min={0}
               onChange={(e) => setNote(e.target.value)}
-              className="text-end  outline-none border-b-2  border-t-0 border-l-0 border-r-0"
+              className="text-end xs:w-[200px]  outline-none border-b-2  border-t-0 border-l-0 border-r-0"
             />
           </div>
         </div>

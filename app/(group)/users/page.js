@@ -47,6 +47,9 @@ function UserPage() {
                         #
                       </th>
                       <th scope="col" className="px-6 py-4">
+                        id
+                      </th>
+                      <th scope="col" className="px-6 py-4">
                         email
                       </th>
                       <th scope="col" className="px-6 py-4">
@@ -56,26 +59,38 @@ function UserPage() {
                         role
                       </th>
                       <th scope="col" className="px-6 py-4">
+                        pays
+                      </th>
+                      <th scope="col" className="px-6 py-4">
                         remain
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        register at
                       </th>
                       <th scope="col" className="px-6 py-4"></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {users?.length > 0?
-                    users?.map((item, index) => (
-                      <UserRow item={item} key={index} id={index + 1} setUsers={setUsers} />
-                    )) : <></>}
+                    {users?.length > 0 ? (
+                      users?.map((item, index) => (
+                        <UserRow
+                          item={item}
+                          key={index}
+                          id={index + 1}
+                          setUsers={setUsers}
+                        />
+                      ))
+                    ) : (
+                      <></>
+                    )}
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
-         
-          
         </div>
       </div>
-      <UserView  />
+      <UserView />
     </main>
   );
 }

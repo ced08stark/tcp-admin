@@ -214,9 +214,10 @@ export default function Home() {
           </div>
           <div className="p-3 absolute right-2 bottom-4 rounded-sm text-white text-xl bg-blue-300 group-hover:bg-blue-500 group-hover:rounded-full ">
             <span>
-              {tests?.length.toString().length > 1
-                ? tests?.length
-                : "0" + tests?.length}
+              {tests?.filter((i) => i.status == "en cours")?.length.toString()
+                .length > 1
+                ? tests?.filter((i) => i.status == "en cours").length
+                : "0" + tests?.filter((i) => i.status == "en cours").length}
             </span>
           </div>
         </Link>
@@ -248,9 +249,10 @@ export default function Home() {
           </div>
           <div className="p-3 absolute right-2 bottom-4 rounded-sm text-white text-xl bg-blue-300 group-hover:bg-blue-500 group-hover:rounded-full ">
             <span>
-              {testsEO?.length.toString().length > 1
-                ? testsEO?.length
-                : "0" + testsEO?.length}
+              {testsEO?.filter((i) => i.status == "en cours").length.toString()
+                .length > 1
+                ? testsEO?.filter((i) => i.status == "en cours").length
+                : "0" + testsEO?.filter((i) => i.status == "en cours").length}
             </span>
           </div>
         </Link>

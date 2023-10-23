@@ -51,9 +51,11 @@ function ExpressionOraleTest() {
           </tr>
         </thead>
         <tbody>
-          {tests?.map((item, index) => (
-            <TestEORow item={item} key={index} id={index + 1} />
-          ))}
+          {tests
+            ?.filter((i) => i.status == "en cours")
+            .map((item, index) => (
+              <TestEORow item={item} key={index} id={index + 1} />
+            ))}
         </tbody>
       </table>
     </div>

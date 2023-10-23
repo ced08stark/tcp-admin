@@ -97,10 +97,13 @@ function UserRow({ item, id, setUsers }) {
       className="even:bg-gray-100 border-b dark:border-neutral-500 transition duration-300 ease-in-out hover:even:bg-white hover:bg-neutral-100 cursor-pointer"
     >
       <td className="whitespace-nowrap px-6 py-4 font-medium">{id}</td>
+      <td className="whitespace-nowrap px-6 py-4">{item?._id}</td>
       <td className="whitespace-nowrap px-6 py-4">{item?.email}</td>
       <td className="whitespace-nowrap px-6 py-4">{item?.phone}</td>
       <td className="whitespace-nowrap px-6 py-4">{item?.role}</td>
-      <td className="whitespace-nowrap px-6 py-4">{item?.remail}</td>
+      <td className="whitespace-nowrap px-6 py-4">{item?.pays}</td>
+      <td className="whitespace-nowrap px-6 py-4">{item?.remain ?  `valable jusqu'a ${new Date(item?.remain).toDateString()}` : 'aucun abonnement'}</td>
+      <td className="whitespace-nowrap px-6 py-4">{item?.createdAt}</td>
       <td className="whitespace-nowrap px-6 py-4">
         {!isLoading ? (
           <button
