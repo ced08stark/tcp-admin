@@ -55,9 +55,7 @@ function UserPage() {
                       <th scope="col" className="px-6 py-4">
                         phone
                       </th>
-                      <th scope="col" className="px-6 py-4">
-                        role
-                      </th>
+
                       <th scope="col" className="px-6 py-4">
                         pays
                       </th>
@@ -66,6 +64,9 @@ function UserPage() {
                       </th>
                       <th scope="col" className="px-6 py-4">
                         register at
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        role
                       </th>
                       <th scope="col" className="px-6 py-4"></th>
                     </tr>
