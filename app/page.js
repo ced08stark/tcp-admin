@@ -7,7 +7,7 @@ import SetCookies from "../hooks/setCookies";
 import GetCookies from "../hooks/getCookies";
 import RemoveCookies from "../hooks/removeCookies";
 import { instance } from "../hooks/Axios";
-import {  } from '@heroicons/react/24/solid'
+import * as Icons from '@heroicons/react/24/solid'
 
 export default function Home() {
   const router = useRouter()

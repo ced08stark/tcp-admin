@@ -6,6 +6,7 @@ const nextConfig = {
       "tcp-services-huga.onrender.com",
       "assets.coderrocketfuel.com",
       "uploadthing.com",
+      "localhost"
     ],
   },
 };

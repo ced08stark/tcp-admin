@@ -17,9 +17,34 @@ import AudioPlayer from "../../../../components/AudioPlayer";
 
 // You need to import our styles for the button to look right. Best to import in the root /layout.tsx but this is fine
 import "@uploadthing/react/styles.css";
+import { baseUrlFile } from "../../../../hooks/Axios";
+import * as Icons from "@heroicons/react/24/outline";
 
-const FileComponent = ({setImages, images}) => {
+
+const FileComponent = ({setImages, images, typeQuestion}) => {
+  const token = GetCookies("token");
+  const [isUploading2, setIsUploading2] = useState(false);
   const [imageFile, setImageFile] = useState("");
+
+
+  const handleSetLibelle = async (e) => {
+    console.log(e.target.files[0]);
+    const formData = new FormData();
+    formData.append("files", e.target.files[0]);
+    setIsUploading2(true);
+    const data = await instance.post("api/question/upload", formData, {
+      headers: {
+        Authorization: `basic ${token}`,
+        "Content-type": "multipart/form-data",
+      },
+    });
+    console.log(data);
+    setIsUploading2(false);
+    if (data) {
+      setImages([...images, data?.data.file]);
+      setImageFile(data?.data.file);
+    }
+  };
   return (
     <div className="mt-2 bg-white flex items-center justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
       <div className="text-center ">
@@ -37,14 +62,22 @@ const FileComponent = ({setImages, images}) => {
             />
           </svg>
         ) : (
-          <Image
-            src={imageFile}
+          
+            typeQuestion == "Expression Ecrite" ?
+          
+         <Image
+            src={`${baseUrlFile}${imageFile}`}
             className="w-full"
             alt="Phone image"
             width={300}
             height={300}
             priority
-          />
+          />: <div className="w-full  justify-center flex items-center">
+                      <AudioPlayer
+                        url={`${baseUrlFile}${imageFile}`}
+                      />
+                    </div>
+              
         )}
         <div className="mt-4 flex items-center justify-center text-sm leading-6 text-gray-600">
           <label
@@ -52,7 +85,8 @@ const FileComponent = ({setImages, images}) => {
             className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
           >
             <span>Upload a file</span>
-            <UploadButton
+
+            {/* <UploadButton
               endpoint="mediaPost"
               onClientUploadComplete={(res) => {
                 if (res) {
@@ -66,7 +100,30 @@ const FileComponent = ({setImages, images}) => {
                 // Do something with the error.
                 alert(`ERROR! ${error.message}`);
               }}
-            />
+            /> */}
+            <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
+              <input
+                type="file"
+                className="w-full h-full opacity-0 cursor-pointer absolute"
+                onChange={handleSetLibelle}
+              />
+              <div className="flex items-center justify-center">
+                {!isUploading2 ? (
+                  <Icons.ArrowDownTrayIcon
+                    className="text-indigo-500 text-lg w-10 h-10"
+                    size={16}
+                  />
+                ) : (
+                  <div
+                    class="spinner-border text-lg spinner-border-sm text-indigo-500"
+                    role="status"
+                  >
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                )}
+                <span className="text-indigo-500 ">upload file libelle</span>
+              </div>
+            </div>
           </label>
         </div>
       </div>
@@ -185,6 +242,7 @@ function AddQuestion() {
             <FileComponent
               images={Imagesfiles}
               setImages={setImagesfiles}
+              typeQuestion={typeQuestion}
             />,
           ]);
         }
@@ -202,6 +260,7 @@ function AddQuestion() {
         <FileComponent
           images={Imagesfiles1}
           tache={tache1}
+          typeQuestion={typeQuestion}
         />,
       ]);
     }
@@ -214,7 +273,11 @@ function AddQuestion() {
       setOtherFiles2([
         ...otherFiles2,
         // eslint-disable-next-line react/jsx-key
-        <FileComponent images={Imagesfiles2} setImages={setImagesfiles2} />,
+        <FileComponent
+          images={Imagesfiles2}
+          setImages={setImagesfiles2}
+          typeQuestion={typeQuestion}
+        />,
       ]);
     }
   };
@@ -456,6 +519,7 @@ function AddQuestion() {
        tache={tache3}
        setTache={setTache3}
        setImages={setImagesfiles}
+       typeQuestion={typeQuestion}
      />,
    ]);
   
@@ -466,6 +530,7 @@ function AddQuestion() {
        tache={tache1}
        setTache={setTache1}
        setImages={setImagesfiles1}
+       typeQuestion={typeQuestion}
      />,
    ]);
    const [otherFiles2, setOtherFiles2] = useState([
@@ -475,6 +540,7 @@ function AddQuestion() {
        tache={tache2}
        setTache={setTache2}
        setImages={setImagesfiles2}
+       typeQuestion={typeQuestion}
      />,
    ]);
 
