@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const baseUrl2 = "https://tcp-services-huga.onrender.com/";
-const baseUrl = "http://localhost:3500/";
+const baseUrl = "https://tcp-services-huga.onrender.com/";
+const baseUrl2 = "http://localhost:3500/";
 export const instance = axios.create({
   baseURL: baseUrl,
   //   headers: { "X-Custom-Header": "foobar" },
