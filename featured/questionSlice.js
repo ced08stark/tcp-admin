@@ -4,8 +4,7 @@ const initialState = {
   question: {
     numero: null,
     consigne: null,
-    libelle:
-      "https://uploadthing.com/f/ec7c0678-c83b-4231-b4fb-1196556805fe_im.png",
+    libelle: null,
     discipline: {
       libelle: null,
       duree: null,

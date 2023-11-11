@@ -61,23 +61,19 @@ const FileComponent = ({setImages, images, typeQuestion}) => {
               clip-rule="evenodd"
             />
           </svg>
-        ) : (
-          
-            typeQuestion == "Expression Ecrite" ?
-          
-         <Image
+        ) : typeQuestion == "Expression Ecrite" ? (
+          <Image
             src={`${baseUrlFile}${imageFile}`}
             className="w-full"
             alt="Phone image"
             width={300}
             height={300}
             priority
-          />: <div className="w-full  justify-center flex items-center">
-                      <AudioPlayer
-                        url={`${baseUrlFile}${imageFile}`}
-                      />
-                    </div>
-              
+          />
+        ) : (
+          <div className="w-full  justify-center flex items-center">
+            <AudioPlayer url={`${baseUrlFile}${imageFile}`} />
+          </div>
         )}
         <div className="mt-4 flex items-center justify-center text-sm leading-6 text-gray-600">
           <label
@@ -85,7 +81,7 @@ const FileComponent = ({setImages, images, typeQuestion}) => {
             className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
           >
             <span>Upload a file</span>
-
+            
             {/* <UploadButton
               endpoint="mediaPost"
               onClientUploadComplete={(res) => {
@@ -600,9 +596,7 @@ function AddQuestion() {
                 <div className="flex items-center space-x-2">
                   <select
                     onChange={(e) => {
-                      handleSelectSerieEE(
-                        JSON.parse(e.target.value)
-                      );
+                      handleSelectSerieEE(JSON.parse(e.target.value));
                       setQuestions(JSON.parse(e.target.value)?.eeQuestions);
                       setCurrentSerie(JSON.parse(e.target.value));
                     }}
@@ -923,8 +917,7 @@ function AddQuestion() {
                 <span></span>
               )}
             </fieldset>
-          </div> */
-          }
+          </div> */}
 
             <div>
               <fieldset className="border border-solid space-y-2 border-gray-600 p-3">
@@ -932,9 +925,7 @@ function AddQuestion() {
                 <div className="flex items-center space-x-2">
                   <select
                     onChange={(e) => {
-                      handleSelectSerieEO(
-                        JSON.parse(e.target.value)
-                      );
+                      handleSelectSerieEO(JSON.parse(e.target.value));
                       setQuestions(JSON.parse(e.target.value)?.eoQuestions);
                       setCurrentSerie(JSON.parse(e.target.value));
                     }}
@@ -988,7 +979,15 @@ function AddQuestion() {
                       className="block text-sm font-medium leading-6 text-gray-900"
                     ></label>
 
-                    {otherFiles1}
+                    {
+                      <FileComponent
+                        images={Imagesfiles1}
+                        tache={tache1}
+                        setTache={setTache1}
+                        setImages={setImagesfiles1}
+                        typeQuestion={typeQuestion}
+                      />
+                    }
                     {/* <div
                       className="w-full flex items-center justify-end "
                       onClick={() => addOtherFile1()}
@@ -1015,15 +1014,22 @@ function AddQuestion() {
                       ></textarea>
                     </div>
                   </div>
-                  
+
                   <div className="col-span-full">
                     <label
                       htmlFor="cover-photo"
                       className="block text-sm font-medium leading-6 text-gray-900"
                     ></label>
 
-                    {otherFiles2}
-                    
+                    {
+                      <FileComponent
+                        images={Imagesfiles2}
+                        tache={tache2}
+                        setTache={setTache2}
+                        setImages={setImagesfiles2}
+                        typeQuestion={typeQuestion}
+                      />
+                    }
                   </div>
                 </fieldset>
                 <fieldset className="w-full border border-solid space-y-2 border-gray-600 p-3">
@@ -1045,15 +1051,22 @@ function AddQuestion() {
                       ></textarea>
                     </div>
                   </div>
-                  
+
                   <div className="col-span-full">
                     <label
                       htmlFor="cover-photo"
                       className="block text-sm font-medium leading-6 text-gray-900"
                     ></label>
 
-                    {otherFiles}
-                    
+                    {
+                      <FileComponent
+                        images={Imagesfiles}
+                        tache={tache3}
+                        setTache={setTache3}
+                        setImages={setImagesfiles}
+                        typeQuestion={typeQuestion}
+                      />
+                    }
                   </div>
                 </fieldset>
               </fieldset>

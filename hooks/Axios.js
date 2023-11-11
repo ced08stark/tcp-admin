@@ -11,5 +11,5 @@ export const baseUrlFile = baseUrl + "api/question/file/";
 export const baseUrlImg = baseUrl + "uploads/image/";
 export const baseUrlpdf = baseUrl + "uploads/pdf/";
 export const baseOther = baseUrl + "uploads/autres/";
-export const baseAudio = baseUrl + "uploads/audios/";
+export const baseAudio = baseUrl + "uploads/audios/"
 export default baseUrl;

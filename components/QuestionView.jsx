@@ -7,10 +7,8 @@ import GetCookies from "../hooks/getCookies";
 import { instance, baseUrlImg } from "../hooks/Axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setQuestion, selectQuestion } from "../featured/questionSlice";
-
-import { UploadButton } from "@uploadthing/react";
-import "@uploadthing/react/styles.css";
 import AudioPlayer from "./AudioPlayer";
+import { baseUrlFile } from "../hooks/Axios";
 
 function QuestionView() {
   const dispatch = useDispatch();
@@ -158,6 +156,45 @@ function QuestionView() {
     isCorrect: false,
   });
   const [images, setImages] = useState(null);
+  const [isUploading, setIsUploading] = useState(false)
+  const [isUploading2, setIsUploading2] = useState(false);
+
+  const handleSetConsigne = async (e) => {
+    console.log(e.target.files[0]);
+    const formData = new FormData();
+    formData.append("files", e.target.files[0]);
+    setIsUploading(true);
+    const data = await instance.post("api/question/upload", formData, {
+      headers: {
+        Authorization: `basic ${token}`,
+        "Content-type": "multipart/form-data",
+      },
+    });
+    setIsUploading(false);
+    console.log(data);
+    if (data) {
+      setQuestion({ ...question, consigne: data.data.file });
+    }
+  };
+
+  const handleSetLibelle = async (e) => {
+    console.log(e.target.files[0]);
+    const formData = new FormData();
+    formData.append("files", e.target.files[0]);
+    setIsUploading2(true);
+    const data = await instance.post("api/question/upload", formData, {
+      headers: {
+        Authorization: `basic ${token}`,
+        "Content-type": "multipart/form-data",
+      },
+    });
+    console.log(data);
+    setIsUploading2(false);
+    if (data) {
+      setImage(data?.data.file);
+
+    }
+  };
 
   const close = () => {
     const lightbox = document.querySelector("#lightbox");
@@ -198,16 +235,18 @@ function QuestionView() {
               <div className="mt-2 bg-white flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                 <div className="text-center">
                   <div className="w-full  justify-center flex">
-                    <Image
+                   {currentQuestion?.libelle && <Image
                       className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
                       src={`${
-                        image != "null" ? image : currentQuestion?.libelle
+                        image != "null"
+                          ? `${baseUrlFile}${image}`
+                          : `${baseUrlFile}${currentQuestion?.libelle}`
                       }`}
                       alt="Next.js Logo"
                       width={180}
                       height={37}
                       priority
-                    />
+                    />}
                   </div>
                   <div className="mt-4 flex items-center justify-center text-sm leading-6 text-gray-600">
                     <label
@@ -216,7 +255,7 @@ function QuestionView() {
                     >
                       <span>Upload a file</span>
 
-                      <UploadButton
+                      {/* <UploadButton
                         endpoint="imageUploader"
                         onClientUploadComplete={(res) => {
                           if (res) {
@@ -229,7 +268,32 @@ function QuestionView() {
                           // Do something with the error.
                           alert(`ERROR! ${error.message}`);
                         }}
-                      />
+                      /> */}
+                      <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
+                        <input
+                          type="file"
+                          className="w-full h-full opacity-0 cursor-pointer absolute"
+                          onChange={handleSetLibelle}
+                        />
+                        <div className="flex items-center justify-center">
+                          {!isUploading2 ? (
+                            <Icons.ArrowDownTrayIcon
+                              className="text-indigo-500 text-lg w-10 h-10"
+                              size={16}
+                            />
+                          ) : (
+                            <div
+                              class="spinner-border text-lg spinner-border-sm text-indigo-500"
+                              role="status"
+                            >
+                              <span class="visually-hidden">Loading...</span>
+                            </div>
+                          )}
+                          <span className="text-indigo-500 ">
+                            upload file libelle
+                          </span>
+                        </div>
+                      </div>
 
                       {/* <input
                           id="file-upload"
@@ -277,11 +341,9 @@ function QuestionView() {
             <div className="mt-2 bg-white flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
               <div className="text-center">
                 <div className="w-full  justify-center flex">
-                  
-                    <AudioPlayer
-                      url={currentQuestion?.consigne}
-                    />
-                  
+                  {currentQuestion?.consigne && <AudioPlayer
+                    url={`${baseUrlFile}${currentQuestion?.consigne}`}
+                  />}
                 </div>
                 <div className="mt-4 flex items-center justify-center text-sm leading-6 text-gray-600">
                   <label
@@ -292,35 +354,85 @@ function QuestionView() {
                     {currentQuestion?.discipline?.libelle == null ||
                     currentQuestion?.discipline?.libelle ==
                       "Comprehension Ecrite" ? (
-                      <UploadButton
-                        endpoint="imageUploader"
-                        onClientUploadComplete={(res) => {
-                          if (res) {
-                            setImage(res[0].fileUrl);
-                            alert("Upload Completed");
-                          }
-                          // Do something with the respons
-                        }}
-                        onUploadError={(error) => {
-                          // Do something with the error.
-                          alert(`ERROR! ${error.message}`);
-                        }}
-                      />
+                      <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
+                        <input
+                          type="file"
+                          className="w-full h-full opacity-0 cursor-pointer absolute"
+                          onChange={handleSetConsigne}
+                        />
+                        <div className="flex items-center justify-center">
+                          {!isUploading ? (
+                            <Icons.ArrowDownTrayIcon
+                              className="text-indigo-500 text-lg w-10 h-10"
+                              size={16}
+                            />
+                          ) : (
+                            <div
+                              class="spinner-border text-lg spinner-border-sm text-indigo-500"
+                              role="status"
+                            >
+                              <span class="visually-hidden">Loading...</span>
+                            </div>
+                          )}
+                          <span className="text-indigo-500 ">
+                            upload file consigne
+                          </span>
+                        </div>
+                      </div>
                     ) : (
-                      <UploadButton
-                        endpoint="mediaPost"
-                        onClientUploadComplete={(res) => {
-                          if (res) {
-                            setImage(res[0].fileUrl);
-                            alert("Upload Completed");
-                          }
-                          // Do something with the response
-                        }}
-                        onUploadError={(error) => {
-                          // Do something with the error.
-                          alert(`ERROR! ${error.message}`);
-                        }}
-                      />
+                      // <UploadButton
+                      //   endpoint="imageUploader"
+                      //   onClientUploadComplete={(res) => {
+                      //     if (res) {
+                      //       setImage(res[0].fileUrl);
+                      //       alert("Upload Completed");
+                      //     }
+                      //     // Do something with the respons
+                      //   }}
+                      //   onUploadError={(error) => {
+                      //     // Do something with the error.
+                      //     alert(`ERROR! ${error.message}`);
+                      //   }}
+                      // />
+                      // <UploadButton
+                      //   endpoint="mediaPost"
+                      //   onClientUploadComplete={(res) => {
+                      //     if (res) {
+                      //       setImage(res[0].fileUrl);
+                      //       alert("Upload Completed");
+                      //     }
+                      //     // Do something with the response
+                      //   }}
+                      //   onUploadError={(error) => {
+                      //     // Do something with the error.
+                      //     alert(`ERROR! ${error.message}`);
+                      //   }}
+                      // />
+                      <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
+                        <input
+                          type="file"
+                          className="w-full h-full opacity-0 cursor-pointer absolute"
+                          onChange={handleSetConsigne}
+                        />
+                        <div className="flex items-center justify-center">
+                          {!isUploading ? (
+                            <Icons.ArrowDownTrayIcon
+                              className="text-indigo-500 text-lg w-10 h-10"
+                              size={16}
+                            />
+                          ) : (
+                            <div
+                              class="spinner-border text-lg spinner-border-sm text-indigo-500"
+                              role="status"
+                            >
+                              <span class="visually-hidden">Loading...</span>
+                            </div>
+                          )}
+                          <span className="text-indigo-500 ">
+                            upload file consigne
+                          </span>
+                        </div>
+                      </div>
                     )}
                     {/* <input
                           id="file-upload"

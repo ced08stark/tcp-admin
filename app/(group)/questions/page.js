@@ -23,72 +23,89 @@ import "@uploadthing/react/styles.css";
 import AudioPlayer from "../../../components/AudioPlayer";
 import TabView from '../../../components/TabView'
 import { selectSerie } from "../../../featured/serieSlice";
+import { baseUrlFile } from "../../../hooks/Axios";
 
 function QuestionsPage() {
   //const fileRef = useRef(null);
   const router = useRouter();
   const token = GetCookies("token");
-  const [see, setSee] = useState(false)
+  const [see, setSee] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState({
-    name: 'consigne',
-    value: ''
-  })
+    name: "consigne",
+    value: "",
+  });
   const serie = useSelector(selectSerie);
   const [eeQuestions, setEEQuestions] = useState([]);
   //const [questions, setQuestions] = useState([]);
   const dispatch = useDispatch();
   const currentQuestion = useSelector(selectQuestion);
   const [suggestions2, setSuggestions2] = useState([]);
-  const [image, setImage] = useState("null")
+  const [image, setImage] = useState("null");
+  const [isUploading2, setIsUploading2] = useState(false);
 
-   const Update = async (datas) => {
-   
+   const handleSetLibelle = async (e) => {
+    console.log(e.target.files[0]);
+    const formData = new FormData();
+    formData.append("files", e.target.files[0]);
+    setIsUploading2(true);
+    const data = await instance.post("api/question/upload", formData, {
+      headers: {
+        Authorization: `basic ${token}`,
+        "Content-type": "multipart/form-data",
+      },
+    });
+    console.log(data);
+    setIsUploading2(false);
+    if (data) {
+      setImage(data?.data.file);
+    }
+  };
+
+  const Update = async (datas) => {
     //alert(JSON.stringify(questions))
     const newTab = serie.questions.filter((i) => i._id != datas?._id);
-    
 
-     setIsLoading(true);
-     const data = await instance
-       .patch(
-         `/api/serie/series/${serie._id}`,
-         {
-           libelle: serie.libelle,
-           questions: newTab,
-           eoQuestions: serie.eoQuestions,
-           eeQuestions: serie.eeQuestions
-         },
-         {
-           headers: {
-             Authorization: `basic ${token}`,
-           },
-         }
-       )
-       .catch((err) => console.log(err.message));
-     setIsLoading(false);
-     if (data) {
-       setQuestion({})
-       router.push('/dashboard')
-       alert("serie update success");
-       getSeries();
-       setImage("null");
-       setSuggestion1({ text: "" });
-       setSuggestion2({ text: "" });
-       setSuggestion3({ text: "" });
-       setSuggestion4({ text: "" });
-       
-     }
-   };
+    setIsLoading(true);
+    const data = await instance
+      .patch(
+        `/api/serie/series/${serie._id}`,
+        {
+          libelle: serie.libelle,
+          questions: newTab,
+          eoQuestions: serie.eoQuestions,
+          eeQuestions: serie.eeQuestions,
+        },
+        {
+          headers: {
+            Authorization: `basic ${token}`,
+          },
+        }
+      )
+      .catch((err) => console.log(err.message));
+    setIsLoading(false);
+    if (data) {
+      setQuestion({});
+      router.push("/dashboard");
+      alert("serie update success");
+      getSeries();
+      setImage("null");
+      setSuggestion1({ text: "" });
+      setSuggestion2({ text: "" });
+      setSuggestion3({ text: "" });
+      setSuggestion4({ text: "" });
+    }
+  };
 
-  const handleUpdate = async() =>{
-    alert(currentQuestion?.consigne)
+  const handleUpdate = async () => {
+    alert(currentQuestion?.consigne);
     const formData = new FormData();
     setIsLoading(true);
     const data = await instance
       .patch(
         `/api/question/questions/${currentQuestion?._id}`,
         {
-          libelle: image == "null" ? currentQuestion.libelle :  image,
+          libelle: image == "null" ? currentQuestion.libelle : image,
           consigne: currentQuestion.consigne,
           numero: currentQuestion.numero,
           categorie: currentQuestion.categorie,
@@ -110,18 +127,17 @@ function QuestionsPage() {
       )
       .catch((err) => console.log(err));
     setIsLoading(false);
-    
+
     if (data) {
-      alert(JSON.stringify(data.data))
-     // Update(data.data)
-      
+      alert(JSON.stringify(data.data));
+      // Update(data.data)
     } else {
-      console.log(formData)
-      alert("echec de update de la question");
+      console.log(formData);
+      alert("echec de update de la question")
     }
-  }
-
-
+  };
+  //alert(image)
+  //alert(currentQuestion.libelle)
   const [suggestion1, setSuggestion1] = useState({
     text: null,
     isCorrect: false,
@@ -157,46 +173,42 @@ function QuestionsPage() {
     }
   };
 
-  
+  const getSeries = async () => {
+    const data = await instance
+      .get("/api/serie/series", {
+        headers: {
+          Authorization: `basic ${token}`,
+        },
+      })
+      .catch((err) => console.log(err.message));
 
-  
-   const getSeries = async () => {
-     const data = await instance
-       .get("/api/serie/series", {
-         headers: {
-           Authorization: `basic ${token}`,
-         },
-       })
-       .catch((err) => console.log(err.message));
-     
-     if (data) {
-       setSeries(data?.data);
-     }
-   };
-   const handleShow = () =>{
-    if(see){
-      setSee(false)
+    if (data) {
+      setSeries(data?.data);
     }
-    else{
-      setSee(true)
+  };
+  const handleShow = () => {
+    if (see) {
+      setSee(false);
+    } else {
+      setSee(true);
     }
-   }
-   useEffect(() => {
-     getSeries();
-     // getEEQuestions()
-     //getQuestions()
-     //console.log(series)
-     currentQuestion?.suggestions?.map((item, index) => {
-       setSuggestions2([
-         ...suggestions2,
-         {
-           ...suggestions2[index],
-           text: item?.text,
-           isCorrect: item?.isCorrect,
-         },
-       ]);
-     });
-   }, []);
+  };
+  useEffect(() => {
+    getSeries();
+    // getEEQuestions()
+    //getQuestions()
+    //console.log(series)
+    currentQuestion?.suggestions?.map((item, index) => {
+      setSuggestions2([
+        ...suggestions2,
+        {
+          ...suggestions2[index],
+          text: item?.text,
+          isCorrect: item?.isCorrect,
+        },
+      ]);
+    });
+  }, []);
 
   return (
     <div className="flex  m-2 lg:m-4 lg:mx-10 flex-col">
@@ -448,11 +460,11 @@ function QuestionsPage() {
                               <div className="text-center">
                                 <div className="w-full  justify-center flex">
                                   <Image
-                                    className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+                                    className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
                                     src={`${
                                       image != "null"
-                                        ? image
-                                        : currentQuestion?.libelle
+                                        ? `${baseUrlFile}${image}`
+                                        : `${baseUrlFile}${currentQuestion?.libelle}`
                                     }`}
                                     alt="Next.js Logo"
                                     width={180}
@@ -467,7 +479,7 @@ function QuestionsPage() {
                                   >
                                     <span>Upload a file</span>
 
-                                    <UploadButton
+                                    {/* <UploadButton
                                       endpoint="imageUploader"
                                       onClientUploadComplete={(res) => {
                                         if (res) {
@@ -480,7 +492,34 @@ function QuestionsPage() {
                                         // Do something with the error.
                                         alert(`ERROR! ${error.message}`);
                                       }}
-                                    />
+                                    /> */}
+                                    <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
+                                      <input
+                                        type="file"
+                                        className="w-full h-full opacity-0 cursor-pointer absolute"
+                                        onChange={handleSetLibelle}
+                                      />
+                                      <div className="flex items-center justify-center">
+                                        {!isUploading2 ? (
+                                          <Icons.ArrowDownTrayIcon
+                                            className="text-indigo-500 text-lg w-10 h-10"
+                                            size={16}
+                                          />
+                                        ) : (
+                                          <div
+                                            class="spinner-border text-lg spinner-border-sm text-indigo-500"
+                                            role="status"
+                                          >
+                                            <span class="visually-hidden">
+                                              Loading...
+                                            </span>
+                                          </div>
+                                        )}
+                                        <span className="text-indigo-500 ">
+                                          upload file libelle
+                                        </span>
+                                      </div>
+                                    </div>
 
                                     {/* <input
                           id="file-upload"
@@ -536,8 +575,8 @@ function QuestionsPage() {
                                   className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
                                   src={`${
                                     image != "null"
-                                      ? image
-                                      : currentQuestion?.consigne
+                                      ? `${baseUrlFile}${image}`
+                                      : `${baseUrlFile}${currentQuestion?.consigne}`
                                   }`}
                                   alt="Next.js Logo"
                                   width={180}
@@ -548,8 +587,8 @@ function QuestionsPage() {
                                 <AudioPlayer
                                   url={`${
                                     image != "null"
-                                      ? image
-                                      : currentQuestion?.consigne
+                                      ? `${baseUrlFile}${image}`
+                                      : `${baseUrlFile}${currentQuestion?.consigne}`
                                   }`}
                                 />
                               )}
@@ -563,35 +602,89 @@ function QuestionsPage() {
                                 {currentQuestion?.discipline?.libelle == null ||
                                 currentQuestion?.discipline?.libelle ==
                                   "Comprehension Ecrite" ? (
-                                  <UploadButton
-                                    endpoint="imageUploader"
-                                    onClientUploadComplete={(res) => {
-                                      if (res) {
-                                        setImage(res[0].fileUrl);
-                                        alert("Upload Completed");
-                                      }
-                                      // Do something with the respons
-                                    }}
-                                    onUploadError={(error) => {
-                                      // Do something with the error.
-                                      alert(`ERROR! ${error.message}`);
-                                    }}
-                                  />
+                                  // <UploadButton
+                                  //   endpoint="imageUploader"
+                                  //   onClientUploadComplete={(res) => {
+                                  //     if (res) {
+                                  //       setImage(res[0].fileUrl);
+                                  //       alert("Upload Completed");
+                                  //     }
+                                  //     // Do something with the respons
+                                  //   }}
+                                  //   onUploadError={(error) => {
+                                  //     // Do something with the error.
+                                  //     alert(`ERROR! ${error.message}`);
+                                  //   }}
+                                  // />
+                                  <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
+                                    <input
+                                      type="file"
+                                      className="w-full h-full opacity-0 cursor-pointer absolute"
+                                      onChange={handleSetLibelle}
+                                    />
+                                    <div className="flex items-center justify-center">
+                                      {!isUploading2 ? (
+                                        <Icons.ArrowDownTrayIcon
+                                          className="text-indigo-500 text-lg w-10 h-10"
+                                          size={16}
+                                        />
+                                      ) : (
+                                        <div
+                                          class="spinner-border text-lg spinner-border-sm text-indigo-500"
+                                          role="status"
+                                        >
+                                          <span class="visually-hidden">
+                                            Loading...
+                                          </span>
+                                        </div>
+                                      )}
+                                      <span className="text-indigo-500 ">
+                                        upload file libelle
+                                      </span>
+                                    </div>
+                                  </div>
                                 ) : (
-                                  <UploadButton
-                                    endpoint="mediaPost"
-                                    onClientUploadComplete={(res) => {
-                                      if (res) {
-                                        setImage(res[0].fileUrl);
-                                        alert("Upload Completed");
-                                      }
-                                      // Do something with the response
-                                    }}
-                                    onUploadError={(error) => {
-                                      // Do something with the error.
-                                      alert(`ERROR! ${error.message}`);
-                                    }}
-                                  />
+                                  // <UploadButton
+                                  //   endpoint="mediaPost"
+                                  //   onClientUploadComplete={(res) => {
+                                  //     if (res) {
+                                  //       setImage(res[0].fileUrl);
+                                  //       alert("Upload Completed");
+                                  //     }
+                                  //     // Do something with the response
+                                  //   }}
+                                  //   onUploadError={(error) => {
+                                  //     // Do something with the error.
+                                  //     alert(`ERROR! ${error.message}`);
+                                  //   }}
+                                  // />
+                                  <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
+                                    <input
+                                      type="file"
+                                      className="w-full h-full opacity-0 cursor-pointer absolute"
+                                      onChange={handleSetLibelle}
+                                    />
+                                    <div className="flex items-center justify-center">
+                                      {!isUploading2 ? (
+                                        <Icons.ArrowDownTrayIcon
+                                          className="text-indigo-500 text-lg w-10 h-10"
+                                          size={16}
+                                        />
+                                      ) : (
+                                        <div
+                                          class="spinner-border text-lg spinner-border-sm text-indigo-500"
+                                          role="status"
+                                        >
+                                          <span class="visually-hidden">
+                                            Loading...
+                                          </span>
+                                        </div>
+                                      )}
+                                      <span className="text-indigo-500 ">
+                                        upload file libelle
+                                      </span>
+                                    </div>
+                                  </div>
                                 )}
                                 {/* <input
                           id="file-upload"
@@ -967,8 +1060,8 @@ function QuestionsPage() {
                                     className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
                                     src={`${
                                       image != "null"
-                                        ? image
-                                        : currentQuestion?.libelle
+                                        ? `${baseUrlFile}${image}`
+                                        : `${baseUrlFile}${currentQuestion?.libelle}`
                                     }`}
                                     alt="Next.js Logo"
                                     width={180}
@@ -983,20 +1076,33 @@ function QuestionsPage() {
                                   >
                                     <span>Upload a file</span>
 
-                                    <UploadButton
-                                      endpoint="imageUploader"
-                                      onClientUploadComplete={(res) => {
-                                        if (res) {
-                                          setImage(res[0].fileUrl);
-                                          alert("Upload Completed");
-                                        }
-                                        // Do something with the respons
-                                      }}
-                                      onUploadError={(error) => {
-                                        // Do something with the error.
-                                        alert(`ERROR! ${error.message}`);
-                                      }}
-                                    />
+                                    <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
+                                      <input
+                                        type="file"
+                                        className="w-full h-full opacity-0 cursor-pointer absolute"
+                                        onChange={handleSetLibelle}
+                                      />
+                                      <div className="flex items-center justify-center">
+                                        {!isUploading2 ? (
+                                          <Icons.ArrowDownTrayIcon
+                                            className="text-indigo-500 text-lg w-10 h-10"
+                                            size={16}
+                                          />
+                                        ) : (
+                                          <div
+                                            class="spinner-border text-lg spinner-border-sm text-indigo-500"
+                                            role="status"
+                                          >
+                                            <span class="visually-hidden">
+                                              Loading...
+                                            </span>
+                                          </div>
+                                        )}
+                                        <span className="text-indigo-500 ">
+                                          upload file libelle
+                                        </span>
+                                      </div>
+                                    </div>
 
                                     {/* <input
                           id="file-upload"
@@ -1052,8 +1158,8 @@ function QuestionsPage() {
                                   className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
                                   src={`${
                                     image != "null"
-                                      ? image
-                                      : currentQuestion?.consigne
+                                      ? `${baseUrlFile}${image}`
+                                      : `${baseUrlFile}${currentQuestion?.consigne}`
                                   }`}
                                   alt="Next.js Logo"
                                   width={180}
@@ -1064,8 +1170,8 @@ function QuestionsPage() {
                                 <AudioPlayer
                                   url={`${
                                     image != "null"
-                                      ? image
-                                      : currentQuestion?.consigne
+                                      ? `${baseUrlFile}${image}`
+                                      : `${baseUrlFile}${currentQuestion?.consigne}`
                                   }`}
                                 />
                               )}
@@ -1079,35 +1185,61 @@ function QuestionsPage() {
                                 {currentQuestion?.discipline?.libelle == null ||
                                 currentQuestion?.discipline?.libelle ==
                                   "Comprehension Ecrite" ? (
-                                  <UploadButton
-                                    endpoint="imageUploader"
-                                    onClientUploadComplete={(res) => {
-                                      if (res) {
-                                        setImage(res[0].fileUrl);
-                                        alert("Upload Completed");
-                                      }
-                                      // Do something with the respons
-                                    }}
-                                    onUploadError={(error) => {
-                                      // Do something with the error.
-                                      alert(`ERROR! ${error.message}`);
-                                    }}
-                                  />
+                                  <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
+                                    <input
+                                      type="file"
+                                      className="w-full h-full opacity-0 cursor-pointer absolute"
+                                      onChange={handleSetLibelle}
+                                    />
+                                    <div className="flex items-center justify-center">
+                                      {!isUploading2 ? (
+                                        <Icons.ArrowDownTrayIcon
+                                          className="text-indigo-500 text-lg w-10 h-10"
+                                          size={16}
+                                        />
+                                      ) : (
+                                        <div
+                                          class="spinner-border text-lg spinner-border-sm text-indigo-500"
+                                          role="status"
+                                        >
+                                          <span class="visually-hidden">
+                                            Loading...
+                                          </span>
+                                        </div>
+                                      )}
+                                      <span className="text-indigo-500 ">
+                                        upload file libelle
+                                      </span>
+                                    </div>
+                                  </div>
                                 ) : (
-                                  <UploadButton
-                                    endpoint="mediaPost"
-                                    onClientUploadComplete={(res) => {
-                                      if (res) {
-                                        setImage(res[0].fileUrl);
-                                        alert("Upload Completed");
-                                      }
-                                      // Do something with the response
-                                    }}
-                                    onUploadError={(error) => {
-                                      // Do something with the error.
-                                      alert(`ERROR! ${error.message}`);
-                                    }}
-                                  />
+                                  <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
+                                    <input
+                                      type="file"
+                                      className="w-full h-full opacity-0 cursor-pointer absolute"
+                                      onChange={handleSetLibelle}
+                                    />
+                                    <div className="flex items-center justify-center">
+                                      {!isUploading2 ? (
+                                        <Icons.ArrowDownTrayIcon
+                                          className="text-indigo-500 text-lg w-10 h-10"
+                                          size={16}
+                                        />
+                                      ) : (
+                                        <div
+                                          class="spinner-border text-lg spinner-border-sm text-indigo-500"
+                                          role="status"
+                                        >
+                                          <span class="visually-hidden">
+                                            Loading...
+                                          </span>
+                                        </div>
+                                      )}
+                                      <span className="text-indigo-500 ">
+                                        upload file libelle
+                                      </span>
+                                    </div>
+                                  </div>
                                 )}
                                 {/* <input
                           id="file-upload"

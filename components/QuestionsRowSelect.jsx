@@ -5,7 +5,8 @@ import { setQuestion, setQuestionsSelect, selectQuestionsSelect, selectQuestion 
 import GetCookies from "../hooks/getCookies";
 import { instance } from "../hooks/Axios";
 import { selectSerie } from "../featured/serieSlice";
-
+import AudioPlayer from "./AudioPlayer";
+import { baseUrlFile } from "../hooks/Axios";
 
 let newtab = [];
 function QuestionsRowSelect({item, id}) {
@@ -72,7 +73,13 @@ function QuestionsRowSelect({item, id}) {
     >
       <td className="whitespace-nowrap px-6 py-4 font-medium">{id}</td>
       <td className="whitespace-nowrap px-6 py-4">{item?.numero}</td>
-      <td className="whitespace-nowrap px-6 py-4">{item?.consigne}</td>
+      <td className="whitespace-nowrap px-6 py-4">
+        {item?.discipline?.libelle == "Comprehension Ecrite" ? (
+          item?.consigne
+        ) : (
+          <AudioPlayer url={`${baseUrlFile}${item?.consigne}`} />
+        )}
+      </td>
       <td className="whitespace-nowrap px-6 py-4">
         {item?.categorie?.libelle}
       </td>

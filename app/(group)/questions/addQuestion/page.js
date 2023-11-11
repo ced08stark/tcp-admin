@@ -12,7 +12,7 @@ import {
   selectQuestionsSelect,
 } from "../../../../featured/questionSlice";
 
-import { UploadButton } from "@uploadthing/react";
+//import { UploadButton } from "@uploadthing/react";
 import AudioPlayer from "../../../../components/AudioPlayer";
 import { baseUrlFile } from "../../../../hooks/Axios";
 import * as Icons from '@heroicons/react/24/outline'
@@ -20,7 +20,7 @@ import * as Icons from '@heroicons/react/24/outline'
 
 
 // You need to import our styles for the button to look right. Best to import in the root /layout.tsx but this is fine
-import "@uploadthing/react/styles.css";
+//import "@uploadthing/react/styles.css";
 
 
 
@@ -162,23 +162,7 @@ function AddQuestion() {
     
   }
 
-  const handleSetConsigne = async(e) =>{
-    console.log(e.target.files[0])
-    const formData = new FormData();
-    formData.append("files", e.target.files[0]);
-    setIsUploading(true)
-    const data = await instance.post("api/question/upload", formData, {
-      headers: {
-        Authorization: `basic ${token}`,
-       "Content-type": "multipart/form-data",
-      },
-    });
-    setIsUploading(false)
-    console.log(data)
-    if(data){
-      setQuestion({...question, consigne: data.data.file})
-    }
-  }
+  
 
   const handleSetLibelle = async (e) => {
     console.log(e.target.files[0]);
@@ -195,6 +179,25 @@ function AddQuestion() {
     setIsUploading2(false)
     if (data) {
       setImage(data?.data.file);
+    }
+  };
+
+  const handleSetConsigne = async (e) => {
+    console.log(e.target.files[0]);
+    const formData = new FormData();
+    formData.append("files", e.target.files[0]);
+    setIsUploading(true);
+    const data = await instance.post("api/question/upload", formData, {
+      headers: {
+        Authorization: `basic ${token}`,
+        "Content-type": "multipart/form-data",
+      },
+    });
+    
+    setIsUploading(false);
+    if (data) {
+     
+      setQuestion({...question, consigne: data?.data.file})
     }
   };
 
