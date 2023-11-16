@@ -99,7 +99,13 @@ function QuestionsRows({item, id, serie}) {
     >
       <td className="whitespace-nowrap px-6 py-4 font-medium">{id}</td>
       <td className="whitespace-nowrap px-6 py-4">{item?.numero}</td>
-      <td className="whitespace-nowrap px-6 py-4"></td>
+      <td className="whitespace-nowrap px-6 py-4">
+        {item?.discipline?.libelle == "Comprehension Ecrite" ? (
+          item?.consigne
+        ) : (
+          <AudioPlayer url={`${baseUrlFile}${item?.consigne}`} />
+        )}
+      </td>
       <td className="whitespace-nowrap px-6 py-4">
         {item?.categorie?.libelle}
       </td>

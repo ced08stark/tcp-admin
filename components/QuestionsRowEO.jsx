@@ -5,6 +5,8 @@ import { selectEEQuestion, setEEQuestion } from "../featured/questionSlice";
 import GetCookies from "../hooks/getCookies";
 import { instance } from "../hooks/Axios";
 import AudioPlayer from "./AudioPlayer";
+import { baseUrlFile } from "../hooks/Axios";
+
 
 function QuestionsRowEO({ item, setQuestions, serie, id }) {
   const token = GetCookies("token");
@@ -97,7 +99,7 @@ function QuestionsRowEO({ item, setQuestions, serie, id }) {
         <br />
         <p>duree: {item?.tasks[0]?.duree} secondes</p>
         <br />
-        <AudioPlayer url={`${item?.tasks[0]?.fichier}`} />
+        <AudioPlayer url={`${baseUrlFile}${item?.tasks[0]?.fichier}`} />
       </td>
       <td className="whitespace-wrap   px-6 py-4 flex-col">
         <p> numero: {item?.tasks[1]?.numero}</p>
@@ -106,7 +108,7 @@ function QuestionsRowEO({ item, setQuestions, serie, id }) {
         <br />
         <p>duree: {item?.tasks[1]?.duree} secondes</p>
         <br />
-        <AudioPlayer url={`${item?.tasks[1]?.fichier}`} />
+        <AudioPlayer url={`${baseUrlFile}${item?.tasks[1]?.fichier}`} />
       </td>
       <td className="whitespace-wrap   px-6 py-4 flex-col">
         <p> numero: {item?.tasks[2]?.numero}</p>
@@ -115,7 +117,7 @@ function QuestionsRowEO({ item, setQuestions, serie, id }) {
         <br />
         <p>duree: {item?.tasks[2]?.duree} secondes</p>
         <br />
-        <AudioPlayer url={`${item?.tasks[2]?.fichier}`} />
+        <AudioPlayer url={`${baseUrlFile}${item?.tasks[2]?.fichier}`} />
       </td>
       <td className="whitespace-nowrap px-6 py-4">
         {!isLoading ? (
