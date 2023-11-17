@@ -17,9 +17,8 @@ import QuestionView from "../../../../components/QuestionView";
 import QuestionsRowSelect from "../../../../components/QuestionsRowSelect";
 import { selectSerie } from "../../../../featured/serieSlice";
 import * as Icons from "@heroicons/react/24/outline";
-import { OurFileRouter } from "../../../api/uploadthing/core";
-import { UploadButton } from "@uploadthing/react";
 import AudioPlayer from "../../../../components/AudioPlayer";
+import { baseUrlFile } from "../../../../hooks/Axios";
 
 let serieTable = [];
 function QuestionsPage() {
@@ -37,8 +36,28 @@ function QuestionsPage() {
   const dispatch = useDispatch();
   const [suggestions2, setSuggestions2] = useState([]);
   const [image, setImage] = useState("null");
+  const [isUploading2, setIsUploading2] = useState(false);
+
+  const handleSetLibelle = async (e) => {
+    
+    const formData = new FormData();
+    formData.append("files", e.target.files[0]);
+    setIsUploading2(true);
+    const data = await instance.post("api/question/upload", formData, {
+      headers: {
+        Authorization: `basic ${token}`,
+        "Content-type": "multipart/form-data",
+      },
+    });
+    console.log(data);
+    setIsUploading2(false);
+    if (data) {
+      setImage(data?.data.file);
+    }
+  };
+
   const handleUpdate = async () => {
-    console.log(currentQuestion);
+    
     // dispatch(
     //   setQuestion({
     //     ...currentQuestion,
@@ -454,13 +473,13 @@ function QuestionsPage() {
                     <div className="mt-2 bg-white flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                       <div className="text-center">
                         <div className="w-full  justify-center flex">
-                          {currentQuestion?.libelle !=null && (
+                          {currentQuestion?.libelle != null && (
                             <Image
                               className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
                               src={`${
                                 image != "null"
-                                  ? image
-                                  : currentQuestion?.libelle
+                                  ? `${baseUrlFile}${image}`
+                                  : `${baseUrlFile}${currentQuestion?.libelle}`
                               }`}
                               alt="Next.js Logo"
                               width={180}
@@ -476,19 +495,10 @@ function QuestionsPage() {
                           >
                             <span>Upload a file</span>
 
-                            <UploadButton
-                              endpoint="imageUploader"
-                              onClientUploadComplete={(res) => {
-                                if (res) {
-                                  setImage(res[0].fileUrl);
-                                  alert("Upload Completed");
-                                }
-                                // Do something with the respons
-                              }}
-                              onUploadError={(error) => {
-                                // Do something with the error.
-                                alert(`ERROR! ${error.message}`);
-                              }}
+                            <input
+                              type="file"
+                              className="w-full h-full opacity-0 cursor-pointer absolute"
+                              onChange={handleSetLibelle}
                             />
 
                             {/* <input
@@ -539,16 +549,26 @@ function QuestionsPage() {
                 <div className="mt-2 bg-white flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                   <div className="text-center">
                     <div className="w-full  justify-center flex">
-                      {currentQuestion?.consigne ? (
-                        <AudioPlayer
-                          url={`${
-                            image != "null" ? image : currentQuestion?.consigne
+                      {currentQuestion?.discipline?.libelle ==
+                      "Comprehension Ecrite" ? (
+                        <Image
+                          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+                          src={`${
+                            image != "null"
+                              ? `${baseUrlFile}${image}`
+                              : `${baseUrlFile}${currentQuestion?.consigne}`
                           }`}
+                          alt="Next.js Logo"
+                          width={180}
+                          height={37}
+                          priority
                         />
                       ) : (
                         <AudioPlayer
                           url={`${
-                            image != "null" ? image : currentQuestion?.consigne
+                            image != "null"
+                              ? `${baseUrlFile}${image}`
+                              : `${baseUrlFile}${currentQuestion?.consigne}`
                           }`}
                         />
                       )}
@@ -562,35 +582,61 @@ function QuestionsPage() {
                         {currentQuestion?.discipline?.libelle == null ||
                         currentQuestion?.discipline?.libelle ==
                           "Comprehension Ecrite" ? (
-                          <UploadButton
-                            endpoint="imageUploader"
-                            onClientUploadComplete={(res) => {
-                              if (res) {
-                                setImage(res[0].fileUrl);
-                                alert("Upload Completed");
-                              }
-                              // Do something with the respons
-                            }}
-                            onUploadError={(error) => {
-                              // Do something with the error.
-                              alert(`ERROR! ${error.message}`);
-                            }}
-                          />
+                          <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
+                            <input
+                              type="file"
+                              className="w-full h-full opacity-0 cursor-pointer absolute"
+                              onChange={handleSetLibelle}
+                            />
+                            <div className="flex items-center justify-center">
+                              {!isUploading2 ? (
+                                <Icons.ArrowDownTrayIcon
+                                  className="text-indigo-500 text-lg w-10 h-10"
+                                  size={16}
+                                />
+                              ) : (
+                                <div
+                                  class="spinner-border text-lg spinner-border-sm text-indigo-500"
+                                  role="status"
+                                >
+                                  <span class="visually-hidden">
+                                    Loading...
+                                  </span>
+                                </div>
+                              )}
+                              <span className="text-indigo-500 ">
+                                upload file libelle
+                              </span>
+                            </div>
+                          </div>
                         ) : (
-                          <UploadButton
-                            endpoint="mediaPost"
-                            onClientUploadComplete={(res) => {
-                              if (res) {
-                                setImage(res[0].fileUrl);
-                                alert("Upload Completed");
-                              }
-                              // Do something with the response
-                            }}
-                            onUploadError={(error) => {
-                              // Do something with the error.
-                              alert(`ERROR! ${error.message}`);
-                            }}
-                          />
+                          <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
+                            <input
+                              type="file"
+                              className="w-full h-full opacity-0 cursor-pointer absolute"
+                              onChange={handleSetLibelle}
+                            />
+                            <div className="flex items-center justify-center">
+                              {!isUploading2 ? (
+                                <Icons.ArrowDownTrayIcon
+                                  className="text-indigo-500 text-lg w-10 h-10"
+                                  size={16}
+                                />
+                              ) : (
+                                <div
+                                  class="spinner-border text-lg spinner-border-sm text-indigo-500"
+                                  role="status"
+                                >
+                                  <span class="visually-hidden">
+                                    Loading...
+                                  </span>
+                                </div>
+                              )}
+                              <span className="text-indigo-500 ">
+                                upload file libelle
+                              </span>
+                            </div>
+                          </div>
                         )}
                         {/* <input
                           id="file-upload"

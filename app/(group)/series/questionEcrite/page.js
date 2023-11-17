@@ -397,6 +397,7 @@ function QuestionsPage() {
                             key={index}
                             id={index + 1}
                           />
+                          
                         ))
                     ) : (
                       <>
@@ -481,7 +482,7 @@ function QuestionsPage() {
                           >
                             <span>Upload a file</span>
 
-                            <UploadButton
+                            {/* <UploadButton
                               endpoint="imageUploader"
                               onClientUploadComplete={(res) => {
                                 if (res) {
@@ -494,7 +495,7 @@ function QuestionsPage() {
                                 // Do something with the error.
                                 alert(`ERROR! ${error.message}`);
                               }}
-                            />
+                            /> */}
 
                             {/* <input
                           id="file-upload"

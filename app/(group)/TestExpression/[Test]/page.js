@@ -29,7 +29,7 @@ function Test() {
          },
        })
        .catch((err) => console.log(err.message));
-     console.log(data);
+     
      if (data) {
        setTest(data?.data);
        //console.log(JSON.parse(data?.data?.payload))
@@ -46,7 +46,7 @@ function Test() {
      getTest();
    }, []);
   const handlePressNext = ()=>{
-    console.log(taskIndex)
+   
     if (taskIndex >= 0 && taskIndex < 2 ) {
         setTaskIndex(taskIndex+1)
     }
@@ -82,7 +82,7 @@ function Test() {
         )
         .catch((err) => console.log(err.message));
       setIsLoading(false);
-      console.log(data);
+      
       if (data) {
         alert("test envoyer avec success");
         router.push("/TestExpression");
@@ -97,7 +97,6 @@ function Test() {
     }
      
   }
-   console.log(params);
   return (
     <div className="w-full flex flex-col">
       <div className="p-3 ">

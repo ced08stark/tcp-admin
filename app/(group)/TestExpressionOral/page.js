@@ -15,7 +15,7 @@ function ExpressionOraleTest() {
         },
       })
       .catch((err) => console.log(err.message));
-    console.log(data);
+   
     if (data) {
       setTests(data?.data);
     }

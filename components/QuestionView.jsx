@@ -235,18 +235,20 @@ function QuestionView() {
               <div className="mt-2 bg-white flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                 <div className="text-center">
                   <div className="w-full  justify-center flex">
-                   {currentQuestion?.libelle && <Image
-                      className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
-                      src={`${
-                        image != "null"
-                          ? `${baseUrlFile}${image}`
-                          : `${baseUrlFile}${currentQuestion?.libelle}`
-                      }`}
-                      alt="Next.js Logo"
-                      width={180}
-                      height={37}
-                      priority
-                    />}
+                    {currentQuestion?.libelle && (
+                      <Image
+                        className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+                        src={`${
+                          image != "null"
+                            ? `${baseUrlFile}${image}`
+                            : `${baseUrlFile}${currentQuestion?.libelle}`
+                        }`}
+                        alt="Next.js Logo"
+                        width={180}
+                        height={37}
+                        priority
+                      />
+                    )}
                   </div>
                   <div className="mt-4 flex items-center justify-center text-sm leading-6 text-gray-600">
                     <label
@@ -341,9 +343,11 @@ function QuestionView() {
             <div className="mt-2 bg-white flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
               <div className="text-center">
                 <div className="w-full  justify-center flex">
-                  {currentQuestion?.consigne && <AudioPlayer
-                    url={`${baseUrlFile}${currentQuestion?.consigne}`}
-                  />}
+                  {currentQuestion?.consigne && (
+                    <AudioPlayer
+                      url={`${baseUrlFile}${currentQuestion?.consigne}`}
+                    />
+                  )}
                 </div>
                 <div className="mt-4 flex items-center justify-center text-sm leading-6 text-gray-600">
                   <label
@@ -508,7 +512,7 @@ function QuestionView() {
               }
               //placeholder={currentQuestion?.suggestions[0]?.text}
               placeholder={currentQuestion?.suggestions[0]?.text}
-              value={suggestion1.text}
+              value={suggestion1.text ? suggestion1.text : undefined}
               cols={1}
               rows={1}
               className=" w-full pl-2"
@@ -533,11 +537,11 @@ function QuestionView() {
                   isCorrect: currentQuestion?.suggestions[1]?.isCorrect,
                 })
               }
+              value={suggestion2.text ? suggestion2.text : undefined}
               cols={1}
               rows={1}
               className=" w-full pl-2"
               placeholder={currentQuestion?.suggestions[1]?.text}
-              value={suggestion2.text}
             ></textarea>
           </div>
           <div className="flex items-center">
@@ -562,8 +566,8 @@ function QuestionView() {
               cols={1}
               rows={1}
               className=" w-full pl-2"
+              value={suggestion3.text ? suggestion3.text : undefined}
               placeholder={currentQuestion?.suggestions[2]?.text}
-              value={suggestion3.text}
             ></textarea>
           </div>
           <div className="flex items-center">
@@ -588,7 +592,8 @@ function QuestionView() {
               cols={1}
               rows={1}
               className=" w-full pl-2"
-              value={suggestion4.text}
+              value={suggestion4.text ? suggestion4.text : undefined}
+
             ></textarea>
           </div>
         </div>

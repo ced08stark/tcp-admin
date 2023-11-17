@@ -19,7 +19,6 @@ import QuestionsRowEE from '../../../components/QuestionsRowEE'
 import QuestionsRowEO from '../../../components/QuestionsRowEO'
 import * as Icons from "@heroicons/react/24/outline"
 import { UploadButton } from "@uploadthing/react";
-import "@uploadthing/react/styles.css";
 import AudioPlayer from "../../../components/AudioPlayer";
 import TabView from '../../../components/TabView'
 import { selectSerie } from "../../../featured/serieSlice";
@@ -951,7 +950,8 @@ function QuestionsPage() {
           </tbody>
         </table>
         <div className="w-[200px]"></div>
-      </div> */}
+      </div> */
+      }
               <div className="flex h-screen">
                 <div
                   className={`flex flex-col overflow-x-auto w-full  lg:overflow-y-auto ${
@@ -1314,7 +1314,9 @@ function QuestionsPage() {
                           }
                           //placeholder={currentQuestion?.suggestions[0]?.text}
                           placeholder={currentQuestion?.suggestions[0]?.text}
-                          value={suggestion1.text}
+                          value={
+                            suggestion1.text ? suggestion1.text : undefined
+                          }
                           cols={1}
                           rows={1}
                           className=" w-full pl-2"
@@ -1344,7 +1346,9 @@ function QuestionsPage() {
                           rows={1}
                           className=" w-full pl-2"
                           placeholder={currentQuestion?.suggestions[1]?.text}
-                          value={suggestion2.text}
+                          value={
+                            suggestion2.text ? suggestion2.text : undefined
+                          }
                         ></textarea>
                       </div>
                       <div className="flex items-center">
@@ -1371,7 +1375,9 @@ function QuestionsPage() {
                           rows={1}
                           className=" w-full pl-2"
                           placeholder={currentQuestion?.suggestions[2]?.text}
-                          value={suggestion3.text}
+                          value={
+                            suggestion3.text ? suggestion3.text : undefined
+                          }
                         ></textarea>
                       </div>
                       <div className="flex items-center">
@@ -1397,7 +1403,9 @@ function QuestionsPage() {
                           cols={1}
                           rows={1}
                           className=" w-full pl-2"
-                          value={suggestion4.text}
+                          value={
+                            suggestion4.text ? suggestion4.text : undefined
+                          }
                         ></textarea>
                       </div>
                     </div>
