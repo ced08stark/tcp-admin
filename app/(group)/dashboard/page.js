@@ -111,8 +111,7 @@ export default function Home() {
       setQuestion({
         ...currentQuestion,
         _id: null,
-        libelle:
-          "https://uploadthing.com/f/ec7c0678-c83b-4231-b4fb-1196556805fe_im.png",
+        libelle: null,
         consigne: null,
         numero: null,
         categorie: null,
