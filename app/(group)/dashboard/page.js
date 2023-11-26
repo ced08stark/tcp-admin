@@ -41,7 +41,7 @@ export default function Home() {
         },
       })
       .catch((err) => console.log(err.message));
-    console.log(data);
+   
     if (data) {
       setTests(data?.data);
     }
@@ -55,7 +55,7 @@ export default function Home() {
         },
       })
       .catch((err) => console.log(err.message));
-    console.log(data);
+    
     if (data) {
       setTestsEO(data?.data);
     }
@@ -69,7 +69,7 @@ export default function Home() {
         },
       })
       .catch((err) => console.log(err.message));
-    console.log(data);
+   
     if (data) {
       setUsers(data?.data);
     }
@@ -87,7 +87,7 @@ export default function Home() {
           }
         )
         .catch((err) => console.log(err.message));
-        console.log(data)
+       
       if(data){
         setSeries(data?.data)
       }
@@ -100,7 +100,7 @@ export default function Home() {
         },
       })
       .catch((err) => console.log(err.message));
-    console.log(data);
+   
     if (data) {
       setQuestions(data?.data);
     }

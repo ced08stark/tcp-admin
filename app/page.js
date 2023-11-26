@@ -22,7 +22,7 @@ export default function Home() {
       })
       .catch((err) => console.log(err.message));
     setIsLoading(false);
-    if (data) {
+    if (data?.data?.role == "admin") {
       alert("connexion success")
       SetCookies("token", data?.data?.token);
       router.push("/dashboard")
