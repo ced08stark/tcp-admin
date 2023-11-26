@@ -103,8 +103,8 @@ function QuestionsRows({item, id, serie}) {
         {item?.discipline?.libelle == "Comprehension Ecrite" ? (
           item?.consigne
         ) : (
-          // <AudioPlayer url={`${baseUrlFile}${item?.consigne}`} />
-          <></>
+          <AudioPlayer url={`${baseUrlFile}${item?.consigne}`} />
+         
         )}
       </td>
       <td className="whitespace-nowrap px-6 py-4">

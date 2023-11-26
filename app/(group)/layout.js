@@ -34,7 +34,7 @@ export default function RootLayout({ children }) {
       navLinks.classList.add("top-[-100%]");
     } else {
       setShowMenu(true);
-      navLinks.classList.remove("top-[-100%]");
+      navLinks.classList.remove("top-[-100%]")
       navLinks.classList.add("top-[9%]");
     }
 

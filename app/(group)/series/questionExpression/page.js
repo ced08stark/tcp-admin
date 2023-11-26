@@ -41,112 +41,26 @@ function QuestionsPage() {
   const [suggestions2, setSuggestions2] = useState([]);
   const [image, setImage] = useState("null");
 
-  // const handleUpdate = async () => {
-  //   console.log(currentQuestion);
-  //   // dispatch(
-  //   //   setQuestion({
-  //   //     ...currentQuestion,
-  //   // libelle: currentQuestion.libelle,
-  //   // consigne: currentQuestion.consigne,
-  //   // numero: currentQuestion.numero,
-  //   // categorie: currentQuestion.categorie,
-  //   // discipline: currentQuestion.discipline,
-  //   // duree: currentQuestion.duree,
-  //   // suggestion1: suggestion1?.text
-  //   //   ? suggestion1
-  //   //   : currentQuestion.suggestions[0],
-  //   // suggestion2: suggestion2?.text
-  //   //   ? suggestion2
-  //   //   : currentQuestion.suggestions[1],
-  //   // suggestion3: suggestion3?.text
-  //   //   ? suggestion3
-  //   //   : currentQuestion.suggestions[2],
-  //   // suggestion4: suggestion4?.text
-  //   //   ? suggestion4
-  //   //   : currentQuestion.suggestions[3],
-  //   //   })
-  //   // );
-  //   const formData = new FormData();
-  //   console.log(currentQuestion);
-  //   /*console.log(suggestions?.length)
-  //   formData.append("numero", currentQuestion?.numero);
-  //   formData.append("consigne", question?.consigne);
-  //   formData.append("files", question?.libelle);
-  //   formData.append(
-  //     "suggestions[0][text]",
-  //     suggestions[0]?.text ? suggestions[0]?.text : suggestions2[0].text
-  //   );
-  //   formData.append(
-  //     "suggestions[0][isCorrect]",
-  //     suggestions[0]?.isCorrect ? suggestions[0]?.isCorrect : suggestions2[0].isCorrect
-  //   );
-  //   formData.append(
-  //     "suggestions[1][text]",
-  //     suggestions[1]?.text ? suggestions[1]?.text : suggestions2[1].text
-  //   );
-  //   formData.append(
-  //     "suggestions[1][isCorrect]",
-  //     suggestions[1]?.isCorrect ? suggestions[1]?.isCorrect : suggestions2[1].isCorrect
-  //   );
-  //   formData.append(
-  //     "suggestions[2][text]",
-  //     suggestions[2]?.text ? suggestions[2]?.text : suggestions2[2].text
-  //   );
-  //   formData.append(
-  //     "suggestions[2][isCorrect]",
-  //     suggestions[2]?.isCorrect ? suggestions[2]?.isCorrect : suggestions2[2].isCorrect
-  //   );
-  //   formData.append("suggestions[3][text]", suggestions[3]?.text ? suggestions[3]?.text : suggestions2[3].text);
-  //   formData.append(
-  //     "suggestions[3][isCorrect]",
-  //     suggestions[3]?.isCorrect ? suggestions[3]?.isCorrect : suggestions2[3].isCorrect
-  //   );
-  //   formData.append("categorie[libelle]", currentQuestion?.categorie?.libelle);
-  //   formData.append("categorie[point]", currentQuestion?.categorie?.point);
-  //   formData.append("discipline[libelle]", currentQuestion?.discipline?.libelle);
-  //   formData.append("discipline[duree]", currentQuestion?.discipline?.duree);
-  //   formData.append("duree", currentQuestion?.duree);*/
-  //   setIsLoading(true);
-  //   const data = await instance
-  //     .patch(
-  //       `/api/question/questions/${currentQuestion?._id}`,
-  //       {
-  //         libelle: image != "null" ? image : currentQuestion.libelle,
-  //         consigne: currentQuestion.consigne,
-  //         numero: currentQuestion.numero,
-  //         categorie: currentQuestion.categorie,
-  //         discipline: currentQuestion.discipline,
-  //         duree: currentQuestion.duree,
-  //         suggestions: [
-  //           suggestion1?.text ? suggestion1 : currentQuestion.suggestions[0],
-  //           suggestion2?.text ? suggestion2 : currentQuestion.suggestions[1],
-  //           suggestion3?.text ? suggestion3 : currentQuestion.suggestions[2],
-  //           suggestion4?.text ? suggestion4 : currentQuestion.suggestions[3],
-  //         ],
-  //       },
-  //       {
-  //         headers: {
-  //           Authorization: `basic ${token}`,
-  //           /*"Content-type": "multipart/form-data"*/
-  //         },
-  //       }
-  //     )
-  //     .catch((err) => console.log(err));
-  //   setIsLoading(false);
+  const [isUploading2, setIsUploading2] = useState(false);
 
-  //   if (data) {
-  //     getQuestion();
-  //     setImage("null");
-  //     setSuggestion1({ text: "" });
-  //     setSuggestion2({ text: "" });
-  //     setSuggestion3({ text: "" });
-  //     setSuggestion4({ text: "" });
-  //     alert("update question success");
-  //   } else {
-  //     console.log(formData);
-  //     alert("echec de update de la question");
-  //   }
-  // };
+  const handleSetLibelle = async (e) => {
+    const formData = new FormData();
+    formData.append("files", e.target.files[0]);
+    setIsUploading2(true);
+    const data = await instance.post("api/question/upload", formData, {
+      headers: {
+        Authorization: `basic ${token}`,
+        "Content-type": "multipart/form-data",
+      },
+    });
+    console.log(data);
+    setIsUploading2(false);
+    if (data) {
+      setImage(data?.data.file);
+    }
+  };
+
+  
   const [eeQuestions, setEEQuestions] = useState([]);
   const [suggestion1, setSuggestion1] = useState({
     text: null,
@@ -313,14 +227,13 @@ function QuestionsPage() {
                   </thead>
                   <tbody>
                     {serie?.eeQuestions?.map((q, i) => (
-                        <QuestionsRowEE
-                          serie={serie}
-                          item={q}
-                          key={i}
-                          id={i + 1}
-                        />
-                      ))
-                      }
+                      <QuestionsRowEE
+                        serie={serie}
+                        item={q}
+                        key={i}
+                        id={i + 1}
+                      />
+                    ))}
                     {/* {eeQuestions.length > 0 ? (
                           eeQuestions
                             ?.filter((item) =>
@@ -390,7 +303,13 @@ function QuestionsPage() {
                           >
                             <span>Upload a file</span>
 
-                            <UploadButton
+                            <input
+                              type="file"
+                              className="w-full h-full opacity-0 cursor-pointer absolute"
+                              onChange={handleSetLibelle}
+                            />
+
+                            {/* <UploadButton
                               endpoint="imageUploader"
                               onClientUploadComplete={(res) => {
                                 if (res) {
@@ -403,7 +322,7 @@ function QuestionsPage() {
                                 // Do something with the error.
                                 alert(`ERROR! ${error.message}`);
                               }}
-                            />
+                            /> */}
 
                             {/* <input
                           id="file-upload"
@@ -482,35 +401,61 @@ function QuestionsPage() {
                         {currentQuestion?.discipline?.libelle == null ||
                         currentQuestion?.discipline?.libelle ==
                           "Comprehension Ecrite" ? (
-                          <UploadButton
-                            endpoint="imageUploader"
-                            onClientUploadComplete={(res) => {
-                              if (res) {
-                                setImage(res[0].fileUrl);
-                                alert("Upload Completed");
-                              }
-                              // Do something with the respons
-                            }}
-                            onUploadError={(error) => {
-                              // Do something with the error.
-                              alert(`ERROR! ${error.message}`);
-                            }}
-                          />
+                          <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
+                            <input
+                              type="file"
+                              className="w-full h-full opacity-0 cursor-pointer absolute"
+                              onChange={handleSetLibelle}
+                            />
+                            <div className="flex items-center justify-center">
+                              {!isUploading2 ? (
+                                <Icons.ArrowDownTrayIcon
+                                  className="text-indigo-500 text-lg w-10 h-10"
+                                  size={16}
+                                />
+                              ) : (
+                                <div
+                                  class="spinner-border text-lg spinner-border-sm text-indigo-500"
+                                  role="status"
+                                >
+                                  <span class="visually-hidden">
+                                    Loading...
+                                  </span>
+                                </div>
+                              )}
+                              <span className="text-indigo-500 ">
+                                upload file libelle
+                              </span>
+                            </div>
+                          </div>
                         ) : (
-                          <UploadButton
-                            endpoint="mediaPost"
-                            onClientUploadComplete={(res) => {
-                              if (res) {
-                                setImage(res[0].fileUrl);
-                                alert("Upload Completed");
-                              }
-                              // Do something with the response
-                            }}
-                            onUploadError={(error) => {
-                              // Do something with the error.
-                              alert(`ERROR! ${error.message}`);
-                            }}
-                          />
+                          <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
+                            <input
+                              type="file"
+                              className="w-full h-full opacity-0 cursor-pointer absolute"
+                              onChange={handleSetLibelle}
+                            />
+                            <div className="flex items-center justify-center">
+                              {!isUploading2 ? (
+                                <Icons.ArrowDownTrayIcon
+                                  className="text-indigo-500 text-lg w-10 h-10"
+                                  size={16}
+                                />
+                              ) : (
+                                <div
+                                  class="spinner-border text-lg spinner-border-sm text-indigo-500"
+                                  role="status"
+                                >
+                                  <span class="visually-hidden">
+                                    Loading...
+                                  </span>
+                                </div>
+                              )}
+                              <span className="text-indigo-500 ">
+                                upload file libelle
+                              </span>
+                            </div>
+                          </div>
                         )}
                         {/* <input
                           id="file-upload"

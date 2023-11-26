@@ -113,7 +113,14 @@ function Test() {
           </span>
           <div className="flex flex-col items-center xs:text-xs md:text-md lg:text-base">
             <span>
-              {parseInt(note1) + parseInt(note2) + parseInt(note3)} / 20
+              {note1
+                ? parseInt(note1)
+                : 0 + note2
+                ? parseInt(note2)
+                : 0 + note3
+                ? parseInt(note3)
+                : 0}{" "}
+              / 20
             </span>
             <span
               className={`text-xs px-2 md:px-3 py-1 rounded-full ${

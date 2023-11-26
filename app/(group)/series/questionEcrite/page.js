@@ -21,6 +21,7 @@ import * as Icons from "@heroicons/react/24/outline";
 import { OurFileRouter } from "../../../api/uploadthing/core";
 import { UploadButton } from "@uploadthing/react";
 import AudioPlayer from "../../../../components/AudioPlayer";
+import { baseUrlFile } from "../../../../hooks/Axios";
 
 let serieTable = []
 function QuestionsPage() {
@@ -39,71 +40,47 @@ function QuestionsPage() {
   const dispatch = useDispatch();
   const [suggestions2, setSuggestions2] = useState([]);
   const [image, setImage] = useState("null");
+
+    const [isUploading2, setIsUploading2] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
+
+    const handleSetLibelle = async (e) => {
+      const formData = new FormData();
+      formData.append("files", e.target.files[0]);
+      setIsUploading2(true);
+      const data = await instance.post("api/question/upload", formData, {
+        headers: {
+          Authorization: `basic ${token}`,
+          "Content-type": "multipart/form-data",
+        },
+      });
+      
+      setIsUploading2(false);
+      if (data) {
+        setImage(data?.data.file);
+      }
+    };
+
+    const handleSetConsigne = async (e) => {
+      const formData = new FormData();
+      formData.append("files", e.target.files[0]);
+      setIsUploading(true);
+      const data = await instance.post("api/question/upload", formData, {
+        headers: {
+          Authorization: `basic ${token}`,
+          "Content-type": "multipart/form-data",
+        },
+      });
+      setIsUploading(false);
+      
+      if (data) {
+        setQuestion({ ...currentQuestion, consigne: data.data.file });
+      }
+    };
+
   const handleUpdate = async () => {
     
-    // dispatch(
-    //   setQuestion({
-    //     ...currentQuestion,
-    // libelle: currentQuestion.libelle,
-    // consigne: currentQuestion.consigne,
-    // numero: currentQuestion.numero,
-    // categorie: currentQuestion.categorie,
-    // discipline: currentQuestion.discipline,
-    // duree: currentQuestion.duree,
-    // suggestion1: suggestion1?.text
-    //   ? suggestion1
-    //   : currentQuestion.suggestions[0],
-    // suggestion2: suggestion2?.text
-    //   ? suggestion2
-    //   : currentQuestion.suggestions[1],
-    // suggestion3: suggestion3?.text
-    //   ? suggestion3
-    //   : currentQuestion.suggestions[2],
-    // suggestion4: suggestion4?.text
-    //   ? suggestion4
-    //   : currentQuestion.suggestions[3],
-    //   })
-    // );
     const formData = new FormData();
-    console.log(currentQuestion);
-    /*console.log(suggestions?.length)
-    formData.append("numero", currentQuestion?.numero);
-    formData.append("consigne", question?.consigne);
-    formData.append("files", question?.libelle);
-    formData.append(
-      "suggestions[0][text]",
-      suggestions[0]?.text ? suggestions[0]?.text : suggestions2[0].text
-    );
-    formData.append(
-      "suggestions[0][isCorrect]",
-      suggestions[0]?.isCorrect ? suggestions[0]?.isCorrect : suggestions2[0].isCorrect
-    );
-    formData.append(
-      "suggestions[1][text]",
-      suggestions[1]?.text ? suggestions[1]?.text : suggestions2[1].text
-    );
-    formData.append(
-      "suggestions[1][isCorrect]",
-      suggestions[1]?.isCorrect ? suggestions[1]?.isCorrect : suggestions2[1].isCorrect
-    );
-    formData.append(
-      "suggestions[2][text]",
-      suggestions[2]?.text ? suggestions[2]?.text : suggestions2[2].text
-    );
-    formData.append(
-      "suggestions[2][isCorrect]",
-      suggestions[2]?.isCorrect ? suggestions[2]?.isCorrect : suggestions2[2].isCorrect
-    );
-    formData.append("suggestions[3][text]", suggestions[3]?.text ? suggestions[3]?.text : suggestions2[3].text);
-    formData.append(
-      "suggestions[3][isCorrect]",
-      suggestions[3]?.isCorrect ? suggestions[3]?.isCorrect : suggestions2[3].isCorrect
-    );
-    formData.append("categorie[libelle]", currentQuestion?.categorie?.libelle);
-    formData.append("categorie[point]", currentQuestion?.categorie?.point);
-    formData.append("discipline[libelle]", currentQuestion?.discipline?.libelle);
-    formData.append("discipline[duree]", currentQuestion?.discipline?.duree);
-    formData.append("duree", currentQuestion?.duree);*/
     setIsLoading(true);
     const data = await instance
       .patch(
@@ -125,7 +102,6 @@ function QuestionsPage() {
         {
           headers: {
             Authorization: `basic ${token}`,
-            /*"Content-type": "multipart/form-data"*/
           },
         }
       )
@@ -397,7 +373,6 @@ function QuestionsPage() {
                             key={index}
                             id={index + 1}
                           />
-                          
                         ))
                     ) : (
                       <>
@@ -466,7 +441,7 @@ function QuestionsPage() {
                         <div className="w-full  justify-center flex">
                           <Image
                             className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
-                            src={`${
+                            src={`${baseUrlFile}${
                               image != "null" ? image : currentQuestion?.libelle
                             }`}
                             alt="Next.js Logo"
@@ -481,6 +456,32 @@ function QuestionsPage() {
                             className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                           >
                             <span>Upload a file</span>
+
+                            <input
+                              type="file"
+                              className="w-full h-full opacity-0 cursor-pointer absolute"
+                              onChange={handleSetLibelle}
+                            />
+                            <div className="flex items-center justify-center">
+                              {!isUploading2 ? (
+                                <Icons.ArrowDownTrayIcon
+                                  className="text-indigo-500 text-lg w-10 h-10"
+                                  size={16}
+                                />
+                              ) : (
+                                <div
+                                  class="spinner-border text-lg spinner-border-sm text-indigo-500"
+                                  role="status"
+                                >
+                                  <span class="visually-hidden">
+                                    Loading...
+                                  </span>
+                                </div>
+                              )}
+                              <span className="text-indigo-500 ">
+                                upload file libelle
+                              </span>
+                            </div>
 
                             {/* <UploadButton
                               endpoint="imageUploader"
@@ -549,7 +550,7 @@ function QuestionsPage() {
                       "Comprehension Ecrite" ? (
                         <Image
                           className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
-                          src={`${
+                          src={`${baseUrlFile}${
                             image != "null" ? image : currentQuestion?.consigne
                           }`}
                           alt="Next.js Logo"
@@ -559,7 +560,7 @@ function QuestionsPage() {
                         />
                       ) : (
                         <AudioPlayer
-                          url={`${
+                          url={`${baseUrlFile}${
                             image != "null" ? image : currentQuestion?.consigne
                           }`}
                         />
@@ -574,35 +575,61 @@ function QuestionsPage() {
                         {currentQuestion?.discipline?.libelle == null ||
                         currentQuestion?.discipline?.libelle ==
                           "Comprehension Ecrite" ? (
-                          <UploadButton
-                            endpoint="imageUploader"
-                            onClientUploadComplete={(res) => {
-                              if (res) {
-                                setImage(res[0].fileUrl);
-                                alert("Upload Completed");
-                              }
-                              // Do something with the respons
-                            }}
-                            onUploadError={(error) => {
-                              // Do something with the error.
-                              alert(`ERROR! ${error.message}`);
-                            }}
-                          />
+                          <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
+                            <input
+                              type="file"
+                              className="w-full h-full opacity-0 cursor-pointer absolute"
+                              onChange={handleSetConsigne}
+                            />
+                            <div className="flex items-center justify-center">
+                              {!isUploading ? (
+                                <Icons.ArrowDownTrayIcon
+                                  className="text-indigo-500 text-lg w-10 h-10"
+                                  size={16}
+                                />
+                              ) : (
+                                <div
+                                  class="spinner-border text-lg spinner-border-sm text-indigo-500"
+                                  role="status"
+                                >
+                                  <span class="visually-hidden">
+                                    Loading...
+                                  </span>
+                                </div>
+                              )}
+                              <span className="text-indigo-500 ">
+                                upload file consigne
+                              </span>
+                            </div>
+                          </div>
                         ) : (
-                          <UploadButton
-                            endpoint="mediaPost"
-                            onClientUploadComplete={(res) => {
-                              if (res) {
-                                setImage(res[0].fileUrl);
-                                alert("Upload Completed");
-                              }
-                              // Do something with the response
-                            }}
-                            onUploadError={(error) => {
-                              // Do something with the error.
-                              alert(`ERROR! ${error.message}`);
-                            }}
-                          />
+                          <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
+                            <input
+                              type="file"
+                              className="w-full h-full opacity-0 cursor-pointer absolute"
+                              onChange={handleSetConsigne}
+                            />
+                            <div className="flex items-center justify-center">
+                              {!isUploading ? (
+                                <Icons.ArrowDownTrayIcon
+                                  className="text-indigo-500 text-lg w-10 h-10"
+                                  size={16}
+                                />
+                              ) : (
+                                <div
+                                  class="spinner-border text-lg spinner-border-sm text-indigo-500"
+                                  role="status"
+                                >
+                                  <span class="visually-hidden">
+                                    Loading...
+                                  </span>
+                                </div>
+                              )}
+                              <span className="text-indigo-500 ">
+                                upload file consigne
+                              </span>
+                            </div>
+                          </div>
                         )}
                         {/* <input
                           id="file-upload"

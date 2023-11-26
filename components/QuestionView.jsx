@@ -18,71 +18,25 @@ function QuestionView() {
   const [image, setImage] = useState("null");
   const token = GetCookies("token");
   console.log(currentQuestion?.consigne)
+
+  const getQuestion = async () => {
+    const data = await instance
+      .get("/api/question/questions", {
+        headers: {
+          Authorization: `basic ${token}`,
+        },
+      })
+      .catch((err) => console.log(err.message));
+    console.log(data);
+    if (data) {
+      //setQuestions(data?.data);
+    }
+  };
+
   const handleUpdate = async () => {
-    //console.log(currentQuestion);
-    // dispatch(
-    //   setQuestion({
-    //     ...currentQuestion,
-    // libelle: currentQuestion.libelle,
-    // consigne: currentQuestion.consigne,
-    // numero: currentQuestion.numero,
-    // categorie: currentQuestion.categorie,
-    // discipline: currentQuestion.discipline,
-    // duree: currentQuestion.duree,
-    // suggestion1: suggestion1?.text
-    //   ? suggestion1
-    //   : currentQuestion.suggestions[0],
-    // suggestion2: suggestion2?.text
-    //   ? suggestion2
-    //   : currentQuestion.suggestions[1],
-    // suggestion3: suggestion3?.text
-    //   ? suggestion3
-    //   : currentQuestion.suggestions[2],
-    // suggestion4: suggestion4?.text
-    //   ? suggestion4
-    //   : currentQuestion.suggestions[3],
-    //   })
-    // );
+    
     const formData = new FormData();
     console.log(currentQuestion);
-    /*console.log(suggestions?.length)
-    formData.append("numero", currentQuestion?.numero);
-    formData.append("consigne", question?.consigne);
-    formData.append("files", question?.libelle);
-    formData.append(
-      "suggestions[0][text]",
-      suggestions[0]?.text ? suggestions[0]?.text : suggestions2[0].text
-    );
-    formData.append(
-      "suggestions[0][isCorrect]",
-      suggestions[0]?.isCorrect ? suggestions[0]?.isCorrect : suggestions2[0].isCorrect
-    );
-    formData.append(
-      "suggestions[1][text]",
-      suggestions[1]?.text ? suggestions[1]?.text : suggestions2[1].text
-    );
-    formData.append(
-      "suggestions[1][isCorrect]",
-      suggestions[1]?.isCorrect ? suggestions[1]?.isCorrect : suggestions2[1].isCorrect
-    );
-    formData.append(
-      "suggestions[2][text]",
-      suggestions[2]?.text ? suggestions[2]?.text : suggestions2[2].text
-    );
-    formData.append(
-      "suggestions[2][isCorrect]",
-      suggestions[2]?.isCorrect ? suggestions[2]?.isCorrect : suggestions2[2].isCorrect
-    );
-    formData.append("suggestions[3][text]", suggestions[3]?.text ? suggestions[3]?.text : suggestions2[3].text);
-    formData.append(
-      "suggestions[3][isCorrect]",
-      suggestions[3]?.isCorrect ? suggestions[3]?.isCorrect : suggestions2[3].isCorrect
-    );
-    formData.append("categorie[libelle]", currentQuestion?.categorie?.libelle);
-    formData.append("categorie[point]", currentQuestion?.categorie?.point);
-    formData.append("discipline[libelle]", currentQuestion?.discipline?.libelle);
-    formData.append("discipline[duree]", currentQuestion?.discipline?.duree);
-    formData.append("duree", currentQuestion?.duree);*/
     setIsLoading(true);
     const data = await instance
       .patch(
@@ -111,19 +65,7 @@ function QuestionView() {
       .catch((err) => console.log(err));
     setIsLoading(false);
 
-     const getQuestion = async () => {
-       const data = await instance
-         .get("/api/question/questions", {
-           headers: {
-             Authorization: `basic ${token}`,
-           },
-         })
-         .catch((err) => console.log(err.message));
-       console.log(data);
-       if (data) {
-         //setQuestions(data?.data);
-       }
-     };
+     
 
     if (data) {
       getQuestion();
@@ -173,7 +115,7 @@ function QuestionView() {
     setIsUploading(false);
     console.log(data);
     if (data) {
-      setQuestion({ ...question, consigne: data.data.file });
+      setQuestion({ ...currentQuestion, consigne: data.data.file });
     }
   };
 
@@ -188,11 +130,9 @@ function QuestionView() {
         "Content-type": "multipart/form-data",
       },
     });
-    console.log(data);
     setIsUploading2(false);
     if (data) {
       setImage(data?.data.file);
-
     }
   };
 

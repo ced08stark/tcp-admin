@@ -41,10 +41,29 @@ function QuestionsPage() {
   const currentQuestion = useSelector(selectQuestion);
   const [suggestions2, setSuggestions2] = useState([]);
   const [image, setImage] = useState("null");
+  const [isUploading, setIsUploading] = useState(false);
   const [isUploading2, setIsUploading2] = useState(false);
 
+  const handleSetConsigne = async (e) => {
+   
+    const formData = new FormData();
+    formData.append("files", e.target.files[0]);
+    setIsUploading(true);
+    const data = await instance.post("api/question/upload", formData, {
+      headers: {
+        Authorization: `basic ${token}`,
+        "Content-type": "multipart/form-data",
+      },
+    });
+    setIsUploading(false);
+   
+    if (data) {
+      setQuestion({ ...currentQuestion, consigne: data.data.file });
+    }
+  };
+
    const handleSetLibelle = async (e) => {
-    console.log(e.target.files[0]);
+    
     const formData = new FormData();
     formData.append("files", e.target.files[0]);
     setIsUploading2(true);
@@ -54,7 +73,7 @@ function QuestionsPage() {
         "Content-type": "multipart/form-data",
       },
     });
-    console.log(data);
+   
     setIsUploading2(false);
     if (data) {
       setImage(data?.data.file);
@@ -619,10 +638,10 @@ function QuestionsPage() {
                                     <input
                                       type="file"
                                       className="w-full h-full opacity-0 cursor-pointer absolute"
-                                      onChange={handleSetLibelle}
+                                      onChange={handleSetConsigne}
                                     />
                                     <div className="flex items-center justify-center">
-                                      {!isUploading2 ? (
+                                      {!isUploading ? (
                                         <Icons.ArrowDownTrayIcon
                                           className="text-indigo-500 text-lg w-10 h-10"
                                           size={16}
@@ -638,7 +657,7 @@ function QuestionsPage() {
                                         </div>
                                       )}
                                       <span className="text-indigo-500 ">
-                                        upload file libelle
+                                        upload file consigne
                                       </span>
                                     </div>
                                   </div>
@@ -661,10 +680,10 @@ function QuestionsPage() {
                                     <input
                                       type="file"
                                       className="w-full h-full opacity-0 cursor-pointer absolute"
-                                      onChange={handleSetLibelle}
+                                      onChange={handleSetConsigne}
                                     />
                                     <div className="flex items-center justify-center">
-                                      {!isUploading2 ? (
+                                      {!isUploading ? (
                                         <Icons.ArrowDownTrayIcon
                                           className="text-indigo-500 text-lg w-10 h-10"
                                           size={16}
@@ -680,7 +699,7 @@ function QuestionsPage() {
                                         </div>
                                       )}
                                       <span className="text-indigo-500 ">
-                                        upload file libelle
+                                        upload file consigne
                                       </span>
                                     </div>
                                   </div>
