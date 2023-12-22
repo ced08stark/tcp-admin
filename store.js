@@ -2,7 +2,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import questionSlice from "./featured/questionSlice";
 import serieSlice from "./featured/serieSlice";
 import userSlice from "./featured/userSlice";
-import testSlice from "./featured/testSlice"
+import testSlice from "./featured/testSlice";
+import adsSlice from "./featured/adsSlice";
 
 
 export const store = configureStore({
@@ -10,6 +11,7 @@ export const store = configureStore({
     question: questionSlice,
     serie: serieSlice,
     user: userSlice,
-    test: testSlice
+    test: testSlice,
+    ads: adsSlice
   },
 });

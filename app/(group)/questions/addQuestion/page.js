@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import AddSerie from "../../../../components/AddSerie";
@@ -11,11 +12,11 @@ import {
   selectQuestion,
   selectQuestionsSelect,
 } from "../../../../featured/questionSlice";
-
-//import { UploadButton } from "@uploadthing/react";
 import AudioPlayer from "../../../../components/AudioPlayer";
 import { baseUrlFile } from "../../../../hooks/Axios";
-import * as Icons from '@heroicons/react/24/outline'
+import * as Icons from '@heroicons/react/24/outline';
+
+
 
 
 
@@ -497,7 +498,8 @@ function AddQuestion() {
                   <></>
                 )}
                 {discipline?.libelle == null ||
-                discipline?.libelle == "Comprehension Ecrite" ? (
+                discipline?.libelle == "Comprehension Ecrite" ? 
+                (
                   <input
                     type="text"
                     onChange={(e) => {
@@ -558,7 +560,8 @@ function AddQuestion() {
                 /> */}
               </div>
 
-              {/* <div className="flex space-x-4">
+              {/*
+              <div className="flex space-x-4">
                 <select
                   onChange={(e) => {
                     setQuestion({
