@@ -18,8 +18,7 @@ import QuestionView from "../../../../components/QuestionView";
 import QuestionsRowSelect from "../../../../components/QuestionsRowSelect";
 import { selectSerie } from "../../../../featured/serieSlice";
 import * as Icons from "@heroicons/react/24/outline";
-import { OurFileRouter } from "../../../api/uploadthing/core";
-import { UploadButton } from "@uploadthing/react";
+
 import AudioPlayer from "../../../../components/AudioPlayer";
 import { baseUrlFile } from "../../../../hooks/Axios";
 

@@ -12,11 +12,10 @@ import {
   selectQuestionsSelect,
 } from "../../../../featured/questionSlice";
 
-import { UploadButton } from "@uploadthing/react";
+
 import AudioPlayer from "../../../../components/AudioPlayer";
 
-// You need to import our styles for the button to look right. Best to import in the root /layout.tsx but this is fine
-import "@uploadthing/react/styles.css";
+
 import { baseUrlFile } from "../../../../hooks/Axios";
 import * as Icons from "@heroicons/react/24/outline";
 
