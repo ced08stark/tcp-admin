@@ -18,7 +18,6 @@ import QuestionView from "../../../components/QuestionView";
 import QuestionsRowEE from '../../../components/QuestionsRowEE'
 import QuestionsRowEO from '../../../components/QuestionsRowEO'
 import * as Icons from "@heroicons/react/24/outline"
-import { UploadButton } from "@uploadthing/react";
 import AudioPlayer from "../../../components/AudioPlayer";
 import TabView from '../../../components/TabView'
 import { selectSerie } from "../../../featured/serieSlice";
