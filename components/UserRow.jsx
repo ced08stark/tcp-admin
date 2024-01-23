@@ -118,7 +118,7 @@ function UserRow({ item, id, setUsers }) {
                       setUsers({});
                       getUsers();
                     } else {
-                      alert("delete user failed");
+                      alert("update user failed");
                     }
                   },
                 },
@@ -135,20 +135,26 @@ function UserRow({ item, id, setUsers }) {
                 {
                   label: "Yes",
                   onClick: async () => {
-                    setIsLoading(true);
+                    setIsUpdate(true);
                     const data = await instance
-                      .patch(`/api/user/users/${item._id}`, {
-                        headers: {
-                          Authorization: `basic ${token}`,
+                      .patch(
+                        `/api/user/users/${item._id}`,
+                        {
+                          role: type,
                         },
-                      })
+                        {
+                          headers: {
+                            Authorization: `basic ${token}`,
+                          },
+                        }
+                      )
                       .catch((err) => console.log(err));
-                    setIsLoading(false);
+                    setIsUpdate(false);
                     if (data) {
                       setUsers({});
                       getUsers();
                     } else {
-                      alert("delete user failed");
+                      alert("update user failed");
                     }
                   },
                 },
