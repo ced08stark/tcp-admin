@@ -1,8 +1,11 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import AudioPlayer from "./AudioPlayer";
+import { baseUrlFile, baseUrlOfUploadthing } from "../hooks/Axios";
+
+
 
 function TaskAudio({
   name,
@@ -14,6 +17,19 @@ function TaskAudio({
   reponse,
   setNote,
 }) {
+ 
+  const [reponseFile, setReponseFile] = useState('');
+
+
+ 
+
+   function getEndOfUrl(url) {
+    let lastIndex = url.lastIndexOf("/");
+    
+    let endOfUrl = url.substring(lastIndex + 1);
+    return endOfUrl;
+  }
+
   const router = useRouter();
   const viewImages = () => {
     if (images?.length > 0) {
@@ -22,6 +38,7 @@ function TaskAudio({
       alert("aucun document n'a ete assigne a la tache");
     }
   };
+ 
   return (
     <div className="w-[90%] mx-auto flex xs:flex-col lg:flex-row  justify-between bg-white">
       <div className="flex w-full flex-col m-3">
@@ -46,7 +63,7 @@ function TaskAudio({
           {files && (
             <Link
               target="_blank"
-              href={files.toString()}
+              href={baseUrlFile + files.toString()}
               className="px-4 py-1 bg-blue-500 rounded-md text-white my-4"
             >
               ecouter audio
@@ -56,7 +73,14 @@ function TaskAudio({
       </div>
       <div className="m-3 w-full">
         <div className="text-lg xs:w-[90%] m-auto flex items-center justify-center lg:w-full h-[300px] font-medium p-3 rounded-xl border-2">
-          <AudioPlayer url={`${reponse}`} />
+          {reponse ? (
+            <AudioPlayer
+              url={`${baseUrlOfUploadthing + getEndOfUrl(reponse)}`}
+            />
+          ) : (
+            <span className="font-bold text-lg">Aucun audio</span>
+          )}
+
         </div>
 
         <div className="flex items-center justify-between">

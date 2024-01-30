@@ -7,6 +7,7 @@ import GetCookies from "../../../../hooks/getCookies";
 import { instance } from "../../../../hooks/Axios";
 import { useRouter } from "next/navigation";
 
+
 function Test() {
   const params = useParams();
   const [taskIndex, setTaskIndex] = useState(0);
@@ -32,6 +33,7 @@ function Test() {
     
     if (data) {
       setTest(data?.data);
+      console.log(data?.data)
       //console.log(JSON.parse(data?.data?.payload))
       setReponse1(data ? JSON.parse(data?.data?.payload)?.taskUrl1 : "");
       setReponse2(data ? JSON.parse(data?.data?.payload)?.taskUrl2 : "");

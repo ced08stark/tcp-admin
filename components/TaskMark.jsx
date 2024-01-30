@@ -2,6 +2,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { useRouter } from "next/navigation";
+import { baseUrlFile } from '../hooks/Axios';
 
 function TaskMark({name, consigne, note, images, reponse, min, max, status, noteMax, setNote}) {
   const router = useRouter()
@@ -42,7 +43,7 @@ function TaskMark({name, consigne, note, images, reponse, min, max, status, note
             <Link
               key={i}
               target="_blank"
-              href={_}
+              href={baseUrlFile + _}
               className="px-4 py-1 bg-blue-500 rounded-md text-white my-4"
             >
               voir le document {i + 1}
