@@ -4,4 +4,4 @@ const RemoveCookies = (cookiename) => {
    Cookies.remove(cookiename);
 };
 
-export default RemoveCookies;
+export default RemoveCookies

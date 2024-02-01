@@ -115,7 +115,7 @@ function QuestionView() {
     setIsUploading(false);
     console.log(data);
     if (data) {
-      setQuestion({ ...currentQuestion, consigne: data.data.file });
+      dispatch(setQuestion({ ...currentQuestion, consigne: data.data.file }));
     }
   };
 

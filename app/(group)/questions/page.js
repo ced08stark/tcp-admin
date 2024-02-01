@@ -57,7 +57,7 @@ function QuestionsPage() {
     setIsUploading(false);
    
     if (data) {
-      setQuestion({ ...currentQuestion, consigne: data.data.file });
+      dispatch(setQuestion({ ...currentQuestion, consigne: data.data.file }));
     }
   };
 
