@@ -21,6 +21,7 @@ function Test() {
   const [reponse1, setReponse1] = useState("");
   const [reponse2, setReponse2] = useState("");
   const [reponse3, setReponse3] = useState("");
+  const [comment, setComment] = useState("");
 
   const getTest = async () => {
     const data = await instance
@@ -47,17 +48,17 @@ function Test() {
   useEffect(() => {
     getTest();
   }, []);
-  const handlePressNext = () => {
-   
-    if (taskIndex >= 0 && taskIndex < 2) {
-      setTaskIndex(taskIndex + 1);
-    }
-  };
-  const handlePressPrev = () => {
-    if (taskIndex > 0 && taskIndex <= 2) {
-      setTaskIndex(taskIndex - 1);
-    }
-  };
+ const handlePressNext = () => {
+   if (taskIndex >= 0 && taskIndex < 3) {
+     setTaskIndex(taskIndex + 1);
+   }
+ };
+
+ const handlePressPrev = () => {
+   if (taskIndex > 0 && taskIndex <= 3) {
+     setTaskIndex(taskIndex - 1);
+   }
+ };
   const Send = async () => {
     if (note1 && note2 && note3) {
       if (
@@ -77,6 +78,7 @@ function Test() {
                 { task: "tache3", note: note3 },
               ],
               payload: test?.payload,
+              comment: comment,
               status: "terminer",
             },
             {
@@ -170,6 +172,15 @@ function Test() {
           reponse={reponse3}
         />
       )}
+      {taskIndex == 3 && (
+        <div className="flex items-center justify-center">
+          <textarea
+            onChange={(e) => setComment(e.target.value)}
+            className="w-[80%] h-[400px] p-3 rounded-md"
+            placeholder={`votre commentaire sur le test de ${test.user.email}`}
+          ></textarea>
+        </div>
+      )}
       <div className="xs:w-full lg:w-[80%] mx-auto my-4 justify-between items-center flex">
         <button
           onClick={() => handlePressPrev()}
@@ -216,7 +227,7 @@ function Test() {
         <button
           onClick={() => handlePressNext()}
           className={`px-6 py-2 text-white ${
-            taskIndex == 2 ? "bg-gray-400" : "bg-blue-500"
+            taskIndex == 3 ? "bg-gray-400" : "bg-blue-500"
           } rounded-sm `}
         >
           next

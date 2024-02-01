@@ -20,6 +20,7 @@ function Test() {
    const [reponse1, setReponse1] = useState("");
    const [reponse2, setReponse2] = useState("");
    const [reponse3, setReponse3] = useState("");
+   const [comment, setComment] = useState("");
 
    const getTest = async () => {
      const data = await instance
@@ -36,7 +37,7 @@ function Test() {
        setReponse1(data ? JSON.parse(data?.data?.payload)?.textOne : '');
        setReponse2(data ? JSON.parse(data?.data?.payload)?.textTwo : '');
        setReponse3(data ? JSON.parse(data?.data?.payload)?.textThree : '');
-       setNote1(data?.data?.resultat[0]?.note)
+       setNote1(data?.data?.resultat[0]?.note);
        setNote2(data?.data?.resultat[1]?.note);
        setNote3(data?.data?.resultat[2]?.note);
      }
@@ -45,14 +46,15 @@ function Test() {
    useEffect(() => {
      getTest();
    }, []);
+
   const handlePressNext = ()=>{
-   
-    if (taskIndex >= 0 && taskIndex < 2 ) {
+    if (taskIndex >= 0 && taskIndex < 3 ) {
         setTaskIndex(taskIndex+1)
     }
   }
+
   const handlePressPrev = ()=>{
-    if (taskIndex > 0 && taskIndex <= 2) {
+    if (taskIndex > 0 && taskIndex <= 3) {
       setTaskIndex(taskIndex - 1);
     }
   }
@@ -71,6 +73,7 @@ function Test() {
               { task: "tache2", note: note2 },
               { task: "tache3", note: note3 },
             ],
+            comment: comment,
             payload: test?.payload,
             status: "terminer",
           },
@@ -110,7 +113,14 @@ function Test() {
           </span>
           <div className="flex flex-col items-center xs:text-xs md:text-md lg:text-base">
             <span>
-               {note1 ? parseInt(note1) : 0 + note2 ? parseInt(note2) : 0 + note3 ? parseInt(note3) : 0} / 20 
+              {note1
+                ? parseInt(note1)
+                : 0 + note2
+                ? parseInt(note2)
+                : 0 + note3
+                ? parseInt(note3)
+                : 0}{" "}
+              / 20
             </span>
             <span
               className={`text-xs px-2 md:px-3 py-1 rounded-full ${
@@ -133,9 +143,7 @@ function Test() {
           note={note1}
           setNote={setNote1}
           consigne={test?.serie?.eeQuestions[0]?.tasks[0]?.consigne}
-          reponse={
-            reponse1
-          }
+          reponse={reponse1}
         />
       )}
       {taskIndex == 1 && (
@@ -165,6 +173,11 @@ function Test() {
           status={test?.status}
           reponse={reponse3}
         />
+      )}
+      {taskIndex == 3 && (
+        <div className="flex items-center justify-center">
+          <textarea onChange={(e)=>setComment(e.target.value)} className="w-[80%] h-[400px] p-3 rounded-md" placeholder={`votre commentaire sur le test de ${test.user.email}`}></textarea>
+        </div>
       )}
       <div className="xs:w-full lg:w-[80%] mx-auto my-4 justify-between items-center flex">
         <button
@@ -212,10 +225,10 @@ function Test() {
         <button
           onClick={() => handlePressNext()}
           className={`px-6 py-2 text-white ${
-            taskIndex == 2 ? "bg-gray-400" : "bg-blue-500"
+            taskIndex == 3 ? "bg-gray-400" : "bg-blue-500"
           } rounded-sm `}
         >
-          next 
+          next
         </button>
       </div>
     </div>
