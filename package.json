@@ -11,6 +11,10 @@
   "dependencies": {
     "@heroicons/react": "^2.0.18",
     "@reduxjs/toolkit": "^1.9.5",
+    "@tiptap/extension-underline": "^2.2.1",
+    "@tiptap/pm": "^2.2.1",
+    "@tiptap/react": "^2.2.1",
+    "@tiptap/starter-kit": "^2.2.1",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "date-fns": "2.29.3",

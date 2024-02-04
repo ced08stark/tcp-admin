@@ -17,6 +17,9 @@ function Test() {
   const [note1, setNote1] = useState(0);
   const [note2, setNote2] = useState(0);
   const [note3, setNote3] = useState(0);
+  const [commentaire1, setCommentaire1] = useState("votre commentaire tache 1 !!!");
+  const [commentaire2, setCommentaire2] = useState("votre commentaire tache 2 !!!");
+  const [commentaire3, setCommentaire3] = useState("votre commentaire tache 3 !!!");
   const router = useRouter();
   const [reponse1, setReponse1] = useState("");
   const [reponse2, setReponse2] = useState("");
@@ -49,13 +52,13 @@ function Test() {
     getTest();
   }, []);
  const handlePressNext = () => {
-   if (taskIndex >= 0 && taskIndex < 3) {
+   if (taskIndex >= 0 && taskIndex < 2) {
      setTaskIndex(taskIndex + 1);
    }
  };
 
  const handlePressPrev = () => {
-   if (taskIndex > 0 && taskIndex <= 3) {
+   if (taskIndex > 0 && taskIndex <= 2) {
      setTaskIndex(taskIndex - 1);
    }
  };
@@ -73,9 +76,9 @@ function Test() {
               serie: test?.serie?._id,
               user: test?.user?._id,
               resultat: [
-                { task: "tache1", note: note1 },
-                { task: "tache2", note: note2 },
-                { task: "tache3", note: note3 },
+                { task: "tache1", note: note1, comment: commentaire1 },
+                { task: "tache2", note: note2, comment: commentaire2 },
+                { task: "tache3", note: note3, comment: commentaire3 },
               ],
               payload: test?.payload,
               comment: comment,
@@ -146,6 +149,8 @@ function Test() {
           setNote={setNote1}
           consigne={test?.serie?.eoQuestions[0]?.tasks[0]?.consigne}
           reponse={reponse1}
+          commentaire={commentaire1}
+          setCommentaire={setCommentaire1}
         />
       )}
       {taskIndex == 1 && (
@@ -158,6 +163,8 @@ function Test() {
           status={test?.status}
           noteMax={8}
           reponse={reponse2}
+          commentaire={commentaire2}
+          setCommentaire={setCommentaire2}
         />
       )}
       {taskIndex == 2 && (
@@ -170,17 +177,11 @@ function Test() {
           setNote={setNote3}
           status={test?.status}
           reponse={reponse3}
+          commentaire={commentaire3}
+          setCommentaire={setCommentaire3}
         />
       )}
-      {taskIndex == 3 && (
-        <div className="flex items-center justify-center">
-          <textarea
-            onChange={(e) => setComment(e.target.value)}
-            className="w-[80%] h-[400px] p-3 rounded-md"
-            placeholder={`votre commentaire sur le test de ${test.user.email}`}
-          ></textarea>
-        </div>
-      )}
+     
       <div className="xs:w-full lg:w-[80%] mx-auto my-4 justify-between items-center flex">
         <button
           onClick={() => handlePressPrev()}
@@ -227,7 +228,7 @@ function Test() {
         <button
           onClick={() => handlePressNext()}
           className={`px-6 py-2 text-white ${
-            taskIndex == 3 ? "bg-gray-400" : "bg-blue-500"
+            taskIndex == 2 ? "bg-gray-400" : "bg-blue-500"
           } rounded-sm `}
         >
           next

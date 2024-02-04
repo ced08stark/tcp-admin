@@ -1,11 +1,13 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from "next/navigation";
 import { baseUrlFile } from '../hooks/Axios';
+import TipTap from '../components/TipTap'
 
-function TaskMark({name, consigne, note, images, reponse, min, max, status, noteMax, setNote}) {
+function TaskMark({name, consigne, note, images, reponse, min, max, status, noteMax, setNote, commentaire, setCommentaire}) {
   const router = useRouter()
+  const [comment, setComment] = useState(false);
   const viewImages = () =>{
       if(images?.length > 0){
        //images?.map((_, i) => router.push(`/${_}`))
@@ -89,6 +91,20 @@ function TaskMark({name, consigne, note, images, reponse, min, max, status, note
             />
           </div>
         </div>
+        {!comment ? (
+          <button
+            onClick={() => setComment(true)}
+            className={
+              `bg-blue-500 inline-block text-white text-sm font-medium px-10 py-2 cursor-pointer border-0 shadow-sm shadow-black/40  relative 
+        before:absolute before:w-full before:h-full before:inset-0  
+        before:bg-white/20 before:scale-0 hover:before:scale-100 before:transition-all 
+        before:rounded-full hover:before:rounded-none rounded-md`}
+          >
+            commenter
+          </button>
+        ) : (
+          <TipTap setComment={setCommentaire} comment={commentaire} />
+        )}
       </div>
     </div>
   );

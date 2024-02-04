@@ -397,28 +397,7 @@ function QuestionsPage() {
                   <tbody>
                     {serie?.questions?.length > 0 ? (
                       serie?.questions
-                        ?.filter(
-                          (item) =>
-                            item?.discipline?.libelle ==
-                              "Comprehension Orale" &&
-                            (filter.name == "consigne"
-                              ? item?.consigne?.includes(filter.value)
-                              : filter.name == "numero"
-                              ? item?.numero.toString().includes(filter.value)
-                              : filter.name == "categorie"
-                              ? item?.categorie?.libelle
-                                  .toLowerCase()
-                                  .includes(filter.value)
-                              : filter.name == "discipline"
-                              ? item?.discipline?.libelle
-                                  .toLowerCase()
-                                  .includes(filter.value)
-                              : filter.name == "point"
-                              ? item?.categorie?.point
-                                  .toString()
-                                  .includes(filter.value)
-                              : item)
-                        )
+                        
                         .map((item, index) => (
                           <QuestionsRowSelect
                             setQuestions={setQuestions}
