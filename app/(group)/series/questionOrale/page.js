@@ -397,7 +397,11 @@ function QuestionsPage() {
                   <tbody>
                     {serie?.questions?.length > 0 ? (
                       serie?.questions
-                        
+                        ?.filter(
+                          (item) =>
+                            item?.discipline?.libelle ==
+                              "Comprehension Orale" 
+                        )
                         .map((item, index) => (
                           <QuestionsRowSelect
                             setQuestions={setQuestions}

@@ -342,7 +342,13 @@ function QuestionsPage() {
                   </thead>
                   <tbody>
                     {serie?.questions?.length > 0 ? (
-                      serie?.questions.map((item, index) => (
+                      serie?.questions
+                        ?.filter(
+                          (item) =>
+                            item?.discipline?.libelle ==
+                              "Comprehension Ecrite" 
+                        )
+                        .map((item, index) => (
                           <QuestionsRowSelect
                             setQuestions={setQuestions}
                             item={item}
