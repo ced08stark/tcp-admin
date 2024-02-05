@@ -16,15 +16,9 @@ function Test() {
    const [note1, setNote1] = useState(0)
    const [note2, setNote2] = useState(0)
    const [note3, setNote3] = useState(0)
-  const [commentaire1, setCommentaire1] = useState(
-    "votre commentaire tache 1 !!!"
-  );
-  const [commentaire2, setCommentaire2] = useState(
-    "votre commentaire tache 2 !!!"
-  );
-  const [commentaire3, setCommentaire3] = useState(
-    "votre commentaire tache 3 !!!"
-  );
+  const [commentaire1, setCommentaire1] = useState(null);
+  const [commentaire2, setCommentaire2] = useState(null);
+  const [commentaire3, setCommentaire3] = useState(null);
    const router = useRouter()
    const [reponse1, setReponse1] = useState("");
    const [reponse2, setReponse2] = useState("");
