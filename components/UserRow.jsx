@@ -114,6 +114,7 @@ function UserRow({ item, id, setUsers }) {
                       )
                       .catch((err) => console.log(err));
                     setIsUpdate(false);
+                    console.log(data)
                     if (data) {
                       setUsers({});
                       getUsers();
@@ -147,8 +148,7 @@ function UserRow({ item, id, setUsers }) {
                             Authorization: `basic ${token}`,
                           },
                         }
-                      )
-                      .catch((err) => console.log(err));
+                      ).catch((err) => console.log(err));
                     setIsUpdate(false);
                     if (data) {
                       setUsers({});
@@ -169,8 +169,7 @@ function UserRow({ item, id, setUsers }) {
       else{
         alert('aucun changement sur l\'utilisateur')
       }
-       
-     };
+  };
 
 
 

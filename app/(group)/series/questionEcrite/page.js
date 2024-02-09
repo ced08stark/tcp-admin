@@ -53,7 +53,7 @@ function QuestionsPage() {
           "Content-type": "multipart/form-data",
         },
       });
-      
+      console.log(data);
       setIsUploading2(false);
       if (data) {
         setImage(data?.data.file);
@@ -345,8 +345,7 @@ function QuestionsPage() {
                       serie?.questions
                         ?.filter(
                           (item) =>
-                            item?.discipline?.libelle ==
-                              "Comprehension Ecrite" 
+                            item?.discipline?.libelle == "Comprehension Ecrite"
                         )
                         .map((item, index) => (
                           <QuestionsRowSelect
@@ -422,9 +421,11 @@ function QuestionsPage() {
                       <div className="text-center">
                         <div className="w-full  justify-center flex">
                           <Image
-                            className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
-                            src={`${baseUrlFile}${
-                              image != "null" ? image : currentQuestion?.libelle
+                            className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
+                            src={`${
+                              image != "null"
+                                ? `${baseUrlFile}${image}`
+                                : `${baseUrlFile}${currentQuestion?.libelle}`
                             }`}
                             alt="Next.js Logo"
                             width={180}
@@ -432,69 +433,30 @@ function QuestionsPage() {
                             priority
                           />
                         </div>
-                        <div className="mt-4 flex items-center justify-center text-sm leading-6 text-gray-600">
-                          <label
-                            htmlFor="file-upload"
-                            className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                          >
-                            <span>Upload a file</span>
-
-                            <input
-                              type="file"
-                              className="w-full h-full opacity-0 cursor-pointer absolute"
-                              onChange={handleSetLibelle}
-                            />
-                            <div className="flex items-center justify-center">
-                              {!isUploading2 ? (
-                                <Icons.ArrowDownTrayIcon
-                                  className="text-indigo-500 text-lg w-10 h-10"
-                                  size={16}
-                                />
-                              ) : (
-                                <div
-                                  class="spinner-border text-lg spinner-border-sm text-indigo-500"
-                                  role="status"
-                                >
-                                  <span class="visually-hidden">
-                                    Loading...
-                                  </span>
-                                </div>
-                              )}
-                              <span className="text-indigo-500 ">
-                                upload file libelle
-                              </span>
-                            </div>
-
-                            {/* <UploadButton
-                              endpoint="imageUploader"
-                              onClientUploadComplete={(res) => {
-                                if (res) {
-                                  setImage(res[0].fileUrl);
-                                  alert("Upload Completed");
-                                }
-                                // Do something with the respons
-                              }}
-                              onUploadError={(error) => {
-                                // Do something with the error.
-                                alert(`ERROR! ${error.message}`);
-                              }}
-                            /> */}
-
-                            {/* <input
-                          id="file-upload"
-                          name="file-upload"
-                          type="file"
-                          className="sr-only"
-                          ref={fileRef}
-                          onChange={() =>
-                            setQuestion({
-                              ...question,
-                              libelle: fileRef.current.files[0],
-                            })
-                          }
-                        /> */}
-                          </label>
-                          {/* <p className="pl-1">or drag and drop</p> */}
+                        <div className="w-full border-dashed relative border-2 cursor-pointer bg-white border-indigo-500 h-[50px] item-center justify-center">
+                          <input
+                            type="file"
+                            className=" bg-red-500 w-full h-full opacity-0 absolute left-0 cursor-pointer"
+                            onChange={handleSetLibelle}
+                          />
+                          <div className="flex items-center justify-center">
+                            {!isUploading2 ? (
+                              <Icons.ArrowDownTrayIcon
+                                className="text-indigo-500 text-lg w-10 h-10"
+                                size={16}
+                              />
+                            ) : (
+                              <div
+                                class="spinner-border text-lg spinner-border-sm text-indigo-500"
+                                role="status"
+                              >
+                                <span class="visually-hidden">Loading...</span>
+                              </div>
+                            )}
+                            <span className="text-indigo-500 ">
+                              upload file libelle
+                            </span>
+                          </div>
                         </div>
                         {/* <p className="text-xs leading-5 text-gray-600">
                       PNG, JPG, GIF up to 10MB Or mp4 file
