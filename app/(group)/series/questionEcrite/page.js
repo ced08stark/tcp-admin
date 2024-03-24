@@ -79,7 +79,7 @@ function QuestionsPage() {
 
   const handleUpdate = async () => {
     
-    const formData = new FormData();
+   
     setIsLoading(true);
     const data = await instance
       .patch(
@@ -116,7 +116,6 @@ function QuestionsPage() {
       setSuggestion4({ text: "" });
       alert("update question success");
     } else {
-      console.log(formData);
       alert("echec de update de la question");
     }
   };
@@ -136,13 +135,7 @@ function QuestionsPage() {
     text: null,
     isCorrect: false,
   });
-  const [images, setImages] = useState(null);
-  const [series, setSeries] = useState([]);
-
-  const Add = async() =>{
-      let modal = document.querySelector("#lightbox");
-      modal.classList.remove("scale-0");
-  }
+ 
 
   const Update = async () => {
     setIsLoading(true)
@@ -169,24 +162,7 @@ function QuestionsPage() {
         }
   };
 
-  const getQuestion = async() =>{
-    const data = await instance
-        .get(
-          "/api/question/questions",
-          {
-            headers: {
-              Authorization: `basic ${token}`,
-            },
-          }
-        )
-        .catch((err) => console.log(err.message));
-        console.log(data)
-      if(data){
-        setQuestions(data?.data)
-        
-      }
-
-  }
+  
 
   useEffect(()=>{
    // getQuestion()
