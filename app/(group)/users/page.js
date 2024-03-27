@@ -219,7 +219,7 @@ function UserPage() {
                             id={index + 1}
                             setUsers={setUsers}
                           />
-                        )).reverse()
+                        ))
                     ) : (
                       <></>
                     )}
