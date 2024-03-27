@@ -79,7 +79,7 @@ const FileComponent = ({setImages, images, typeQuestion}) => {
             htmlFor="file-upload"
             className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
           >
-            <span>Upload a file</span>
+            <span>Upload a image file</span>
             
             {/* <UploadButton
               endpoint="mediaPost"
@@ -116,7 +116,92 @@ const FileComponent = ({setImages, images, typeQuestion}) => {
                     <span class="visually-hidden">Loading...</span>
                   </div>
                 )}
-                <span className="text-indigo-500 ">upload file libelle</span>
+                <span className="text-indigo-500 ">upload image file libelle</span>
+              </div>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+const FileAudioComponent = ({ setAudios, audio, typeQuestion }) => {
+  const token = GetCookies("token");
+  const [isUploading2, setIsUploading2] = useState(false);
+  const [audioFile, setAudioFile] = useState("");
+
+  const handleSetLibelle = async (e) => {
+    console.log(e.target.files[0]);
+    const formData = new FormData();
+    formData.append("files", e.target.files[0]);
+    setIsUploading2(true);
+    const data = await instance.post("api/question/upload", formData, {
+      headers: {
+        Authorization: `basic ${token}`,
+        "Content-type": "multipart/form-data",
+      },
+    });
+    console.log(data);
+    setIsUploading2(false);
+    if (data) {
+      setAudios([...audio, data?.data.file]);
+      setAudioFile(data?.data.file);
+    }
+  };
+  return (
+    <div className="mt-2 bg-white flex items-center justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+      <div className="text-center ">
+        {!audioFile == "" ? (
+         
+          <div className="w-full  justify-center flex items-center">
+            <AudioPlayer url={`${baseUrlFile}${audioFile}`} />
+          </div>
+        ): null}
+        <div className="mt-4 flex items-center justify-center text-sm leading-6 text-gray-600">
+          <label
+            htmlFor="file-upload"
+            className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+          >
+            <span>Upload audio file libelle</span>
+
+            {/* <UploadButton
+              endpoint="mediaPost"
+              onClientUploadComplete={(res) => {
+                if (res) {
+                  setImageFile(res[0].fileUrl);
+                  setImages([...images, res[0].fileUrl]);
+                  alert("Upload Completed");
+                }
+                // Do something with the respons
+              }}
+              onUploadError={(error) => {
+                // Do something with the error.
+                alert(`ERROR! ${error.message}`);
+              }}
+            /> */}
+            <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
+              <input
+                type="file"
+                className="w-full h-full opacity-0 cursor-pointer absolute"
+                onChange={handleSetLibelle}
+              />
+              <div className="flex items-center justify-center">
+                {!isUploading2 ? (
+                  <Icons.ArrowDownTrayIcon
+                    className="text-indigo-500 text-lg w-10 h-10"
+                    size={16}
+                  />
+                ) : (
+                  <div
+                    class="spinner-border text-lg spinner-border-sm text-indigo-500"
+                    role="status"
+                  >
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                )}
+                <span className="text-indigo-500 ">upload audio file libelle</span>
               </div>
             </div>
           </label>
@@ -135,6 +220,10 @@ function AddQuestion() {
   const [Imagesfiles, setImagesfiles] = useState([])
   const [Imagesfiles1, setImagesfiles1] = useState([])
   const [Imagesfiles2, setImagesfiles2] = useState([]);
+
+  const [Audiofiles, setAudiofiles] = useState([]);
+  const [Audiofiles1, setAudiofiles1] = useState([]);
+  const [Audiofiles2, setAudiofiles2] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
  
   const [suggestion1, setSuggestion1] = useState({
@@ -458,21 +547,24 @@ function AddQuestion() {
                     numero: 82,
                     consigne: tache1.consigne,
                     duree: tache1.duree,
-                    fichier: Imagesfiles1[0]
+                    fichier: Audiofiles1[0],
+                    images: Imagesfiles1,
                   },
                   {
                     libelle: tache2.libelle,
                     numero: 83,
                     consigne: tache2.consigne,
                     duree: tache2.duree,
-                    fichier: Imagesfiles2[0],
+                    fichier: Audiofiles2[0],
+                    images: Imagesfiles2,
                   },
                   {
                     libelle: tache3.libelle,
                     numero: 84,
                     consigne: tache3.consigne,
                     duree: tache3.duree,
-                    fichier: Imagesfiles[0],
+                    fichier: Audiofiles[0],
+                    images: Imagesfiles,
                   },
                 ],
               },
@@ -538,6 +630,8 @@ function AddQuestion() {
        typeQuestion={typeQuestion}
      />,
    ]);
+
+   
 
   
 
@@ -629,7 +723,7 @@ function AddQuestion() {
 
                 <fieldset className="w-full  border border-solid space-y-2 border-gray-600 p-3">
                   <div className="flex w-full xs:flex-col md:flex-row">
-                    <div className="w-1/3">
+                    <div className="w-1/3 mx-2">
                       <legend className="text-xl  font-bold">Tache 1</legend>
                       <input
                         type="number"
@@ -640,7 +734,7 @@ function AddQuestion() {
                             minWord: parseInt(e.target.value),
                           });
                         }}
-                        className="peer p-2 block min-h-[auto] bg-white mb-10  text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                        className="peer p-1 block min-h-[auto] bg-white mb-10  text-xs md:text-sm lg:text-base rounded border-0  px-3 leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
                         placeholder="mots minimuns"
                       />
                       <input
@@ -652,7 +746,7 @@ function AddQuestion() {
                             maxWord: parseInt(e.target.value),
                           });
                         }}
-                        className="peer p-2 block min-h-[auto] bg-white text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                        className="peer p-1 block min-h-[auto] bg-white text-xs md:text-sm lg:text-base rounded border-0  px-3 leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
                         placeholder="mots maximums"
                       />
                     </div>
@@ -703,7 +797,7 @@ function AddQuestion() {
                 </fieldset>
                 <fieldset className="w-full  border border-solid space-y-2 border-gray-600 p-3">
                   <div className="flex w-full xs:flex-col md:flex-row">
-                    <div className="w-1/3">
+                    <div className="w-1/3 mx-2">
                       <legend className="text-xl  font-bold">Tache 2</legend>
                       <input
                         type="number"
@@ -714,7 +808,7 @@ function AddQuestion() {
                             minWord: parseInt(e.target.value),
                           });
                         }}
-                        className="peer p-2 block min-h-[auto] bg-white mb-10  text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                        className="peer p-1 block min-h-[auto] bg-white mb-10  text-xs md:text-sm lg:text-base rounded border-0  px-3  leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
                         placeholder="mots minimuns"
                       />
                       <input
@@ -726,7 +820,7 @@ function AddQuestion() {
                             maxWord: parseInt(e.target.value),
                           });
                         }}
-                        className="peer p-2 block min-h-[auto] bg-white text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                        className="peer p-1 block min-h-[auto] bg-white text-xs md:text-sm lg:text-base rounded border-0  px-3  leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
                         placeholder="mots maximums"
                       />
                     </div>
@@ -777,7 +871,7 @@ function AddQuestion() {
                 </fieldset>
                 <fieldset className="w-full border border-solid space-y-2 border-gray-600 p-3">
                   <div className="flex w-full xs:flex-col md:flex-row">
-                    <div className="w-1/3">
+                    <div className="w-1/3 mx-2">
                       <legend className="text-xl  font-bold">Tache 3</legend>
                       <input
                         type="number"
@@ -788,7 +882,7 @@ function AddQuestion() {
                             minWord: parseInt(e.target.value),
                           });
                         }}
-                        className="peer p-2 block min-h-[auto] bg-white mb-10  text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                        className="peer p-1 block min-h-[auto] bg-white mb-10  text-xs md:text-sm lg:text-base rounded border-0  px-3 leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
                         placeholder="mots minimuns"
                       />
                       <input
@@ -800,7 +894,7 @@ function AddQuestion() {
                             maxWord: parseInt(e.target.value),
                           });
                         }}
-                        className="peer p-2 block min-h-[auto] bg-white text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
+                        className="peer p-1 block min-h-[auto] bg-white text-xs md:text-sm lg:text-base rounded border-0  px-3 leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
                         placeholder="mots maximums"
                       />
                     </div>
@@ -972,6 +1066,15 @@ function AddQuestion() {
                       ></textarea>
                     </div>
                   </div>
+                  {
+                    <FileAudioComponent
+                      audio={Audiofiles1}
+                      tache={tache1}
+                      setTache={setTache1}
+                      setAudios={setAudiofiles1}
+                      typeQuestion={typeQuestion}
+                    />
+                  }
                   <div className="col-span-full">
                     <label
                       htmlFor="cover-photo"
@@ -979,13 +1082,22 @@ function AddQuestion() {
                     ></label>
 
                     {
-                      <FileComponent
-                        images={Imagesfiles1}
-                        tache={tache1}
-                        setTache={setTache1}
-                        setImages={setImagesfiles1}
-                        typeQuestion={typeQuestion}
-                      />
+                      <div className="col-span-full">
+                        <label
+                          htmlFor="cover-photo"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        ></label>
+
+                        {otherFiles1}
+                        <div
+                          className="w-full flex items-center justify-end "
+                          onClick={() => addOtherFile1()}
+                        >
+                          <span className="px-2 py-1 rounded-md mt-2 bg-gray-900 text-white cursor-pointer">
+                            autre image
+                          </span>
+                        </div>
+                      </div>
                     }
                     {/* <div
                       className="w-full flex items-center justify-end "
@@ -1013,6 +1125,15 @@ function AddQuestion() {
                       ></textarea>
                     </div>
                   </div>
+                  {
+                    <FileAudioComponent
+                      audio={Audiofiles2}
+                      tache={tache2}
+                      setTache={setTache2}
+                      setAudios={setAudiofiles2}
+                      typeQuestion={typeQuestion}
+                    />
+                  }
 
                   <div className="col-span-full">
                     <label
@@ -1021,13 +1142,22 @@ function AddQuestion() {
                     ></label>
 
                     {
-                      <FileComponent
-                        images={Imagesfiles2}
-                        tache={tache2}
-                        setTache={setTache2}
-                        setImages={setImagesfiles2}
-                        typeQuestion={typeQuestion}
-                      />
+                      <div className="col-span-full">
+                        <label
+                          htmlFor="cover-photo"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        ></label>
+
+                        {otherFiles2}
+                        <div
+                          className="w-full flex items-center justify-end "
+                          onClick={() => addOtherFile2()}
+                        >
+                          <span className="px-2 py-1 rounded-md mt-2 bg-gray-900 text-white cursor-pointer">
+                            autre image
+                          </span>
+                        </div>
+                      </div>
                     }
                   </div>
                 </fieldset>
@@ -1050,6 +1180,15 @@ function AddQuestion() {
                       ></textarea>
                     </div>
                   </div>
+                  {
+                    <FileAudioComponent
+                      audio={Audiofiles}
+                      tache={tache3}
+                      setTache={setTache3}
+                      setAudios={setAudiofiles}
+                      typeQuestion={typeQuestion}
+                    />
+                  }
 
                   <div className="col-span-full">
                     <label
@@ -1058,13 +1197,22 @@ function AddQuestion() {
                     ></label>
 
                     {
-                      <FileComponent
-                        images={Imagesfiles}
-                        tache={tache3}
-                        setTache={setTache3}
-                        setImages={setImagesfiles}
-                        typeQuestion={typeQuestion}
-                      />
+                      <div className="col-span-full">
+                        <label
+                          htmlFor="cover-photo"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        ></label>
+
+                        {otherFiles}
+                        <div
+                          className="w-full flex items-center justify-end "
+                          onClick={() => addOtherFile()}
+                        >
+                          <span className="px-2 py-1 rounded-md mt-2 bg-gray-900 text-white cursor-pointer">
+                            autre image
+                          </span>
+                        </div>
+                      </div>
                     }
                   </div>
                 </fieldset>
