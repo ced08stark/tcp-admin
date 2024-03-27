@@ -6,6 +6,7 @@ import GetCookies from "../../../../hooks/getCookies";
 import { instance } from "../../../../hooks/Axios";
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
+import Tiptap from "../../../../components/TipTap"
 import {
   setQuestion,
   selectQuestion,
@@ -24,6 +25,7 @@ const FileComponent = ({setImages, images, typeQuestion}) => {
   const token = GetCookies("token");
   const [isUploading2, setIsUploading2] = useState(false);
   const [imageFile, setImageFile] = useState("");
+   
 
 
   const handleSetLibelle = async (e) => {
@@ -225,6 +227,10 @@ function AddQuestion() {
   const [Audiofiles1, setAudiofiles1] = useState([]);
   const [Audiofiles2, setAudiofiles2] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [consigneTache1, setConsigneTache1] = useState("");
+  const [consigneTache2, setConsigneTache2] = useState("");
+  const [consigneTache3, setConsigneTache3] = useState("");
  
   const [suggestion1, setSuggestion1] = useState({
     text: null,
@@ -481,7 +487,7 @@ function AddQuestion() {
               {
                 libelle: tache1.libelle,
                 numero: tache1.numero,
-                consigne: tache1.consigne,
+                consigne: consigneTache1,
                 minWord: tache1.minWord,
                 maxWord: tache1.maxWord,
                 typeProduction: tache1.typeProduction,
@@ -490,7 +496,7 @@ function AddQuestion() {
               {
                 libelle: tache2.libelle,
                 numero: tache2.numero,
-                consigne: tache2.consigne,
+                consigne: consigneTache2,
                 minWord: tache2.minWord,
                 maxWord: tache2.maxWord,
                 typeProduction: tache2.typeProduction,
@@ -499,7 +505,7 @@ function AddQuestion() {
               {
                 libelle: tache3.libelle,
                 numero: tache3.numero,
-                consigne: tache3.consigne,
+                consigne: consigneTache3,
                 minWord: tache3.minWord,
                 maxWord: tache3.maxWord,
                 typeProduction: tache3.typeProduction,
@@ -545,7 +551,7 @@ function AddQuestion() {
                   {
                     libelle: tache1.libelle,
                     numero: 82,
-                    consigne: tache1.consigne,
+                    consigne: consigneTache1,
                     duree: tache1.duree,
                     fichier: Audiofiles1[0],
                     images: Imagesfiles1,
@@ -553,7 +559,7 @@ function AddQuestion() {
                   {
                     libelle: tache2.libelle,
                     numero: 83,
-                    consigne: tache2.consigne,
+                    consigne: consigneTache2,
                     duree: tache2.duree,
                     fichier: Audiofiles2[0],
                     images: Imagesfiles2,
@@ -561,7 +567,7 @@ function AddQuestion() {
                   {
                     libelle: tache3.libelle,
                     numero: 84,
-                    consigne: tache3.consigne,
+                    consigne: consigneTache3,
                     duree: tache3.duree,
                     fichier: Audiofiles[0],
                     images: Imagesfiles,
@@ -752,13 +758,17 @@ function AddQuestion() {
                     </div>
                     <div className=" mx-auto space-y-2 w-full">
                       <span>consigne tache 1</span>
-                      <textarea
+                      {/* <textarea
                         onChange={(e) =>
                           setTache1({ ...tache1, consigne: e.target.value })
                         }
                         className="w-full h-28 p-1 rounded-lg my-1"
                         placeholder="votre texte ici"
-                      ></textarea>
+                      ></textarea> */}
+                      <Tiptap
+                        setComment={setConsigneTache1}
+                        comment={consigneTache1}
+                      />
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -826,13 +836,17 @@ function AddQuestion() {
                     </div>
                     <div className="xs:my-3 sm:my-0 mx-auto space-y-2 w-full">
                       <span>consigne tache 2</span>
-                      <textarea
+                      {/* <textarea
                         onChange={(e) =>
                           setTache2({ ...tache2, consigne: e.target.value })
                         }
                         className="w-full h-28 p-1 rounded-lg my-1"
                         placeholder="votre texte ici"
-                      ></textarea>
+                      ></textarea> */}
+                      <Tiptap
+                        setComment={setConsigneTache2}
+                        comment={consigneTache2}
+                      />
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -900,7 +914,7 @@ function AddQuestion() {
                     </div>
                     <div className="relative xs:my-3 sm:my-0 mx-auto space-y-2 w-full">
                       <span>consigne tache 3</span>
-                      <textarea
+                      {/* <textarea
                         onChange={(e) =>
                           setTache3({
                             ...tache3,
@@ -909,7 +923,11 @@ function AddQuestion() {
                         }
                         className="w-full h-28 p-1 rounded-lg my-1"
                         placeholder="votre texte ici"
-                      ></textarea>
+                      ></textarea> */}
+                      <Tiptap
+                        setComment={setConsigneTache2}
+                        comment={consigneTache2}
+                      />
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -1057,13 +1075,17 @@ function AddQuestion() {
                     </div>
                     <div className=" mx-auto w-full">
                       <span>consigne tache 1</span>
-                      <textarea
+                      {/* <textarea
                         onChange={(e) =>
                           setTache1({ ...tache1, consigne: e.target.value })
                         }
                         className="w-full h-28 p-1 rounded-lg my-1"
                         placeholder="votre texte ici"
-                      ></textarea>
+                      ></textarea> */}
+                      <Tiptap
+                        setComment={setConsigneTache1}
+                        comment={consigneTache1}
+                      />
                     </div>
                   </div>
                   {
@@ -1116,13 +1138,17 @@ function AddQuestion() {
                     </div>
                     <div className="xs:my-3 sm:my-0 mx-auto space-y-2 w-full">
                       <span>consigne tache 2</span>
-                      <textarea
+                      {/* <textarea
                         onChange={(e) =>
                           setTache2({ ...tache2, consigne: e.target.value })
                         }
                         className="w-full h-28 p-1 rounded-lg my-1"
                         placeholder="votre texte ici"
-                      ></textarea>
+                      ></textarea> */}
+                      <Tiptap
+                        setComment={setConsigneTache2}
+                        comment={consigneTache2}
+                      />
                     </div>
                   </div>
                   {
@@ -1168,7 +1194,7 @@ function AddQuestion() {
                     </div>
                     <div className="relative xs:my-3 sm:my-0 mx-auto space-y-2 w-full">
                       <span>consigne tache 3</span>
-                      <textarea
+                      {/* <textarea
                         onChange={(e) =>
                           setTache3({
                             ...tache3,
@@ -1177,7 +1203,11 @@ function AddQuestion() {
                         }
                         className="w-full h-28 p-1 rounded-lg my-1"
                         placeholder="votre texte ici"
-                      ></textarea>
+                      ></textarea> */}
+                      <Tiptap
+                        setComment={setConsigneTache3}
+                        comment={consigneTache3}
+                      />
                     </div>
                   </div>
                   {

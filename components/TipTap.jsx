@@ -25,7 +25,7 @@ const Tiptap = ({ setComment, comment }) => {
 
   return (
     <div className="m-auto my-8 max-w-4xl container">
-      <section className="rounded-t-md flex items-center flex-wrap gap-x-4  border border-gray-400 p-2">
+      <section className="rounded-t-md flex items-center flex-wrap gap-x-4 bg-white  border border-gray-400 p-2">
         <button
           onClick={() => editor.chain().focus().toggleBold().run()}
           disabled={!editor.can().chain().focus().toggleBold().run()}
@@ -71,7 +71,7 @@ const Tiptap = ({ setComment, comment }) => {
         </button>
       </section>
 
-      <EditorContent editor={editor} />
+      <EditorContent style={{backgroundColor: 'white'}}  editor={editor} />
     </div>
   );
 };
