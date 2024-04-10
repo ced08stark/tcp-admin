@@ -166,7 +166,7 @@ function AddQuestion() {
   
 
   const handleSetLibelle = async (e) => {
-    console.log(e.target.files[0]);
+    
     const formData = new FormData();
     formData.append("files", e.target.files[0]);
     setIsUploading2(true)
@@ -176,10 +176,10 @@ function AddQuestion() {
         "Content-type": "multipart/form-data",
       },
     });
-    console.log(data);
+    
     setIsUploading2(false)
     if (data) {
-      setImage(data?.data.file);
+      setImage(data?.data?.file.filename);
     }
   };
 
@@ -198,7 +198,7 @@ function AddQuestion() {
     setIsUploading(false);
     if (data) {
      
-      setQuestion({...question, consigne: data?.data.file})
+      setQuestion({ ...question, consigne: data?.data?.file.filename });
     }
   };
 
@@ -284,24 +284,24 @@ function AddQuestion() {
         alert('veuillez selectionner la bonne reponse')
     }
     else{
-    const formData = new FormData();
-    formData.append("numero", question?.numero);
-    formData.append("consigne", question?.consigne);
-    formData.append("files", question?.libelle);
-    //formData.append("libelle", currentQuestion?.libelle);
-    formData.append("suggestions[0][text]", suggestion1.text);
-    formData.append("suggestions[0][isCorrect]", suggestion1.isCorrect);
-    formData.append("suggestions[1][text]", suggestion2.text);
-    formData.append("suggestions[1][isCorrect]", suggestion2.isCorrect);
-    formData.append("suggestions[2][text]", suggestion3.text);
-    formData.append("suggestions[2][isCorrect]", suggestion3.isCorrect);
-    formData.append("suggestions[3][text]", suggestion4.text);
-    formData.append("suggestions[3][isCorrect]", suggestion4.isCorrect);
-    formData.append("categorie[libelle]", category?.libelle);
-    formData.append("categorie[point]", category?.point);
-    formData.append("discipline[libelle]", discipline?.libelle);
-    formData.append("discipline[duree]", category?.duree);
-    formData.append("duree", question?.duree);
+    // const formData = new FormData();
+    // formData.append("numero", question?.numero);
+    // formData.append("consigne", question?.consigne);
+    // formData.append("files", question?.libelle);
+    // //formData.append("libelle", currentQuestion?.libelle);
+    // formData.append("suggestions[0][text]", suggestion1.text);
+    // formData.append("suggestions[0][isCorrect]", suggestion1.isCorrect);
+    // formData.append("suggestions[1][text]", suggestion2.text);
+    // formData.append("suggestions[1][isCorrect]", suggestion2.isCorrect);
+    // formData.append("suggestions[2][text]", suggestion3.text);
+    // formData.append("suggestions[2][isCorrect]", suggestion3.isCorrect);
+    // formData.append("suggestions[3][text]", suggestion4.text);
+    // formData.append("suggestions[3][isCorrect]", suggestion4.isCorrect);
+    // formData.append("categorie[libelle]", category?.libelle);
+    // formData.append("categorie[point]", category?.point);
+    // formData.append("discipline[libelle]", discipline?.libelle);
+    // formData.append("discipline[duree]", category?.duree);
+    // formData.append("duree", question?.duree);
     //console.log(image)
     setIsLoading(true);
     const data = await instance
@@ -351,9 +351,7 @@ function AddQuestion() {
 
   const [image, setImage] = useState('')
   const [files, setFiles] = useState([]);
-  const onDrop = useCallback((acceptedFiles) => {
-    setFiles(acceptedFiles);
-  }, []);
+ 
  
   // const { getRootProps, getInputProps } = useDropzone({
   //   onDrop,

@@ -12,7 +12,6 @@ import { baseUrlFile } from "../hooks/Axios";
 
 function QuestionView() {
   const dispatch = useDispatch();
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const currentQuestion = useSelector(selectQuestion);
   const [image, setImage] = useState("null");
@@ -102,7 +101,7 @@ function QuestionView() {
   const [isUploading2, setIsUploading2] = useState(false);
 
   const handleSetConsigne = async (e) => {
-    console.log(e.target.files[0]);
+   
     const formData = new FormData();
     formData.append("files", e.target.files[0]);
     setIsUploading(true);
@@ -113,9 +112,11 @@ function QuestionView() {
       },
     });
     setIsUploading(false);
-    console.log(data);
+    
     if (data) {
-      dispatch(setQuestion({ ...currentQuestion, consigne: data.data.file }));
+      dispatch(
+        setQuestion({ ...currentQuestion, consigne: data?.data?.file.filename })
+      );
     }
   };
 
@@ -132,7 +133,7 @@ function QuestionView() {
     });
     setIsUploading2(false);
     if (data) {
-      setImage(data?.data.file);
+      setImage(data?.data?.file.filename);
     }
   };
 

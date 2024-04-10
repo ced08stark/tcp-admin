@@ -61,7 +61,7 @@ const AdsVew = () => {
        setIsUploading2(false);
 
        if (data) {
-         setImage(data?.data.file);
+         setImage(data?.data?.file.filename);
        }
      };
 

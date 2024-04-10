@@ -119,7 +119,7 @@ function Evenement() {
     setIsUploading2(false);
 
     if (data) {
-      setImage(data?.data.file);
+      setImage(data?.data.file.filename);
     }
   };
 
@@ -137,7 +137,7 @@ function Evenement() {
     setIsUploading(false);
 
     if (data) {
-      setAds({...ads, adsPicture: data?.data.file});
+      setAds({...ads, adsPicture: data?.data?.file.filename});
     }
   };
 

@@ -29,7 +29,7 @@ const FileComponent = ({setImages, images, typeQuestion}) => {
 
 
   const handleSetLibelle = async (e) => {
-    console.log(e.target.files[0]);
+   
     const formData = new FormData();
     formData.append("files", e.target.files[0]);
     setIsUploading2(true);
@@ -42,8 +42,8 @@ const FileComponent = ({setImages, images, typeQuestion}) => {
     console.log(data);
     setIsUploading2(false);
     if (data) {
-      setImages([...images, data?.data.file]);
-      setImageFile(data?.data.file);
+      setImages([...images, data?.data?.file.filename]);
+      setImageFile(data?.data?.file.filename);
     }
   };
   return (
@@ -135,7 +135,6 @@ const FileAudioComponent = ({ setAudios, audio, typeQuestion }) => {
   const [audioFile, setAudioFile] = useState("");
 
   const handleSetLibelle = async (e) => {
-    console.log(e.target.files[0]);
     const formData = new FormData();
     formData.append("files", e.target.files[0]);
     setIsUploading2(true);
@@ -145,11 +144,10 @@ const FileAudioComponent = ({ setAudios, audio, typeQuestion }) => {
         "Content-type": "multipart/form-data",
       },
     });
-    console.log(data);
     setIsUploading2(false);
     if (data) {
-      setAudios([...audio, data?.data.file]);
-      setAudioFile(data?.data.file);
+      setAudios([...audio, data?.data?.file.filename]);
+      setAudioFile(data?.data?.file.filename);
     }
   };
   return (
@@ -231,33 +229,6 @@ function AddQuestion() {
   const [consigneTache1, setConsigneTache1] = useState("");
   const [consigneTache2, setConsigneTache2] = useState("");
   const [consigneTache3, setConsigneTache3] = useState("");
- 
-  const [suggestion1, setSuggestion1] = useState({
-    text: null,
-    isCorrect: false,
-  });
-  const [suggestion2, setSuggestion2] = useState({
-    text: null,
-    isCorrect: false,
-  });
-  const [suggestion3, setSuggestion3] = useState({
-    text: null,
-    isCorrect: false,
-  });
-  const [suggestion4, setSuggestion4] = useState({
-    text: null,
-    isCorrect: false,
-  });
-
-  const [category, setCategory] = useState({
-    libelle: null,
-    point: null,
-    duree: null,
-  });
-  const [discipline, setDiscipline] = useState({
-    libelle: null,
-    duree: null,
-  });
   const [question, setQuestion] = useState({
     numero: null,
     consigne: null,
