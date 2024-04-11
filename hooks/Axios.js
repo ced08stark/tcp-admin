@@ -1,8 +1,10 @@
-import axios from "axios";
+import axios from 'axios';
 
-const baseUrl2 = "https://abjectof-conoda2.onrender.com/";
-const baseUrl3 = "https://tcp-services-huga.onrender.com/";
-const baseUrl = "http://localhost:3500/";
+
+const baseUrl3 = "https://abjectof-conoda2.onrender.com/";
+const baseUrl = "https://tcp-services-huga.onrender.com/";
+const baseUrl2 = "http://localhost:3500/";
+
 export const baseUrlOfUploadthing="https://utfs.io/f/";
 export const instance = axios.create({
   baseURL: baseUrl,
