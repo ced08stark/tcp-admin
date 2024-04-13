@@ -896,8 +896,8 @@ function AddQuestion() {
                         placeholder="votre texte ici"
                       ></textarea> */}
                       <Tiptap
-                        setComment={setConsigneTache2}
-                        comment={consigneTache2}
+                        setComment={setConsigneTache3}
+                        comment={consigneTache3}
                       />
                     </div>
                   </div>
