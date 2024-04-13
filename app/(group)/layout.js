@@ -56,7 +56,7 @@ export default function RootLayout({ children }) {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <body className={inter.className}>
-          <header className="bg-white z-40">
+          <header className="bg-white z-40 ">
             <nav className="z-40  flex justify-between items-center mx-auto   p-4 lg:px-10 shadow-lg shadow-white">
               <div className="font-bold text-xl text-gray-900">TCP-ADMIN</div>
               <div

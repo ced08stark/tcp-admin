@@ -151,22 +151,51 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-3 pt-12 md:p-6 lg:p-12">
       <div className="bg-white w-full flex flex-col h-[270px] rounded-xl p-3">
         <div className="flex justify-between items-center p-2 ">
-          <span className=" font-semibold">Serie Access</span>
+          <span className=" font-semibold">Serie TCF Access</span>
           <div>
             <Icons.EllipsisHorizontalIcon className="w-6 h-6 cursor-pointer" />
           </div>
         </div>
         <div className="w-full flex overflow-x-auto pb-2 no-scrollbar">
           <div className="flex flex-nowrap">
-            {series?.map((item, index) => (
-              <SerieComponent setSeries={setSeries} item={item} key={index} />
-            ))}
             <div
               onClick={() => Add()}
               className="flex items-center justify-center hover:shadow-xl transition-shadow duration-300 ease-in-out border-2 border-dotted mx-2 shadow-md w-[300px] sm:w-1/2 lg:w-[300px] cursor-pointer border-green-200 p-20 rounded-lg space-y-2"
             >
               <Icons.PlusIcon className="w-16 h-16 font-bold text-green-500" />
             </div>
+            {series
+              ?.sort((a, b) => (Number(a.libelle) > Number(b.libelle) ? 1 : -1))
+              .filter((item) => Number(item.libelle) < 1000)
+              .map((item, index) => (
+                <SerieComponent setSeries={setSeries} item={item} key={index} />
+              ))}
+            
+          </div>
+        </div>
+      </div>
+      <div className="bg-white w-full flex flex-col h-[270px] rounded-xl p-3 my-2">
+        <div className="flex justify-between items-center p-2 ">
+          <span className=" font-semibold">Serie TEF Access</span>
+          <div>
+            <Icons.EllipsisHorizontalIcon className="w-6 h-6 cursor-pointer" />
+          </div>
+        </div>
+        <div className="w-full flex overflow-x-auto pb-2 no-scrollbar">
+          <div className="flex flex-nowrap">
+            <div
+              onClick={() => Add()}
+              className="flex items-center justify-center hover:shadow-xl transition-shadow duration-300 ease-in-out border-2 border-dotted mx-2 shadow-md w-[300px] sm:w-1/2 lg:w-[300px] cursor-pointer border-green-200 p-20 rounded-lg space-y-2"
+            >
+              <Icons.PlusIcon className="w-16 h-16 font-bold text-green-500" />
+            </div>
+            {series
+              ?.sort((a, b) => (Number(a.libelle) > Number(b.libelle) ? 1 : -1))
+              .filter((item) => Number(item.libelle) > 900)
+              .map((item, index) => (
+                <SerieComponent setSeries={setSeries} item={item} key={index} />
+              ))}
+            
           </div>
         </div>
       </div>
