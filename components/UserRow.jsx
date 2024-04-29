@@ -205,24 +205,27 @@ function UserRow({ item, id, setUsers }) {
           : "aucun abonnement"}
       </td>
       <td className="whitespace-nowrap px-6 py-4">{item?.codePromo}</td>
+      <td className="whitespace-nowrap px-6 py-4">{item?.parrain}</td>
       <td className="whitespace-nowrap px-6 py-4">
         {item?.solde ? item?.solde : 0} FCFA
       </td>
       <td className="whitespace-nowrap px-6 py-4 items-center justify-center flex flex-col">
-        <p className="text-center">{item?.filleuls?.length ? item?.filleuls?.length : 0} {" filleuls"}</p>
-        {
-          item?.filleuls?.length > 0 ? <button
-          onClick={() => showFilleuls(item?.filleuls)}
-          className="bg-sky-500 inline-block text-white text-sm font-medium px-2 py-2 cursor-pointer border-0 shadow-sm shadow-black/40 uppercase relative 
+        <p className="text-center">
+          {item?.filleuls?.length ? item?.filleuls?.length : 0} {" filleuls"}
+        </p>
+        {item?.filleuls?.length > 0 ? (
+          <button
+            onClick={() => showFilleuls(item?.filleuls)}
+            className="bg-sky-500 inline-block text-white text-sm font-medium px-2 py-2 cursor-pointer border-0 shadow-sm shadow-black/40 uppercase relative 
         before:absolute before:w-full before:h-full before:inset-0  
         before:bg-white/20 before:scale-0 hover:before:scale-100 before:transition-all 
         before:rounded-full hover:before:rounded-none"
-        >
-          <Icons.EyeIcon className="w-4 h-4" />
-        </button>: null
-        }
-        
+          >
+            <Icons.EyeIcon className="w-4 h-4" />
+          </button>
+        ) : null}
       </td>
+      <td className="whitespace-nowrap px-6 py-4">{item?.lastConnexion}</td>
       <td className="whitespace-nowrap px-6 py-4">{item?.createdAt}</td>
       <td className="whitespace-nowrap px-6 py-4">
         {item?.role == "client" ? (
@@ -231,6 +234,7 @@ function UserRow({ item, id, setUsers }) {
             onChange={(e) => setType(e.target.value)}
           >
             <option value="client">client</option>
+            <option value="correcteur">correcteur</option>
             <option value="admin">admin</option>
           </select>
         ) : (
@@ -240,6 +244,7 @@ function UserRow({ item, id, setUsers }) {
           >
             <option value="admin">admin</option>
             <option value="client">client</option>
+            <option value="correcteur">correcteur</option>
           </select>
         )}
       </td>

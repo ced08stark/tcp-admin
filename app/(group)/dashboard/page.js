@@ -15,6 +15,7 @@ import {
   selectQuestion,
   selectQuestionsSelect,
 } from "../../../featured/questionSlice";
+import { setCurrentUser, selectUser } from "../../../featured/userSlice";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ export default function Home() {
   const token = GetCookies("token");
   const [isLoading, setIsLoading] = useState(false);
   const currentQuestion = useSelector(selectQuestion);
+  const currentUser = useSelector(selectUser);
   const [series, setSeries] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [users, setUsers] = useState([]);
@@ -32,8 +34,14 @@ export default function Home() {
       let modal = document.querySelector("#lightbox");
       modal.classList.remove("scale-0");
   }
+const [isLoadingTestEE, setIsLoadingTestEE] = useState(false)
+const [isLoadingTestEO, setIsLoadingTestEO] = useState(false)
+const [isLoadingUsers, setIsLoadingUsers] = useState(false)
+const [isLoadingAds, setIsLoadingAds] = useState(false);
+const [isLoadingSeries, setIsLoadingSeries] = useState(false);
 
   const getTests = async () => {
+   setIsLoadingTestEE(true)
     const data = await instance
       .get(`/api/eeTest/tests`, {
         headers: {
@@ -41,13 +49,14 @@ export default function Home() {
         },
       })
       .catch((err) => console.log(err.message));
-   
+    setIsLoadingTestEE(false)
     if (data) {
       setTests(data?.data);
     }
   };
 
   const getAdsList = async () => {
+    setIsLoadingAds(true)
     const data = await instance
       .get(`/api/ads/ads`, {
         headers: {
@@ -55,16 +64,17 @@ export default function Home() {
         },
       })
       .catch((err) => console.log(err.message));
-     
+     setIsLoadingAds(false)
     if (data) {
       setAdsList(data?.data);
     }
     else{
-      console.log('nononono');
+      console.log('empty!!!');
     }
   };
 
   const getTestsEO = async () => {
+    setIsLoadingTestEO(true)
     const data = await instance
       .get(`/api/eoTest/tests`, {
         headers: {
@@ -72,13 +82,14 @@ export default function Home() {
         },
       })
       .catch((err) => console.log(err.message));
-    
+    setIsLoadingTestEO(false)
     if (data) {
       setTestsEO(data?.data);
     }
   };
 
   const getUsers = async () => {
+    setIsLoadingUsers(true)
     const data = await instance
       .get("/api/user/users", {
         headers: {
@@ -86,7 +97,7 @@ export default function Home() {
         },
       })
       .catch((err) => console.log(err.message));
-   
+    setIsLoadingUsers(false)
     if (data) {
       setUsers(data?.data);
     }
@@ -94,6 +105,7 @@ export default function Home() {
 
 
   const getSeries = async () => {
+    setIsLoadingSeries(true)
       const data = await instance
         .get(
           "/api/serie/series",
@@ -104,6 +116,7 @@ export default function Home() {
           }
         )
         .catch((err) => console.log(err.message));
+        setIsLoadingSeries(false)
        
       if(data){
         setSeries(data?.data)
@@ -160,7 +173,7 @@ export default function Home() {
           <div className="flex flex-nowrap">
             <div
               onClick={() => Add()}
-              className="flex items-center justify-center hover:shadow-xl transition-shadow duration-300 ease-in-out border-2 border-dotted mx-2 shadow-md w-[300px] sm:w-1/2 lg:w-[300px] cursor-pointer border-green-200 p-20 rounded-lg space-y-2"
+              className="flex items-center justify-center hover:shadow-xl transition-shadow duration-300 ease-in-out border-2 border-dotted mx-2 shadow-md w-[300px] cursor-pointer border-green-200 p-20 rounded-lg space-y-2"
             >
               <Icons.PlusIcon className="w-16 h-16 font-bold text-green-500" />
             </div>
@@ -170,7 +183,6 @@ export default function Home() {
               .map((item, index) => (
                 <SerieComponent setSeries={setSeries} item={item} key={index} />
               ))}
-            
           </div>
         </div>
       </div>
@@ -185,7 +197,7 @@ export default function Home() {
           <div className="flex flex-nowrap">
             <div
               onClick={() => Add()}
-              className="flex items-center justify-center hover:shadow-xl transition-shadow duration-300 ease-in-out border-2 border-dotted mx-2 shadow-md w-[300px] sm:w-1/2 lg:w-[300px] cursor-pointer border-green-200 p-20 rounded-lg space-y-2"
+              className="flex items-center justify-center hover:shadow-xl transition-shadow duration-300 ease-in-out border-2 border-dotted mx-2 shadow-md w-[300px] cursor-pointer border-green-200 p-20 rounded-lg space-y-2"
             >
               <Icons.PlusIcon className="w-16 h-16 font-bold text-green-500" />
             </div>
@@ -195,179 +207,467 @@ export default function Home() {
               .map((item, index) => (
                 <SerieComponent setSeries={setSeries} item={item} key={index} />
               ))}
-            
           </div>
         </div>
       </div>
-      <div className="mb-32 w-full grid text-center lg:mb-0 lg:grid-cols-2 lg:text-left p-4 lg:p-2">
-        <Link
-          href="/questions"
-          className="group  overflow-hidden relative hover:bg-white rounded-lg border border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
-        >
-          <div className="z-20">
-            <h2 className={`mb-3 text-2xl font-semibold`}>
-              Questions{" "}
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                -&gt;
-              </span>
-            </h2>
-            <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-              Find in-depth information about Next.js features and API.
-            </p>
-          </div>
-          <div className=" absolute lg:relative opacity-20 group-hover:opacity-100">
-            <Image
-              className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
-              src="/assets/images/question.jpg"
-              alt="Next.js Logo"
-              width={180}
-              height={37}
-              priority
-            />
-          </div>
-          <div className="p-3 absolute right-2 bottom-4 rounded-sm text-white text-xl bg-blue-300 group-hover:bg-blue-500 group-hover:rounded-full">
-            <span>
-              {questions.length.toString().length > 1
-                ? questions?.length
-                : "0" + questions?.length}
-            </span>
-          </div>
-        </Link>
-        <Link
-          href="/TestExpression"
-          className="group rounded-lg overflow-hidden border relative hover:bg-white border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30 flex justify-between"
-        >
-          <div className="z-20">
-            <h2 className={`mb-3 text-2xl font-semibold`}>
-              Expression Ecrite Test{" "}
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                -&gt;
-              </span>
-            </h2>
-            <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </div>
-          <div className=" absolute lg:relative opacity-20 group-hover:opacity-100">
-            <Image
-              className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
-              src="/assets/images/quizz.jpg"
-              alt="Next.js Logo"
-              width={180}
-              height={37}
-              priority
-            />
-          </div>
-          <div className="p-3 absolute right-2 bottom-4 rounded-sm text-white text-xl bg-blue-300 group-hover:bg-blue-500 group-hover:rounded-full ">
-            <span>
-              {tests?.filter((i) => i.status == "en cours")?.length.toString()
-                .length > 1
-                ? tests?.filter((i) => i.status == "en cours").length
-                : "0" + tests?.filter((i) => i.status == "en cours").length}
-            </span>
-          </div>
-        </Link>
 
-        <Link
-          href="/TestExpressionOral"
-          className="group rounded-lg overflow-hidden border relative hover:bg-white border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30 flex justify-between"
-        >
-          <div className="z-20">
-            <h2 className={`mb-3 text-2xl font-semibold`}>
-              Expression Orale Test{" "}
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                -&gt;
+      <div className="mb-32 w-full grid text-center lg:mb-0 lg:grid-cols-2 lg:text-left p-4 lg:p-2">
+        {currentUser?.role == "admin" ? (
+          <Link
+            href="/questions"
+            className="group  overflow-hidden relative hover:bg-white rounded-lg border border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
+          >
+            <div className="z-20">
+              <h2 className={`mb-3 text-2xl font-semibold`}>
+                Questions{" "}
+                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                  -&gt;
+                </span>
+              </h2>
+              <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+                Find in-depth information about Next.js features and API.
+              </p>
+            </div>
+            <div className=" absolute lg:relative opacity-20 group-hover:opacity-100">
+              <Image
+                className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+                src="/assets/images/question.jpg"
+                alt="Next.js Logo"
+                width={180}
+                height={37}
+                priority
+              />
+            </div>
+            <div className="p-3 absolute right-2 bottom-4 rounded-sm text-white text-xl bg-blue-300 group-hover:bg-blue-500 group-hover:rounded-full">
+              <span>
+                {isLoadingSeries ? (
+                  <>
+                    <div
+                      class="spinner-border spinner-border-sm text-white"
+                      role="status"
+                    >
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </>
+                ) : questions.length.toString().length > 1 ? (
+                  questions?.length
+                ) : (
+                  "0" + questions?.length
+                )}
               </span>
-            </h2>
-            <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </div>
-          <div className=" absolute lg:relative opacity-20 group-hover:opacity-100">
-            <Image
-              className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
-              src="/assets/images/quizz.jpg"
-              alt="Next.js Logo"
-              width={180}
-              height={37}
-              priority
-            />
-          </div>
-          <div className="p-3 absolute right-2 bottom-4 rounded-sm text-white text-xl bg-blue-300 group-hover:bg-blue-500 group-hover:rounded-full ">
-            <span>
-              {testsEO?.filter((i) => i.status == "en cours").length.toString()
-                .length > 1
-                ? testsEO?.filter((i) => i.status == "en cours").length
-                : "0" + testsEO?.filter((i) => i.status == "en cours").length}
-            </span>
-          </div>
-        </Link>
-        <Link
-          href="/users"
-          className="group rounded-lg relative overflow-hidden hover:bg-white border border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
-        >
-          <div className="z-20">
-            <h2 className={`mb-3 text-2xl font-semibold`}>
-              Users{" "}
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                -&gt;
+            </div>
+          </Link>
+        ) : (
+          <div className="group  overflow-hidden relative rounded-lg border border-1 m-2 px-5 py-4 transition-colors border-gray-300 bg-gray-100  flex justify-between">
+            <div className="z-20">
+              <h2 className={`mb-3 text-2xl font-semibold`}>
+                Questions{" "}
+                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                  -&gt;
+                </span>
+              </h2>
+              <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+                Find in-depth information about Next.js features and API.
+              </p>
+            </div>
+            <div className=" absolute lg:relative opacity-20">
+              <Image
+                className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+                src="/assets/images/question.jpg"
+                alt="Next.js Logo"
+                width={180}
+                height={37}
+                priority
+              />
+            </div>
+            <div className="p-3 absolute right-2 bottom-4 rounded-sm text-white text-xl bg-blue-300 ">
+              <span>
+                {isLoadingSeries ? (
+                  <>
+                    <div
+                      class="spinner-border spinner-border-sm text-white"
+                      role="status"
+                    >
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </>
+                ) : questions.length.toString().length > 1 ? (
+                  questions?.length
+                ) : (
+                  "0" + questions?.length
+                )}
               </span>
-            </h2>
-            <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-              Instantly deploy your Next.js site to a shareable URL with Vercel.
-            </p>
+            </div>
           </div>
-          <div className="absolute lg:relative opacity-20 group-hover:opacity-100">
-            <Image
-              className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
-              src="/assets/images/quizztv.jpg"
-              alt="Next.js Logo"
-              width={180}
-              height={37}
-              priority
-            />
-          </div>
-          <div className="p-3 flex items-center justify-center  absolute right-2 bottom-4 text-white text-xl bg-blue-300 group-hover:bg-blue-500 group-hover:rounded-full">
-            <span>
-              {users?.length.toString().length > 1
-                ? users?.length
-                : "0" + users?.length}
-            </span>
-          </div>
-        </Link>
-        <Link
-          href="/ads"
-          className="group rounded-lg relative overflow-hidden hover:bg-white border border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
-        >
-          <div className="z-20">
-            <h2 className={`mb-3 text-2xl font-semibold`}>
-              Evenements{" "}
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                -&gt;
+        )}
+
+        {currentUser?.role == "admin" ? (
+          <Link
+            href="/TestExpression"
+            className="group rounded-lg overflow-hidden border relative hover:bg-white border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30 flex justify-between"
+          >
+            <div className="z-20">
+              <h2 className={`mb-3 text-2xl font-semibold`}>
+                Expression Ecrite Test{" "}
+                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                  -&gt;
+                </span>
+              </h2>
+              <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+                Learn about Next.js in an interactive course with&nbsp;quizzes!
+              </p>
+            </div>
+            <div className=" absolute lg:relative opacity-20">
+              <Image
+                className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+                src="/assets/images/quizz.jpg"
+                alt="Next.js Logo"
+                width={180}
+                height={37}
+                priority
+              />
+            </div>
+            <div className="p-3 absolute right-2 bottom-4 rounded-sm text-white text-xl bg-blue-300 group-hover:bg-blue-500 group-hover:rounded-full ">
+              <span>
+                {isLoadingTestEE ? (
+                  <>
+                    <div
+                      class="spinner-border spinner-border-sm text-white"
+                      role="status"
+                    >
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </>
+                ) : tests
+                    ?.filter((i) => i.status == "en cours")
+                    ?.length.toString().length > 1 ? (
+                  tests?.filter((i) => i.status == "en cours").length
+                ) : (
+                  "0" + tests?.filter((i) => i.status == "en cours").length
+                )}
               </span>
-            </h2>
-            <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-              Instantly deploy your Next.js site to a shareable URL with Vercel.
-            </p>
+            </div>
+          </Link>
+        ) : (
+          <div className="group  overflow-hidden relative rounded-lg border border-1 m-2 px-5 py-4 transition-colors border-gray-300 bg-gray-100  flex justify-between">
+            <div className="z-20">
+              <h2 className={`mb-3 text-2xl font-semibold`}>
+                Expression Ecrite Test{" "}
+                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                  -&gt;
+                </span>
+              </h2>
+              <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+                Learn about Next.js in an interactive course with&nbsp;quizzes!
+              </p>
+            </div>
+            <div className=" absolute lg:relative opacity-20">
+              <Image
+                className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+                src="/assets/images/quizz.jpg"
+                alt="Next.js Logo"
+                width={180}
+                height={37}
+                priority
+              />
+            </div>
+            <div className="p-3 flex items-center justify-center  absolute right-2 bottom-4 text-white text-xl bg-blue-300">
+              <span>
+                {isLoadingTestEE ? (
+                  <>
+                    <div
+                      class="spinner-border spinner-border-sm text-white"
+                      role="status"
+                    >
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </>
+                ) : tests
+                    ?.filter((i) => i.status == "en cours")
+                    ?.length.toString().length > 1 ? (
+                  tests?.filter((i) => i.status == "en cours").length
+                ) : (
+                  "0" + tests?.filter((i) => i.status == "en cours").length
+                )}
+              </span>
+            </div>
           </div>
-          <div className="absolute lg:relative opacity-20 group-hover:opacity-100">
-            <Image
-              className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
-              src="/assets/images/quizztv.jpg"
-              alt="Next.js Logo"
-              width={180}
-              height={37}
-              priority
-            />
+        )}
+
+        {currentUser?.role == "admin" ? (
+          <Link
+            href="/TestExpressionOral"
+            className="group rounded-lg overflow-hidden border relative hover:bg-white border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30 flex justify-between"
+          >
+            <div className="z-20">
+              <h2 className={`mb-3 text-2xl font-semibold`}>
+                Expression Orale Test{" "}
+                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                  -&gt;
+                </span>
+              </h2>
+              <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+                Learn about Next.js in an interactive course with&nbsp;quizzes!
+              </p>
+            </div>
+            <div className=" absolute lg:relative opacity-20 group-hover:opacity-100">
+              <Image
+                className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+                src="/assets/images/quizz.jpg"
+                alt="Next.js Logo"
+                width={180}
+                height={37}
+                priority
+              />
+            </div>
+            <div className="p-3 absolute right-2 bottom-4 rounded-sm text-white text-xl bg-blue-300 group-hover:bg-blue-500 group-hover:rounded-full ">
+              <span>
+                {isLoadingTestEO ? (
+                  <>
+                    <div
+                      class="spinner-border spinner-border-sm text-white"
+                      role="status"
+                    >
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </>
+                ) : testsEO
+                    ?.filter((i) => i.status == "en cours")
+                    ?.length.toString().length > 1 ? (
+                  testsEO?.filter((i) => i.status == "en cours").length
+                ) : (
+                  "0" + testsEO?.filter((i) => i.status == "en cours").length
+                )}
+              </span>
+            </div>
+          </Link>
+        ) : (
+          <div className="group  overflow-hidden relative rounded-lg border border-1 m-2 px-5 py-4 transition-colors border-gray-300 bg-gray-100  flex justify-between">
+            <div className="z-20">
+              <h2 className={`mb-3 text-2xl font-semibold`}>
+                Expression Orale Test{" "}
+                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                  -&gt;
+                </span>
+              </h2>
+              <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+                Learn about Next.js in an interactive course with&nbsp;quizzes!
+              </p>
+            </div>
+            <div className=" absolute lg:relative opacity-20">
+              <Image
+                className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+                src="/assets/images/quizz.jpg"
+                alt="Next.js Logo"
+                width={180}
+                height={37}
+                priority
+              />
+            </div>
+            <div className="p-3 flex items-center justify-center  absolute right-2 bottom-4 text-white text-xl bg-blue-300">
+              <span>
+                {isLoadingTestEO ? (
+                  <>
+                    <div
+                      class="spinner-border spinner-border-sm text-white"
+                      role="status"
+                    >
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </>
+                ) : testsEO
+                    ?.filter((i) => i.status == "en cours")
+                    ?.length.toString().length > 1 ? (
+                  testsEO?.filter((i) => i.status == "en cours").length
+                ) : (
+                  "0" + testsEO?.filter((i) => i.status == "en cours").length
+                )}
+              </span>
+            </div>
           </div>
-          <div className="p-3 flex items-center justify-center  absolute right-2 bottom-4 text-white text-xl bg-blue-300 group-hover:bg-blue-500 group-hover:rounded-full">
-            <span>
-              {adsList?.length.toString().length > 1
-                ? adsList?.length
-                : "0" + adsList?.length}
-            </span>
+        )}
+
+        {currentUser?.role == "admin" ? (
+          <Link
+            href="/users"
+            className="group rounded-lg relative overflow-hidden hover:bg-white border border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
+          >
+            <div className="z-20">
+              <h2 className={`mb-3 text-2xl font-semibold`}>
+                Users{" "}
+                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                  -&gt;
+                </span>
+              </h2>
+              <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+                Instantly deploy your Next.js site to a shareable URL with
+                Vercel.
+              </p>
+            </div>
+            <div className="absolute lg:relative opacity-20 group-hover:opacity-100">
+              <Image
+                className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+                src="/assets/images/quizztv.jpg"
+                alt="Next.js Logo"
+                width={180}
+                height={37}
+                priority
+              />
+            </div>
+            <div className="p-3 flex items-center justify-center  absolute right-2 bottom-4 text-white text-xl bg-blue-300">
+              <span>
+                {isLoadingUsers ? (
+                  <>
+                    <div
+                      class="spinner-border spinner-border-sm text-white"
+                      role="status"
+                    >
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </>
+                ) : users
+                    ?.length.toString().length > 1 ? (
+                  users?.length
+                ) : (
+                  "0" + users?.length
+                )}
+              </span>
+            </div>
+          </Link>
+        ) : (
+          <div className="group  overflow-hidden relative rounded-lg border border-1 m-2 px-5 py-4 transition-colors border-gray-300 bg-gray-100  flex justify-between">
+            <div className="z-20">
+              <h2 className={`mb-3 text-2xl font-semibold`}>
+                Users{" "}
+                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                  -&gt;
+                </span>
+              </h2>
+              <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+                Instantly deploy your Next.js site to a shareable URL with
+                Vercel.
+              </p>
+            </div>
+            <div className="absolute lg:relative opacity-20">
+              <Image
+                className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+                src="/assets/images/quizztv.jpg"
+                alt="Next.js Logo"
+                width={180}
+                height={37}
+                priority
+              />
+            </div>
+            <div className="p-3 flex items-center justify-center  absolute right-2 bottom-4 text-white text-xl bg-blue-300">
+              <span>
+                {isLoadingUsers ? (
+                  <>
+                    <div
+                      class="spinner-border spinner-border-sm text-white"
+                      role="status"
+                    >
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </>
+                ) : users
+                    ?.length.toString().length > 1 ? (
+                  users?.length
+                ) : (
+                  "0" + users?.length
+                )}
+              </span>
+            </div>
           </div>
-        </Link>
+        )}
+
+        {currentUser?.role == "admin" ? (
+          <Link
+            href="/ads"
+            className="group rounded-lg relative overflow-hidden hover:bg-white border border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
+          >
+            <div className="z-20">
+              <h2 className={`mb-3 text-2xl font-semibold`}>
+                Evenements{" "}
+                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                  -&gt;
+                </span>
+              </h2>
+              <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+                Instantly deploy your Next.js site to a shareable URL with
+                Vercel.
+              </p>
+            </div>
+            <div className="absolute lg:relative opacity-20 group-hover:opacity-100">
+              <Image
+                className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+                src="/assets/images/quizztv.jpg"
+                alt="Next.js Logo"
+                width={180}
+                height={37}
+                priority
+              />
+            </div>
+            <div className="p-3 flex items-center justify-center  absolute right-2 bottom-4 text-white text-xl bg-blue-300 ">
+              <span>
+                {isLoadingAds ? (
+                  <>
+                    <div
+                      class="spinner-border spinner-border-sm text-white"
+                      role="status"
+                    >
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </>
+                ) : adsList?.length.toString().length > 1 ? (
+                  adsList?.length
+                ) : (
+                  "0" + adsList?.length
+                )}
+              </span>
+            </div>
+          </Link>
+        ) : (
+          <div className="group  overflow-hidden relative rounded-lg border border-1 m-2 px-5 py-4 transition-colors border-gray-300 bg-gray-100  flex justify-between">
+            <div className="z-20">
+              <h2 className={`mb-3 text-2xl font-semibold`}>
+                Evenements{" "}
+                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                  -&gt;
+                </span>
+              </h2>
+              <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+                Instantly deploy your Next.js site to a shareable URL with
+                Vercel.
+              </p>
+            </div>
+            <div className="absolute lg:relative opacity-20">
+              <Image
+                className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
+                src="/assets/images/quizztv.jpg"
+                alt="Next.js Logo"
+                width={180}
+                height={37}
+                priority
+              />
+            </div>
+            <div className="p-3 flex items-center justify-center  absolute right-2 bottom-4 text-white text-xl bg-blue-300 ">
+              <span>
+                {isLoadingAds ? (
+                  <>
+                    <div
+                      class="spinner-border spinner-border-sm text-white"
+                      role="status"
+                    >
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </>
+                ) : (
+                  adsList?.length
+                )}
+              </span>
+            </div>
+          </div>
+        )}
       </div>
 
       {<AddSerie setSeries={setSeries} series={series} />}

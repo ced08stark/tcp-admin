@@ -4,14 +4,17 @@ import Link from "next/link";
 import React, {useState} from "react"
 import { useRouter } from "next/navigation"
 import SetCookies from "../hooks/setCookies";
-import GetCookies from "../hooks/getCookies";
-import RemoveCookies from "../hooks/removeCookies";
 import { instance } from "../hooks/Axios";
-import * as Icons from '@heroicons/react/24/solid'
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setCurrentUser
+} from "../featured/userSlice";
+
 
 export default function Home() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch()
   const [user, setUser] = useState({ email: "", password: "" });
   const handleLogin = async () => {
     setIsLoading(true);
@@ -22,13 +25,13 @@ export default function Home() {
       })
       .catch((err) => console.log(err.message));
     setIsLoading(false);
-    if (data?.data?.role == "admin") {
-      alert("connexion success")
+    if (data?.data?.role == "admin" || data?.data?.role == "correcteur") {
+      alert("connexion success");
       SetCookies("token", data?.data?.token);
-      router.push("/dashboard")
-    }
-    else{
-      alert("connexion failed")
+      dispatch(setCurrentUser(data?.data))
+      router.push("/dashboard");
+    } else {
+      alert("connexion failed");
     }
   };
   return (

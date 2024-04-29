@@ -1,6 +1,4 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import UserRow from "../../../components/UserRow"
 import GetCookies from "../../../hooks/getCookies";
@@ -91,7 +89,9 @@ function UserPage() {
                   >
                     <li>
                       <button
-                        onClick={() => {setCurrentCategorie("email"), setIsShow(false)}}
+                        onClick={() => {
+                          setCurrentCategorie("email"), setIsShow(false);
+                        }}
                         type="button"
                         class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
@@ -101,7 +101,9 @@ function UserPage() {
                     <li>
                       <button
                         type="button"
-                        onClick={() => {setCurrentCategorie("country"), setIsShow(false)}}
+                        onClick={() => {
+                          setCurrentCategorie("country"), setIsShow(false);
+                        }}
                         class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
                         country
@@ -110,10 +112,23 @@ function UserPage() {
                     <li>
                       <button
                         type="button"
-                        onClick={() => {setCurrentCategorie("role"), setIsShow(false)}}
+                        onClick={() => {
+                          setCurrentCategorie("role"), setIsShow(false);
+                        }}
                         class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
                         role
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCurrentCategorie("parrain"), setIsShow(false);
+                        }}
+                        class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >
+                        parrain
                       </button>
                     </li>
                   </ul>
@@ -184,14 +199,21 @@ function UserPage() {
                       <th scope="col" className="px-6 py-4">
                         remain
                       </th>
-                      <th scope="col" className="px-6 py-4">
+                       <th scope="col" className="px-6 py-4">
                         code promo
                       </th>
+                      <th scope="col" className="px-6 py-4">
+                        parrain
+                      </th>
+                     
                       <th scope="col" className="px-6 py-4">
                         solde
                       </th>
                       <th scope="col" className="px-6 py-4">
                         filleuls
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        last connexion
                       </th>
                       <th scope="col" className="px-6 py-4">
                         register at
@@ -207,10 +229,12 @@ function UserPage() {
                       users
                         ?.filter((item) =>
                           currentCategorie == "country"
-                            ? item.pays.toLowerCase().includes(search)
+                            ? item?.pays.toLowerCase().includes(search)
                             : currentCategorie == "role"
-                            ? item.role.toLowerCase().includes(search)
-                            : item.email.toLowerCase().includes(search)
+                            ? item?.role.toLowerCase().includes(search)
+                            : currentCategorie == "parrain"
+                            ? item?.parrain?.includes(search)
+                            : item?.email.toLowerCase().includes(search)
                         )
                         .map((item, index) => (
                           <UserRow

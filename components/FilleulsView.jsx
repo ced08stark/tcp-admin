@@ -35,8 +35,8 @@ function FilleulsView() {
         </div>
         <span>{currentUser?.email}</span>
 
-        {currentTests?.length > 0 ? (
-          currentTests?.map((item, index) => (
+        {currentUser?.filleuls?.length > 0 ? (
+          currentUser?.filleuls?.map((item, index) => (
             <>
               <div className="flex justify-between w-full bg-white shadow-lg border p-3 rounded-lg">
                 <span className="font-bold">filleuls {index}</span>

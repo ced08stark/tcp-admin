@@ -12,9 +12,11 @@ import GetCookies from "../hooks/getCookies";
 import { instance } from "../hooks/Axios";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css";
+import { setCurrentUser, selectUser } from "../featured/userSlice";
 
 function SerieComponent({item, setSeries}) {
     const router = useRouter();
+    const currentUser = useSelector(selectUser);
     const dispatch = useDispatch();
     const token = GetCookies("token");
     const [isLoading, setIsLoading] = useState(false);
@@ -74,7 +76,7 @@ function SerieComponent({item, setSeries}) {
     }
   return (
     <div
-      className=" hover:shadow-xl transition-shadow duration-300 ease-in-out border-2 mx-2 shadow-md w-[300px]  sm:w-1/2 lg:w-[300px] cursor-pointer border-gray-200 p-4 rounded-lg space-y-2"
+      className=" hover:shadow-xl transition-shadow duration-300 ease-in-out border-2 mx-2 shadow-md w-[300px]  cursor-pointer border-gray-200 p-4 rounded-lg space-y-2"
       onClick={() => handleSerie()}
     >
       <div className="flex items-center justify-between">
@@ -86,7 +88,8 @@ function SerieComponent({item, setSeries}) {
           height={37}
           priority
         />
-        <div className="z-0" onClick={() => handledelete()}>
+        {
+            currentUser?.role == "admin" ?  <div className="z-0" onClick={() => handledelete()}>
           {!isLoading ? (
             <button
               className=" bg-red-500 rounded-md  text-white text-sm font-medium px-2 py-2  border-0 shadow-sm shadow-black/40 uppercase  
@@ -104,7 +107,9 @@ function SerieComponent({item, setSeries}) {
               </div>
             </button>
           )}
-        </div>
+        </div> : null
+        }
+       
       </div>
 
       <div>
