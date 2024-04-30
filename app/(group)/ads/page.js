@@ -27,7 +27,8 @@ function Evenement() {
     linkTarget: null,
     startDate: new Date(),
     endDate: new Date(),
-    adsPicture: null,
+    adsPicture:
+      "http://abjectof-conoda2.onrender.com/api/question/file/files-1700790692705-662116990.PNG",
     localisation: null,
   });
 
