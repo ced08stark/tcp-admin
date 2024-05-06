@@ -3,7 +3,7 @@ import * as Icons from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import GetCookies from "../hooks/getCookies";
 import { instance } from "../hooks/Axios";
-import {setUser, selectUser} from "../featured/userSlice"
+import { setCurrentUser, selectUser } from "../featured/userSlice";
 import { setTests, selectTest } from "../featured/testSlice";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css";
@@ -13,7 +13,7 @@ function UserRow({ item, id, setUsers }) {
     const [isLoading, setIsLoading] = useState(false);
     const [isUpdateSolde, setIsUpdateSolde] = useState(false);
     const [isUpdate, setIsUpdate] = useState(false);
-    const currentUser = useSelector(selectUser);
+   
     const dispatch = useDispatch();
     const token = GetCookies("token");
     const [type, setType] = useState(null);
@@ -85,9 +85,7 @@ function UserRow({ item, id, setUsers }) {
            dispatch(setTests(data?.data));
          }
        //dispatch(setQuestion(item));
-       dispatch(
-        setUser(item)
-       );
+       dispatch(setCurrentUser(item));
       
      };
 
@@ -100,7 +98,7 @@ function UserRow({ item, id, setUsers }) {
          dispatch(setTests(filleuls));
        }
        //dispatch(setQuestion(item));
-       dispatch(setUser(item));
+       dispatch(setCurrentUser(item));
      };
 
 
