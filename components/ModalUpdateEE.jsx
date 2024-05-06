@@ -1,3 +1,4 @@
+"use client"
 import React, {useState} from 'react'
 import * as Icons from "@heroicons/react/24/outline";
 import GetCookies from "../hooks/getCookies";
