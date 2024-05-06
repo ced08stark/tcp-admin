@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import * as Icons from "@heroicons/react/24/outline";
 import GetCookies from "../hooks/getCookies";
-import { setUser, selectUser } from "../featured/userSlice";
+import {  selectUser } from "../featured/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setTests, selectTest } from "../featured/testSlice";
 import TestComponent from "../components/TestComponent"
