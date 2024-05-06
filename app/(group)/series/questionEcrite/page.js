@@ -150,7 +150,7 @@ function QuestionsPage() {
   });
   const [suggestion4, setSuggestion4] = useState({
     text: null,
-    isCorrect: false,
+    isCorrect: false
   });
  
 
