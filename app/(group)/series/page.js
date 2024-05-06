@@ -13,6 +13,7 @@ import {
 export default function Serie() {
   const serie = useSelector(selectSerie);
   const currentQuestion = useSelector(selectQuestion);
+  const currentSerie = localStorage.getItem('serie')
   const dispatch = useDispatch();
   useEffect(()=>{
     dispatch(
@@ -34,9 +35,7 @@ export default function Serie() {
     <main className="flex space-y-8 flex-col items-center justify-between pt-12 p-4  lg:p-12">
       <div className=" w-full flex space-x-4 items-center justify-center">
         <h1 className="text-xl font-bold">serie:</h1>
-        <span className="font-bold text-3xl text-gray-900">
-          {serie?.libelle}
-        </span>
+        <span className="font-bold text-3xl text-gray-900">{currentSerie}</span>
       </div>
       <div className="  w-full grid text-center lg:mb-0 lg:grid-cols-2 lg:text-left">
         <Link

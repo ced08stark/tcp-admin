@@ -95,7 +95,7 @@ function QuestionsRowEO({ item, setQuestions, serie, id }) {
       <td className="whitespace-wrap   px-6 py-4 flex-col">
         <p> numero: {item?.tasks[0]?.numero}</p>
         <br />
-        <p className="font-semibold"> consigne: {item?.tasks[0]?.consigne}</p>
+        <p dangerouslySetInnerHTML={{ __html: item?.tasks[0]?.consigne }} />
         <br />
         <p>duree: {item?.tasks[0]?.duree} secondes</p>
         <br />
@@ -104,7 +104,7 @@ function QuestionsRowEO({ item, setQuestions, serie, id }) {
       <td className="whitespace-wrap   px-6 py-4 flex-col">
         <p> numero: {item?.tasks[1]?.numero}</p>
         <br />
-        <p className="font-semibold"> consigne: {item?.tasks[1]?.consigne}</p>
+        <p dangerouslySetInnerHTML={{ __html: item?.tasks[1]?.consigne }} />
         <br />
         <p>duree: {item?.tasks[1]?.duree} secondes</p>
         <br />
@@ -113,7 +113,7 @@ function QuestionsRowEO({ item, setQuestions, serie, id }) {
       <td className="whitespace-wrap   px-6 py-4 flex-col">
         <p> numero: {item?.tasks[2]?.numero}</p>
         <br />
-        <p className="font-semibold"> consigne: {item?.tasks[2]?.consigne}</p>
+        <p dangerouslySetInnerHTML={{ __html: item?.tasks[2]?.consigne }} />
         <br />
         <p>duree: {item?.tasks[2]?.duree} secondes</p>
         <br />

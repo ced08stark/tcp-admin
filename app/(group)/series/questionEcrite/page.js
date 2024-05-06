@@ -34,13 +34,28 @@ function QuestionsPage() {
    });
   const currentQuestion = useSelector(selectQuestion);
   const selectLists = useSelector(selectQuestionsSelect);
-  const serie = useSelector(selectSerie);
+  const [serie, setSerie] = useState(null);
+  const currentSerie = localStorage.getItem('serie')
   const [questions, setQuestions] = useState([]);
   const dispatch = useDispatch();
   const [image, setImage] = useState(null);
 
     const [isUploading2, setIsUploading2] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+   
+    const handleSerie = async() =>{
+      const result = await instance.get(`/api/serie/series/${currentSerie}`, {
+        headers: {
+          Authorization: `basic ${token}`
+        }
+      })
+      
+      if(result){
+        setSerie(result?.data)
+      }
+    }
+
+    
 
     const handleSetLibelle = async (e) => {
       const formData = new FormData();
@@ -168,6 +183,7 @@ function QuestionsPage() {
 
   useEffect(()=>{
    // getQuestion()
+   handleSerie()
   }, [] )
   return (
     <div className="flex h-auto m-2 lg:m-4 lg:mx-10 flex-col">
@@ -189,7 +205,7 @@ function QuestionsPage() {
               <option value="point">point</option>
             </select>
           </div>
-          <div className="">
+          <div className="relative">
             <input
               type="search"
               onChange={(e) => setFilter({ ...filter, value: e.target.value })}
@@ -199,14 +215,6 @@ function QuestionsPage() {
             <Icons.MagnifyingGlassIcon className="w-5 h-5 absolute bottom-1 right-1 text-gray-400" />
           </div>
         </div>
-        <span className="font-bold">
-          {selectLists?.filter(
-            (item) => item?.discipline?.libelle == "Comprehension Ecrite"
-          )?.length > 0
-            ? selectLists?.length
-            : "0"}{" "}
-          / 40 questions
-        </span>
       </div>
       <div className="flex h-screen">
         <div

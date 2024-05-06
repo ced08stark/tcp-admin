@@ -3,6 +3,7 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
+import { Bold, Italic, List, Quote, Undo, Redo, UnderlineIcon } from "lucide-react"
 
 const Tiptap = ({ setComment, comment }) => {
   const editor = useEditor({
@@ -33,7 +34,7 @@ const Tiptap = ({ setComment, comment }) => {
             editor.isActive("bold") ? "is-active rounded bg-gray-200 p-1" : ""
           }
         >
-          bold
+          <Bold className="w-5 h-5" />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleItalic().run()}
@@ -42,7 +43,7 @@ const Tiptap = ({ setComment, comment }) => {
             editor.isActive("italic") ? "is-active rounded bg-gray-200 p-1" : ""
           }
         >
-          italic
+          <Italic className="w-5 h-5" />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleUnderline().run()}
@@ -53,7 +54,7 @@ const Tiptap = ({ setComment, comment }) => {
               : ""
           }
         >
-          underline
+          <UnderlineIcon className="w-5 h-5" />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
@@ -64,14 +65,14 @@ const Tiptap = ({ setComment, comment }) => {
               : ""
           }
         >
-          blockquote
+          <Quote className="w-5 h-5" />
         </button>
         <button onClick={() => editor.chain().focus().setHardBreak().run()}>
-          hard break
+          <Redo className="w-5 h-5" />
         </button>
       </section>
 
-      <EditorContent style={{backgroundColor: 'white'}}  editor={editor} />
+      <EditorContent style={{ backgroundColor: "white" }} editor={editor} />
     </div>
   );
 };

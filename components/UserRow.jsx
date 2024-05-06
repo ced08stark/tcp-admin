@@ -11,6 +11,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 
 function UserRow({ item, id, setUsers }) {
     const [isLoading, setIsLoading] = useState(false);
+    const [isUpdateSolde, setIsUpdateSolde] = useState(false);
     const [isUpdate, setIsUpdate] = useState(false);
     const currentUser = useSelector(selectUser);
     const dispatch = useDispatch();
@@ -102,6 +103,33 @@ function UserRow({ item, id, setUsers }) {
        dispatch(setUser(item));
      };
 
+
+     const renitialiserSolde = async () => {
+       // console.log(data);
+        setIsUpdateSolde(true)
+        const updateSolde = await instance
+          .patch(
+            `api/user/users/${item._id}`,
+            {
+              solde: 0,
+            },
+            {
+              headers: {
+                Authorization: `basic ${token}`,
+              },
+            }
+          )
+          .catch((err) => console.log(err));
+          setIsUpdateSolde(false)
+
+           if (updateSolde) {
+             setUsers({});
+             getUsers();
+           } else {
+             alert("update user failed");
+           }
+     };
+
      const handleUpdate = async () => {
       if(type){
         {type == "admin"
@@ -126,12 +154,12 @@ function UserRow({ item, id, setUsers }) {
                       )
                       .catch((err) => console.log(err));
                     setIsUpdate(false);
-                    console.log(data)
+                   
                     if (data) {
                       setUsers({});
                       getUsers();
                     } else {
-                      alert("update user failed");
+                      alert("update user solde failed");
                     }
                   },
                 },
@@ -166,7 +194,7 @@ function UserRow({ item, id, setUsers }) {
                       setUsers({});
                       getUsers();
                     } else {
-                      alert("update user failed");
+                      alert("update user role failed");
                     }
                   },
                 },
@@ -207,11 +235,31 @@ function UserRow({ item, id, setUsers }) {
       <td className="whitespace-nowrap px-6 py-4">{item?.codePromo}</td>
       <td className="whitespace-nowrap px-6 py-4">{item?.parrain}</td>
       <td className="whitespace-nowrap px-6 py-4">
-        {item?.solde ? item?.solde : 0} FCFA
+        <p>{item?.solde ? item?.solde : 0} FCFA</p>
+        <button
+            onClick={() => renitialiserSolde(item?._id)}
+            className="bg-green-500 inline-block text-white text-sm font-medium px-2 py-2 cursor-pointer border-0 shadow-sm shadow-black/40 uppercase relative 
+        before:absolute before:w-full before:h-full before:inset-0  
+        before:bg-white/20 before:scale-0 hover:before:scale-100 before:transition-all 
+        before:rounded-full hover:before:rounded-none"
+          >
+            {!isUpdateSolde ? (
+              <Icons.ArrowPathIcon className="w-4 h-4" />
+            ) : (
+            <div
+              class="spinner-border spinner-border-sm text-white"
+              role="status"
+            >
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          
+            )}
+          </button>
       </td>
       <td className="whitespace-nowrap px-6 py-4 items-center justify-center flex flex-col">
         <p className="text-center">
           {item?.filleuls?.length ? item?.filleuls?.length : 0} {" filleuls"}
+          
         </p>
         {item?.filleuls?.length > 0 ? (
           <button

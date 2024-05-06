@@ -24,52 +24,34 @@ import QuestionsRowEO from "../../../../components/QuestionsRowEO";
 
 function QuestionsPage() {
   const token = GetCookies("token");
-  const [isLoading, setIsLoading] = useState(false);
-  const serie = useSelector(selectSerie);
+  const [serie, setSerie] = useState(null);
   const [filter, setFilter] = useState({
     name: "consigne",
     value: "",
   });
   const currentQuestion = useSelector(selectQuestion);
-  const selectLists = useSelector(selectQuestionsSelect);
-  const dispatch = useDispatch();
-  const [image, setImage] = useState("files-1700790692705-662116990.PNG");
-  const [isUploading2, setIsUploading2] = useState(false);
+  const currentSerie = localStorage.getItem("serie");
+
+  const handleSerie = async () => {
+    const result = await instance.get(`/api/serie/series/${currentSerie}`, {
+      headers: {
+        Authorization: `basic ${token}`,
+      },
+    });
+
+    if (result) {
+      setSerie(result?.data);
+    }
+  };
 
 
-   const handleSetLibelle = async (e) => {
-     const formData = new FormData();
-     formData.append("files", e.target.files[0]);
-     setIsUploading2(true);
-     const data = await instance.post("api/question/upload", formData, {
-       headers: {
-         Authorization: `basic ${token}`,
-         "Content-type": "multipart/form-data",
-       },
-     });
-     
-     setIsUploading2(false);
-     if (data) {
-       setImage(data?.data.file);
-     }
-   };
+   
 
-  const [suggestion1, setSuggestion1] = useState({
-    text: null,
-    isCorrect: false,
-  });
-  const [suggestion2, setSuggestion2] = useState({
-    text: null,
-    isCorrect: false,
-  });
-  const [suggestion3, setSuggestion3] = useState({
-    text: null,
-    isCorrect: false,
-  });
-  const [suggestion4, setSuggestion4] = useState({
-    text: null,
-    isCorrect: false,
-  });
+
+
+  useEffect(()=>{
+    handleSerie()
+  }, [])
  
   return (
     <div className="flex h-auto m-2 lg:m-4 lg:mx-10 flex-col">
@@ -91,7 +73,7 @@ function QuestionsPage() {
               <option value="point">point</option>
             </select>
           </div>
-          <div className="">
+          <div className="relative">
             <input
               type="search"
               onChange={(e) => setFilter({ ...filter, value: e.target.value })}
@@ -101,14 +83,7 @@ function QuestionsPage() {
             <Icons.MagnifyingGlassIcon className="w-5 h-5 absolute bottom-1 right-1 text-gray-400" />
           </div>
         </div>
-        <span className="font-bold">
-          {selectLists?.filter(
-            (item) => item?.discipline?.libelle == "Comprehension Ecrite"
-          )?.length > 0
-            ? selectLists?.length
-            : "0"}{" "}
-          / 40 questions
-        </span>
+       
       </div>
       <div className="flex h-screen">
         <div
@@ -155,371 +130,9 @@ function QuestionsPage() {
             </div>
           </div>
         </div>
-        {currentQuestion?.consigne && (
-          <div className="xs:hidden lg:scale-100 lg:flex flex-1 space-y-2 flex-col bg-white p-3  h-full overflow-y-auto">
-            <div className="col-span-full">
-              <div className="mt-2 bg-white flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                <div className="text-center">
-                  <div className="col-span-full">
-                    <label
-                      htmlFor="cover-photo"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    ></label>
-                    <div className="mt-2 bg-white flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                      <div className="text-center">
-                        <div className="w-full  justify-center flex">
-                          <Image
-                            className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
-                            src={`${
-                              image != "files-1700790692705-662116990.PNG"
-                                ? image
-                                : currentQuestion?.libelle
-                            }`}
-                            alt="Next.js Logo"
-                            width={180}
-                            height={37}
-                            priority
-                          />
-                        </div>
-                        <div className="mt-4 flex items-center justify-center text-sm leading-6 text-gray-600">
-                          <label
-                            htmlFor="file-upload"
-                            className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                          >
-                            <span>Upload a file</span>
-
-                            <input
-                              type="file"
-                              className="w-full h-full opacity-0 cursor-pointer absolute"
-                              onChange={handleSetLibelle}
-                            />
-
-                            {/* <input
-                          id="file-upload"
-                          name="file-upload"
-                          type="file"
-                          className="sr-only"
-                          ref={fileRef}
-                          onChange={() =>
-                            setQuestion({
-                              ...question,
-                              libelle: fileRef.current.files[0],
-                            })
-                          }
-                        /> */}
-                          </label>
-                          {/* <p className="pl-1">or drag and drop</p> */}
-                        </div>
-                        {/* <p className="text-xs leading-5 text-gray-600">
-                      PNG, JPG, GIF up to 10MB Or mp4 file
-                    </p> */}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="flex w-full">
-              {currentQuestion?.discipline?.libelle ==
-              "Comprehension Ecrite" ? (
-                <>
-                  <span className="font-bold">Consigne : </span>
-                  <input
-                    type="text"
-                    onChange={(e) => {
-                      dispatch(
-                        setQuestion({
-                          ...currentQuestion,
-                          consigne: e.target.value,
-                        })
-                      );
-                    }}
-                    value={currentQuestion?.consigne}
-                    className="flex-1"
-                  />
-                </>
-              ) : (
-                <div className="mt-2 bg-white flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                  <div className="text-center">
-                    <div className="w-full  justify-center flex">
-                      {currentQuestion?.discipline?.libelle ==
-                      "Comprehension Ecrite" ? (
-                        <Image
-                          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
-                          src={`${
-                            image != "files-1700790692705-662116990.PNG"
-                              ? `${baseUrlFile}${image}`
-                              : `${baseUrlFile}${currentQuestion?.consigne}`
-                          }`}
-                          alt="Next.js Logo"
-                          width={180}
-                          height={37}
-                          priority
-                        />
-                      ) : (
-                        <AudioPlayer
-                          url={`${
-                            image != "files-1700790692705-662116990.PNG"
-                              ? `${baseUrlFile}${image}`
-                              : `${baseUrlFile}${currentQuestion?.consigne}`
-                          }`}
-                        />
-                      )}
-                    </div>
-                    <div className="mt-4 flex items-center justify-center text-sm leading-6 text-gray-600">
-                      <label
-                        htmlFor="file-upload"
-                        className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                      >
-                        <span>Upload a file of consigne</span>
-                        {currentQuestion?.discipline?.libelle == null ||
-                        currentQuestion?.discipline?.libelle ==
-                          "Comprehension Ecrite" ? (
-                          <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
-                            <input
-                              type="file"
-                              className="w-full h-full opacity-0 cursor-pointer absolute"
-                              onChange={handleSetLibelle}
-                            />
-                            <div className="flex items-center justify-center">
-                              {!isUploading2 ? (
-                                <Icons.ArrowDownTrayIcon
-                                  className="text-indigo-500 text-lg w-10 h-10"
-                                  size={16}
-                                />
-                              ) : (
-                                <div
-                                  class="spinner-border text-lg spinner-border-sm text-indigo-500"
-                                  role="status"
-                                >
-                                  <span class="visually-hidden">
-                                    Loading...
-                                  </span>
-                                </div>
-                              )}
-                              <span className="text-indigo-500 ">
-                                upload file libelle
-                              </span>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
-                            <input
-                              type="file"
-                              className="w-full h-full opacity-0 cursor-pointer absolute"
-                              onChange={handleSetLibelle}
-                            />
-                            <div className="flex items-center justify-center">
-                              {!isUploading2 ? (
-                                <Icons.ArrowDownTrayIcon
-                                  className="text-indigo-500 text-lg w-10 h-10"
-                                  size={16}
-                                />
-                              ) : (
-                                <div
-                                  class="spinner-border text-lg spinner-border-sm text-indigo-500"
-                                  role="status"
-                                >
-                                  <span class="visually-hidden">
-                                    Loading...
-                                  </span>
-                                </div>
-                              )}
-                              <span className="text-indigo-500 ">
-                                upload file libelle
-                              </span>
-                            </div>
-                          </div>
-                        )}
-                        {/* <input
-                          id="file-upload"
-                          name="file-upload"
-                          type="file"
-                          className="sr-only"
-                          ref={fileRef}
-                          onChange={() =>
-                            setQuestion({
-                              ...question,
-                              libelle: fileRef.current.files[0],
-                            })
-                          }
-                        /> */}
-                      </label>
-                      {/* <p className="pl-1">or drag and drop</p> */}
-                    </div>
-                    {/* <p className="text-xs leading-5 text-gray-600">
-                      PNG, JPG, GIF up to 10MB Or mp4 file
-                    </p> */}
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className="flex">
-              <span className="font-bold">Discipline : </span>
-              <input
-                type="text"
-                value={currentQuestion?.discipline?.libelle}
-                className="flex-1"
-              />
-            </div>
-            <div className="flex">
-              <span className="font-bold">Categorie : </span>
-              <input
-                className="flex-1"
-                type="text"
-                value={currentQuestion?.categorie?.libelle}
-              />
-            </div>
-            <div className="flex">
-              <span className="font-bold">Duree : </span>
-              <input
-                type="text"
-                value={currentQuestion?.duree}
-                className="flex-1"
-              />
-            </div>
-            <div className="flex flex-col space-y-3">
-              <p className="font-bold text-center underline">Suggestions </p>
-
-              <div className="flex items-center">
-                <span
-                  className={`p-3 text-white font-bold ${
-                    !currentQuestion?.suggestions[0]?.isCorrect
-                      ? `bg-red-500`
-                      : `bg-green-500`
-                  } `}
-                >
-                  R1
-                </span>
-                <textarea
-                  onChange={(e) =>
-                    setSuggestion1({
-                      ...suggestion1,
-                      text: e.target.value,
-                      isCorrect: currentQuestion?.suggestions[0]?.isCorrect,
-                    })
-                  }
-                  //placeholder={currentQuestion?.suggestions[0]?.text}
-                  placeholder={currentQuestion?.suggestions[0]?.text}
-                  value={suggestion1.text}
-                  cols={1}
-                  rows={1}
-                  className=" w-full pl-2"
-                ></textarea>
-              </div>
-
-              <div className="flex items-center">
-                <span
-                  className={`p-3 text-white font-bold ${
-                    !currentQuestion?.suggestions[1]?.isCorrect
-                      ? `bg-red-500`
-                      : `bg-green-500`
-                  } `}
-                >
-                  R2
-                </span>
-                <textarea
-                  onChange={(e) =>
-                    setSuggestion2({
-                      ...suggestion2,
-                      text: e.target.value,
-                      isCorrect: currentQuestion?.suggestions[1]?.isCorrect,
-                    })
-                  }
-                  cols={1}
-                  rows={1}
-                  className=" w-full pl-2"
-                  placeholder={currentQuestion?.suggestions[1]?.text}
-                  value={suggestion2.text}
-                ></textarea>
-              </div>
-              <div className="flex items-center">
-                <span
-                  className={`p-3 text-white font-bold ${
-                    !currentQuestion?.suggestions[2]?.isCorrect
-                      ? `bg-red-500`
-                      : `bg-green-500`
-                  } `}
-                >
-                  R3
-                </span>
-                <textarea
-                  onChange={(e) =>
-                    setSuggestion3({
-                      ...suggestion3,
-                      text: e.target.value,
-                      isCorrect: currentQuestion?.suggestions[2]?.isCorrect,
-                    })
-                  }
-                  //placeholder={currentQuestion?.suggestions[2]?.text}
-                  cols={1}
-                  rows={1}
-                  className=" w-full pl-2"
-                  placeholder={currentQuestion?.suggestions[2]?.text}
-                  value={suggestion3.text}
-                ></textarea>
-              </div>
-              <div className="flex items-center">
-                <span
-                  className={`p-3 text-white font-bold ${
-                    !currentQuestion?.suggestions[3]?.isCorrect
-                      ? `bg-red-500`
-                      : `bg-green-500`
-                  } `}
-                >
-                  R4
-                </span>
-                <textarea
-                  onChange={(e) =>
-                    setSuggestion4({
-                      ...suggestion4,
-                      text: e.target.value,
-                      isCorrect: currentQuestion?.suggestions[3]?.isCorrect,
-                    })
-                  }
-                  placeholder={currentQuestion?.suggestions[3]?.text}
-                  cols={1}
-                  rows={1}
-                  className=" w-full pl-2"
-                  value={suggestion4.text}
-                ></textarea>
-              </div>
-            </div>
-            <div className="mt-10  h-[100px] flex items-center justify-center w-full">
-              {!isLoading ? (
-                <button
-                  onClick={() => handleUpdate()}
-                  className="bg-green-500 inline-block text-white text-sm font-medium px-10 py-2 cursor-pointer border-0 shadow-sm shadow-black/40  relative 
-        before:absolute before:w-full before:h-full before:inset-0  
-        before:bg-white/20 before:scale-0 hover:before:scale-100 before:transition-all 
-        before:rounded-full hover:before:rounded-none rounded-md"
-                >
-                  save modification
-                </button>
-              ) : (
-                <button
-                  disabled
-                  className="bg-green-500 flex items-center space-x-2 text-white text-sm font-medium px-10 py-2 cursor-pointer border-0 shadow-sm shadow-black/40  relative 
-        before:absolute before:w-full before:h-full before:inset-0  
-        before:bg-white/20 before:scale-0 hover:before:scale-100 before:transition-all 
-        before:rounded-full hover:before:rounded-none rounded-md"
-                >
-                  <span>update question</span>
-
-                  <div
-                    class="spinner-border spinner-border-sm text-white"
-                    role="status"
-                  >
-                    <span class="visually-hidden">Loading...</span>
-                  </div>
-                </button>
-              )}
-            </div>
-          </div>
-        )}
+       
       </div>
 
-      <QuestionView />
     </div>
   );
 }

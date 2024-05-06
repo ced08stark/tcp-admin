@@ -18,8 +18,8 @@ import {  selectUser } from "../../../featured/userSlice";
 export default function Home() {
   const dispatch = useDispatch();
   const token = GetCookies("token");
+  const currentRole = localStorage.getItem('role')
   const currentQuestion = useSelector(selectQuestion);
-  const currentUser = useSelector(selectUser);
   const [series, setSeries] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [users, setUsers] = useState([]);
@@ -209,7 +209,7 @@ export default function Home() {
       </div>
 
       <div className="mb-32 w-full grid text-center lg:mb-0 lg:grid-cols-2 lg:text-left p-4 lg:p-2">
-        {currentUser?.role == "admin" ? (
+        {currentRole == "admin" ? (
           <Link
             href="/questions"
             className="group  overflow-hidden relative hover:bg-white rounded-lg border border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
@@ -298,7 +298,7 @@ export default function Home() {
           </div>
         )}
 
-        {currentUser?.role == "admin" ? (
+        {currentRole == "admin" ? (
           <Link
             href="/TestExpression"
             className="group rounded-lg overflow-hidden border relative hover:bg-white border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30 flex justify-between"
@@ -391,7 +391,7 @@ export default function Home() {
           </div>
         )}
 
-        {currentUser?.role == "admin" ? (
+        {currentRole == "admin" ? (
           <Link
             href="/TestExpressionOral"
             className="group rounded-lg overflow-hidden border relative hover:bg-white border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30 flex justify-between"
@@ -484,7 +484,7 @@ export default function Home() {
           </div>
         )}
 
-        {currentUser?.role == "admin" ? (
+        {currentRole == "admin" ? (
           <Link
             href="/users"
             className="group rounded-lg relative overflow-hidden hover:bg-white border border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"
@@ -577,7 +577,7 @@ export default function Home() {
           </div>
         )}
 
-        {currentUser?.role == "admin" ? (
+        {currentRole == "admin" ? (
           <Link
             href="/ads"
             className="group rounded-lg relative overflow-hidden hover:bg-white border border-1 m-2 px-5 py-4 transition-colors hover:border-gray-300 bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 flex justify-between"

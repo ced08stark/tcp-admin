@@ -15,6 +15,9 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import { setCurrentUser, selectUser } from "../featured/userSlice";
 
 function SerieComponent({item, setSeries}) {
+    const currentRole = localStorage.getItem('role')
+    localStorage.setItem("serie", null);
+    
     const router = useRouter();
     const currentUser = useSelector(selectUser);
     const dispatch = useDispatch();
@@ -70,6 +73,7 @@ function SerieComponent({item, setSeries}) {
 
    
     const handleSerie = () => {
+        localStorage.setItem("serie", item.libelle);
         dispatch(setSerie(item))
         dispatch(setQuestionsSelect(item?.questions))
         router.push("/series")
@@ -89,7 +93,7 @@ function SerieComponent({item, setSeries}) {
           priority
         />
         {
-            currentUser?.role == "admin" ?  <div className="z-0" onClick={() => handledelete()}>
+            currentRole == "admin" ?  <div className="z-0" onClick={() => handledelete()}>
           {!isLoading ? (
             <button
               className=" bg-red-500 rounded-md  text-white text-sm font-medium px-2 py-2  border-0 shadow-sm shadow-black/40 uppercase  

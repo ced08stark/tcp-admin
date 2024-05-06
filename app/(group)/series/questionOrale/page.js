@@ -28,7 +28,7 @@ function QuestionsPage() {
   });
   const currentQuestion = useSelector(selectQuestion);
   const selectLists = useSelector(selectQuestionsSelect);
-  const serie = useSelector(selectSerie);
+  const [serie, setSerie] = useState(null);
   const [questions, setQuestions] = useState([]);
   const dispatch = useDispatch();
   const [image, setImage] = useState(null);
@@ -130,13 +130,25 @@ function QuestionsPage() {
     text: null,
     isCorrect: false,
   });
-  const [images, setImages] = useState(null);
-  const [series, setSeries] = useState([]);
+  const currentSerie = localStorage.getItem("serie");
+ 
 
   const Add = async () => {
     let modal = document.querySelector("#lightbox");
     modal.classList.remove("scale-0");
   };
+
+   const handleSerie = async () => {
+     const result = await instance.get(`/api/serie/series/${currentSerie}`, {
+       headers: {
+         Authorization: `basic ${token}`,
+       },
+     });
+
+     if (result) {
+       setSerie(result?.data);
+     }
+   };
 
   const Update = async () => {
     setIsLoading(true);
@@ -161,22 +173,23 @@ function QuestionsPage() {
     }
   };
 
-  const getQuestion = async () => {
-    const data = await instance
-      .get("/api/question/questions", {
-        headers: {
-          Authorization: `basic ${token}`,
-        },
-      })
-      .catch((err) => console.log(err.message));
-    console.log(data);
-    if (data) {
-      setQuestions(data?.data);
-    }
-  };
+  // const getQuestion = async () => {
+  //   const data = await instance
+  //     .get("/api/question/questions", {
+  //       headers: {
+  //         Authorization: `basic ${token}`,
+  //       },
+  //     })
+  //     .catch((err) => console.log(err.message));
+  //   console.log(data);
+  //   if (data) {
+  //     setQuestions(data?.data);
+  //   }
+  // };
 
   useEffect(() => {
-    getQuestion();
+    //getQuestion();
+    handleSerie()
   }, []);
   return (
     <div className="flex h-auto m-2 lg:m-4 lg:mx-10 flex-col">
@@ -198,7 +211,7 @@ function QuestionsPage() {
               <option value="point">point</option>
             </select>
           </div>
-          <div className="">
+          <div className="relative">
             <input
               type="search"
               onChange={(e) => setFilter({ ...filter, value: e.target.value })}
@@ -208,14 +221,6 @@ function QuestionsPage() {
             <Icons.MagnifyingGlassIcon className="w-5 h-5 absolute bottom-1 right-1 text-gray-400" />
           </div>
         </div>
-        <span className="font-bold">
-          {selectLists?.filter(
-            (item) => item?.discipline?.libelle == "Comprehension Orale"
-          )?.length > 0
-            ? selectLists?.length
-            : "0"}{" "}
-          / 40 questions
-        </span>
       </div>
 
       
