@@ -5,8 +5,7 @@ import { setAds, selectAds } from "../featured/adsSlice";
 import { setSerie } from "../featured/serieSlice";
 import GetCookies from "../hooks/getCookies";
 import { instance } from "../hooks/Axios";
-import AudioPlayer from "./AudioPlayer";
-import { baseUrlFile } from "../hooks/Axios";
+
 
 function AdsRows({ setItems, item, id }) {
   const token = GetCookies("token");

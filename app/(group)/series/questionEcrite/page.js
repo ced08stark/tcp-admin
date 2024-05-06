@@ -37,8 +37,7 @@ function QuestionsPage() {
   const serie = useSelector(selectSerie);
   const [questions, setQuestions] = useState([]);
   const dispatch = useDispatch();
-  const [suggestions2, setSuggestions2] = useState([]);
-  const [image, setImage] = useState("null");
+  const [image, setImage] = useState(null);
 
     const [isUploading2, setIsUploading2] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
@@ -85,7 +84,10 @@ function QuestionsPage() {
       .patch(
         `/api/question/questions/${currentQuestion?._id}`,
         {
-          libelle: image != "null" ? image : currentQuestion.libelle,
+          libelle:
+            image != null
+              ? image
+              : currentQuestion.libelle,
           consigne: currentQuestion.consigne,
           numero: currentQuestion.numero,
           categorie: currentQuestion.categorie,
@@ -109,7 +111,7 @@ function QuestionsPage() {
 
     if (data) {
       //getQuestion();
-      setImage("null");
+      setImage(null);
       setSuggestion1({ text: "" });
       setSuggestion2({ text: "" });
       setSuggestion3({ text: "" });
@@ -206,34 +208,6 @@ function QuestionsPage() {
           / 40 questions
         </span>
       </div>
-
-      {/* <div className="w-full flex items-center">
-        <table className="w-[80%]  border">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className=" p-4 uppercase text-xs font-bold text-gray-600 text-left">
-                #
-              </th>
-              <th className=" p-4 uppercase text-xs font-bold text-gray-600 text-left">
-                consigne
-              </th>
-              <th className=" p-4 uppercase text-xs font-bold text-gray-600 text-left">
-                consigne
-              </th>
-              <th className=" p-4 uppercase text-xs font-bold text-gray-600 text-left">
-                consigne
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <QuestionsRows />
-            <QuestionsRows />
-            <QuestionsRows />
-            <QuestionsRows />
-          </tbody>
-        </table>
-        <div className="w-[200px]"></div>
-      </div> */}
       <div className="flex h-screen">
         <div
           className={`flex flex-col overflow-x-auto w-full lg:overflow-y-auto ${
@@ -243,44 +217,7 @@ function QuestionsPage() {
           <div className="sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
               <div className="overflow-x-auto">
-                {/* <table className="min-w-full text-left text-sm font-light">
-                  <thead className="border-b font-medium bg-gray-50 dark:border-neutral-500">
-                    <tr>
-                      <th scope="col" className="px-6 py-4">
-                        #
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        consigne
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        categorie
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        discipline
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        duree
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        points
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        select
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {serie?.questions?.map((item, index) => (
-                      <QuestionsRowSelect
-                        setQuestions={setQuestions}
-                        item={item}
-                        key={index}
-                        id={index + 1}
-                      />
-                    ))}
-                  </tbody>
-    
-                </table> */}
+               
                 <span className="text-black text-xl px-4 mt-10">
                   list des questions de la comprehension ecrite
                 </span>
@@ -339,14 +276,6 @@ function QuestionsPage() {
                       </>
                     )}
 
-                    {/* {serie?.questions?.map((item, index) => (
-                      <QuestionsRowSelect
-                        setQuestions={setQuestions}
-                        item={item}
-                        key={index}
-                        id={index + 1}
-                      />
-                    ))} */}
                   </tbody>
                 </table>
                 <div className="h-[80px] flex items-center justify-center w-full">
@@ -399,7 +328,7 @@ function QuestionsPage() {
                           <Image
                             className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
                             src={`${
-                              image != "null"
+                              image != null
                                 ? `${baseUrlFile}${image}`
                                 : `${baseUrlFile}${currentQuestion?.libelle}`
                             }`}
@@ -471,7 +400,7 @@ function QuestionsPage() {
                         <Image
                           className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
                           src={`${baseUrlFile}${
-                            image != "null" ? image : currentQuestion?.consigne
+                            image != null ? image : currentQuestion?.consigne
                           }`}
                           alt="Next.js Logo"
                           width={180}
@@ -481,7 +410,7 @@ function QuestionsPage() {
                       ) : (
                         <AudioPlayer
                           url={`${baseUrlFile}${
-                            image != "null" ? image : currentQuestion?.consigne
+                            image != null ? image : currentQuestion?.consigne
                           }`}
                         />
                       )}
@@ -551,19 +480,7 @@ function QuestionsPage() {
                             </div>
                           </div>
                         )}
-                        {/* <input
-                          id="file-upload"
-                          name="file-upload"
-                          type="file"
-                          className="sr-only"
-                          ref={fileRef}
-                          onChange={() =>
-                            setQuestion({
-                              ...question,
-                              libelle: fileRef.current.files[0],
-                            })
-                          }
-                        /> */}
+                       
                       </label>
                       {/* <p className="pl-1">or drag and drop</p> */}
                     </div>

@@ -3,16 +3,13 @@ import QuestionsRows from "../../../components/QuestionsRows";
 import React, {useState, useEffect, useRef} from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import SerieComponent from "../../../components/SerieComponent";
-import AddSerie from "../../../components/AddSerie";
 import GetCookies from "../../../hooks/getCookies";
-import { instance, baseUrlImg } from "../../../hooks/Axios";
+import { instance } from "../../../hooks/Axios";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import {
   setQuestion,
-  selectQuestion,
-  selectQuestionsSelect,
+  selectQuestion
 } from "../../../featured/questionSlice";
 import QuestionView from "../../../components/QuestionView";
 import QuestionsRowEE from '../../../components/QuestionsRowEE'
@@ -79,41 +76,6 @@ function QuestionsPage() {
     }
   };
 
-  const Update = async (datas) => {
-    //alert(JSON.stringify(questions))
-    const newTab = serie.questions.filter((i) => i._id != datas?._id);
-
-    setIsLoading(true);
-    const data = await instance
-      .patch(
-        `/api/serie/series/${serie._id}`,
-        {
-          libelle: serie.libelle,
-          questions: newTab,
-          eoQuestions: serie.eoQuestions,
-          eeQuestions: serie.eeQuestions,
-        },
-        {
-          headers: {
-            Authorization: `basic ${token}`,
-          },
-        }
-      )
-      .catch((err) => console.log(err.message));
-    setIsLoading(false);
-    if (data) {
-      setQuestion({});
-      router.push("/dashboard");
-      alert("serie update success");
-      getSeries();
-      setImage("null");
-      setSuggestion1({ text: "" });
-      setSuggestion2({ text: "" });
-      setSuggestion3({ text: "" });
-      setSuggestion4({ text: "" });
-    }
-  };
-
   const handleUpdate = async () => {
     alert(currentQuestion?.consigne);
     const formData = new FormData();
@@ -146,15 +108,13 @@ function QuestionsPage() {
     setIsLoading(false);
 
     if (data) {
-      alert(JSON.stringify(data.data));
-      // Update(data.data)
+      alert("alert success");
     } else {
       console.log(formData);
       alert("echec de update de la question")
     }
   };
-  //alert(image)
-  //alert(currentQuestion.libelle)
+
   const [suggestion1, setSuggestion1] = useState({
     text: null,
     isCorrect: false,
@@ -172,7 +132,6 @@ function QuestionsPage() {
     isCorrect: false,
   });
   const [series, setSeries] = useState([]);
-  const [images, setImages] = useState(null);
   const tabDatas = ["Comprehension Question", "Expression Question"];
   const [currentTab, setCurrentTab] = useState("Comprehension Question");
 
@@ -184,7 +143,7 @@ function QuestionsPage() {
         },
       })
       .catch((err) => console.log(err.message));
-    console.log(data);
+   
     if (data) {
       setEEQuestions(data?.data);
     }
@@ -212,9 +171,6 @@ function QuestionsPage() {
   };
   useEffect(() => {
     getSeries();
-    // getEEQuestions()
-    //getQuestions()
-    //console.log(series)
     currentQuestion?.suggestions?.map((item, index) => {
       setSuggestions2([
         ...suggestions2,

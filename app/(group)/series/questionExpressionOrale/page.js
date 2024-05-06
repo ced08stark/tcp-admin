@@ -8,6 +8,7 @@ import AddSerie from "../../../../components/AddSerie";
 import GetCookies from "../../../../hooks/getCookies";
 import { instance, baseUrlImg } from "../../../../hooks/Axios";
 import { useDispatch, useSelector } from "react-redux";
+import { baseUrlFile } from "../../../../hooks/Axios";
 import {
   setQuestion,
   selectQuestion,
@@ -21,9 +22,7 @@ import AudioPlayer from "../../../../components/AudioPlayer";
 import QuestionsRowEE from "../../../../components/QuestionsRowEE";
 import QuestionsRowEO from "../../../../components/QuestionsRowEO";
 
-let serieTable = [];
 function QuestionsPage() {
-  const router = useRouter();
   const token = GetCookies("token");
   const [isLoading, setIsLoading] = useState(false);
   const serie = useSelector(selectSerie);
@@ -33,11 +32,8 @@ function QuestionsPage() {
   });
   const currentQuestion = useSelector(selectQuestion);
   const selectLists = useSelector(selectQuestionsSelect);
-  const currentSerie = useSelector(selectSerie);
-  const [questions, setQuestions] = useState([]);
   const dispatch = useDispatch();
-  const [suggestions2, setSuggestions2] = useState([]);
-  const [image, setImage] = useState("null");
+  const [image, setImage] = useState("files-1700790692705-662116990.PNG");
   const [isUploading2, setIsUploading2] = useState(false);
 
 
@@ -51,120 +47,13 @@ function QuestionsPage() {
          "Content-type": "multipart/form-data",
        },
      });
-     console.log(data);
+     
      setIsUploading2(false);
      if (data) {
        setImage(data?.data.file);
      }
    };
 
-  // const handleUpdate = async () => {
-  //   console.log(currentQuestion);
-  //   // dispatch(
-  //   //   setQuestion({
-  //   //     ...currentQuestion,
-  //   // libelle: currentQuestion.libelle,
-  //   // consigne: currentQuestion.consigne,
-  //   // numero: currentQuestion.numero,
-  //   // categorie: currentQuestion.categorie,
-  //   // discipline: currentQuestion.discipline,
-  //   // duree: currentQuestion.duree,
-  //   // suggestion1: suggestion1?.text
-  //   //   ? suggestion1
-  //   //   : currentQuestion.suggestions[0],
-  //   // suggestion2: suggestion2?.text
-  //   //   ? suggestion2
-  //   //   : currentQuestion.suggestions[1],
-  //   // suggestion3: suggestion3?.text
-  //   //   ? suggestion3
-  //   //   : currentQuestion.suggestions[2],
-  //   // suggestion4: suggestion4?.text
-  //   //   ? suggestion4
-  //   //   : currentQuestion.suggestions[3],
-  //   //   })
-  //   // );
-  //   const formData = new FormData();
-  //   console.log(currentQuestion);
-  //   /*console.log(suggestions?.length)
-  //   formData.append("numero", currentQuestion?.numero);
-  //   formData.append("consigne", question?.consigne);
-  //   formData.append("files", question?.libelle);
-  //   formData.append(
-  //     "suggestions[0][text]",
-  //     suggestions[0]?.text ? suggestions[0]?.text : suggestions2[0].text
-  //   );
-  //   formData.append(
-  //     "suggestions[0][isCorrect]",
-  //     suggestions[0]?.isCorrect ? suggestions[0]?.isCorrect : suggestions2[0].isCorrect
-  //   );
-  //   formData.append(
-  //     "suggestions[1][text]",
-  //     suggestions[1]?.text ? suggestions[1]?.text : suggestions2[1].text
-  //   );
-  //   formData.append(
-  //     "suggestions[1][isCorrect]",
-  //     suggestions[1]?.isCorrect ? suggestions[1]?.isCorrect : suggestions2[1].isCorrect
-  //   );
-  //   formData.append(
-  //     "suggestions[2][text]",
-  //     suggestions[2]?.text ? suggestions[2]?.text : suggestions2[2].text
-  //   );
-  //   formData.append(
-  //     "suggestions[2][isCorrect]",
-  //     suggestions[2]?.isCorrect ? suggestions[2]?.isCorrect : suggestions2[2].isCorrect
-  //   );
-  //   formData.append("suggestions[3][text]", suggestions[3]?.text ? suggestions[3]?.text : suggestions2[3].text);
-  //   formData.append(
-  //     "suggestions[3][isCorrect]",
-  //     suggestions[3]?.isCorrect ? suggestions[3]?.isCorrect : suggestions2[3].isCorrect
-  //   );
-  //   formData.append("categorie[libelle]", currentQuestion?.categorie?.libelle);
-  //   formData.append("categorie[point]", currentQuestion?.categorie?.point);
-  //   formData.append("discipline[libelle]", currentQuestion?.discipline?.libelle);
-  //   formData.append("discipline[duree]", currentQuestion?.discipline?.duree);
-  //   formData.append("duree", currentQuestion?.duree);*/
-  //   setIsLoading(true);
-  //   const data = await instance
-  //     .patch(
-  //       `/api/question/questions/${currentQuestion?._id}`,
-  //       {
-  //         libelle: image != "null" ? image : currentQuestion.libelle,
-  //         consigne: currentQuestion.consigne,
-  //         numero: currentQuestion.numero,
-  //         categorie: currentQuestion.categorie,
-  //         discipline: currentQuestion.discipline,
-  //         duree: currentQuestion.duree,
-  //         suggestions: [
-  //           suggestion1?.text ? suggestion1 : currentQuestion.suggestions[0],
-  //           suggestion2?.text ? suggestion2 : currentQuestion.suggestions[1],
-  //           suggestion3?.text ? suggestion3 : currentQuestion.suggestions[2],
-  //           suggestion4?.text ? suggestion4 : currentQuestion.suggestions[3],
-  //         ],
-  //       },
-  //       {
-  //         headers: {
-  //           Authorization: `basic ${token}`,
-  //           /*"Content-type": "multipart/form-data"*/
-  //         },
-  //       }
-  //     )
-  //     .catch((err) => console.log(err));
-  //   setIsLoading(false);
-
-  //   if (data) {
-  //     getQuestion();
-  //     setImage("null");
-  //     setSuggestion1({ text: "" });
-  //     setSuggestion2({ text: "" });
-  //     setSuggestion3({ text: "" });
-  //     setSuggestion4({ text: "" });
-  //     alert("update question success");
-  //   } else {
-  //     console.log(formData);
-  //     alert("echec de update de la question");
-  //   }
-  // };
-  const [eeQuestions, setEEQuestions] = useState([]);
   const [suggestion1, setSuggestion1] = useState({
     text: null,
     isCorrect: false,
@@ -181,54 +70,7 @@ function QuestionsPage() {
     text: null,
     isCorrect: false,
   });
-  const [images, setImages] = useState(null);
-  const [series, setSeries] = useState([]);
-
-  const Add = async () => {
-    let modal = document.querySelector("#lightbox");
-    modal.classList.remove("scale-0");
-  };
-
-  const getEOQuestions = async () => {
-    const data = await instance
-      .get("/api/eeQuestion/questions", {
-        headers: {
-          Authorization: `basic ${token}`,
-        },
-      })
-      .catch((err) => console.log(err.message));
-    console.log(data);
-    if (data) {
-      setEEQuestions(data?.data);
-    }
-  };
-
-  // const Update = async () => {
-  //   setIsLoading(true);
-  //   const data = await instance
-  //     .patch(
-  //       `/api/serie/series/${serie._id}`,
-  //       {
-  //         libelle: serie.libelle,
-  //         questions: selectLists,
-  //       },
-  //       {
-  //         headers: {
-  //           Authorization: `basic ${token}`,
-  //         },
-  //       }
-  //     )
-  //     .catch((err) => console.log(err.message));
-  //   setIsLoading(false);
-  //   if (data) {
-  //     alert("serie update success");
-  //     router.push("/dashboard");
-  //   }
-  // };
-
-  useEffect(() => {
-    //getEEQuestions();
-  }, []);
+ 
   return (
     <div className="flex h-auto m-2 lg:m-4 lg:mx-10 flex-col">
       <div className="flex items-center justify-between m-2">
@@ -268,34 +110,6 @@ function QuestionsPage() {
           / 40 questions
         </span>
       </div>
-
-      {/* <div className="w-full flex items-center">
-        <table className="w-[80%]  border">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className=" p-4 uppercase text-xs font-bold text-gray-600 text-left">
-                #
-              </th>
-              <th className=" p-4 uppercase text-xs font-bold text-gray-600 text-left">
-                consigne
-              </th>
-              <th className=" p-4 uppercase text-xs font-bold text-gray-600 text-left">
-                consigne
-              </th>
-              <th className=" p-4 uppercase text-xs font-bold text-gray-600 text-left">
-                consigne
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <QuestionsRows />
-            <QuestionsRows />
-            <QuestionsRows />
-            <QuestionsRows />
-          </tbody>
-        </table>
-        <div className="w-[200px]"></div>
-      </div> */}
       <div className="flex h-screen">
         <div
           className={`flex flex-col overflow-x-auto w-full  lg:overflow-y-auto ${
@@ -329,45 +143,12 @@ function QuestionsPage() {
                   <tbody>
                     {serie?.eoQuestions?.map((q, i) => (
                       <QuestionsRowEO
-                        //setQuestions={setQuestions}
                         serie={serie}
                         item={q}
                         key={i}
                         id={i + 1}
                       />
                     ))}
-                    {/* {eeQuestions.length > 0 ? (
-                          eeQuestions
-                            ?.filter((item) =>
-                              filter.name == "consigne"
-                                ? item?.consigne?.includes(filter.value)
-                                : filter.name == "numero"
-                                ? item?.numero.toString().includes(filter.value)
-                                : filter.name == "categorie"
-                                ? item?.categorie?.libelle
-                                    .toLowerCase()
-                                    .includes(filter.value)
-                                : filter.name == "discipline"
-                                ? item?.discipline?.libelle
-                                    .toLowerCase()
-                                    .includes(filter.value)
-                                : filter.name == "point"
-                                ? item?.categorie?.point
-                                    .toString()
-                                    .includes(filter.value)
-                                : item
-                            )
-                            .map((item, index) => (
-                              <QuestionsRowEE
-                                setQuestions={setQuestions}
-                                item={item}
-                                key={index}
-                                id={index + 1}
-                              />
-                            ))
-                        ) : (
-                          <></>
-                        )} */}
                   </tbody>
                 </table>
               </div>
@@ -390,7 +171,9 @@ function QuestionsPage() {
                           <Image
                             className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
                             src={`${
-                              image != "null" ? image : currentQuestion?.libelle
+                              image != "files-1700790692705-662116990.PNG"
+                                ? image
+                                : currentQuestion?.libelle
                             }`}
                             alt="Next.js Logo"
                             width={180}
@@ -464,7 +247,7 @@ function QuestionsPage() {
                         <Image
                           className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert "
                           src={`${
-                            image != "null"
+                            image != "files-1700790692705-662116990.PNG"
                               ? `${baseUrlFile}${image}`
                               : `${baseUrlFile}${currentQuestion?.consigne}`
                           }`}
@@ -476,7 +259,7 @@ function QuestionsPage() {
                       ) : (
                         <AudioPlayer
                           url={`${
-                            image != "null"
+                            image != "files-1700790692705-662116990.PNG"
                               ? `${baseUrlFile}${image}`
                               : `${baseUrlFile}${currentQuestion?.consigne}`
                           }`}

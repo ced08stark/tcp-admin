@@ -5,14 +5,14 @@ import React from "react";
 import * as Icons from "@heroicons/react/24/outline";
 import GetCookies from "../../../hooks/getCookies";
 import { baseUrlFile } from "../../../hooks/Axios";
-import { selectAds, setAds } from "../../../featured/adsSlice";
+import { selectAds, setAds } from "../featured/adsSlice";
 import { instance, baseUrlImg } from "../../../hooks/Axios";
 import { useSelector, useDispatch } from "react-redux";
 
 const AdsVew = () => {
      const [adsList, setAdsList] = useState([]);
      const currentAds = useSelector(selectAds);
-     const [image, setImage] = useState("null");
+     const [image, setImage] = useState("files-1700790692705-662116990.PNG");
      const token = GetCookies("token");
      const [isLoading, setIsLoading] = useState(false);
      const [isUploading, setIsUploading] = useState(false);
@@ -140,7 +140,7 @@ const AdsVew = () => {
                         <Image
                           className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
                           src={`${
-                            image != "null"
+                            image != "files-1700790692705-662116990.PNG"
                               ? `${baseUrlFile}${image}`
                               : `${baseUrlFile}${currentAds?.adsPicture}`
                           }`}

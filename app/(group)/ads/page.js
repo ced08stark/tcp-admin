@@ -28,7 +28,7 @@ function Evenement() {
     startDate: new Date(),
     endDate: new Date(),
     adsPicture:
-      "http://abjectof-conoda2.onrender.com/api/question/file/files-1700790692705-662116990.PNG",
+      "files-1700790692705-662116990.PNG",
     localisation: null,
   });
 
@@ -146,13 +146,6 @@ function Evenement() {
      setDateStart(ranges.selection.startDate);
      setDateEnd(ranges.selection.endDate);
     console.log(ranges);
-
-    // {
-    //   selection: {
-    //     startDate: [native Date Object],
-    //     endDate: [native Date Object],
-    //   }
-    // }
   };
 
   const selectionRange = {
@@ -319,39 +312,6 @@ function Evenement() {
                     ) : (
                       <></>
                     )}
-
-                    {/* {questions.length > 0 ? (
-                          questions
-                            ?.filter((item) =>
-                              filter.name == "consigne"
-                                ? item?.consigne?.includes(filter.value)
-                                : filter.name == "numero"
-                                ? item?.numero.toString().includes(filter.value)
-                                : filter.name == "categorie"
-                                ? item?.categorie?.libelle
-                                    .toLowerCase()
-                                    .includes(filter.value)
-                                : filter.name == "discipline"
-                                ? item?.discipline?.libelle
-                                    .toLowerCase()
-                                    .includes(filter.value)
-                                : filter.name == "point"
-                                ? item?.categorie?.point
-                                    .toString()
-                                    .includes(filter.value)
-                                : item
-                            )
-                            .map((item, index) => (
-                              <QuestionsRows
-                                setQuestions={setQuestions}
-                                item={item}
-                                key={index}
-                                id={index + 1}
-                              />
-                            ))
-                        ) : (
-                          <></>
-                        )} */}
                   </tbody>
                 </table>
               </div>
@@ -390,21 +350,6 @@ function Evenement() {
                             className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                           >
                             <span>Upload a file</span>
-
-                            {/* <UploadButton
-                                      endpoint="imageUploader"
-                                      onClientUploadComplete={(res) => {
-                                        if (res) {
-                                          setImage(res[0].fileUrl);
-                                          alert("Upload Completed");
-                                        }
-                                        // Do something with the respons
-                                      }}
-                                      onUploadError={(error) => {
-                                        // Do something with the error.
-                                        alert(`ERROR! ${error.message}`);
-                                      }}
-                                    /> */}
                             <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
                               <input
                                 type="file"
@@ -412,26 +357,8 @@ function Evenement() {
                                 onChange={handleSetUpdatePicture}
                               />
                             </div>
-
-                            {/* <input
-                          id="file-upload"
-                          name="file-upload"
-                          type="file"
-                          className="sr-only"
-                          ref={fileRef}
-                          onChange={() =>
-                            setQuestion({
-                              ...question,
-                              libelle: fileRef.current.files[0],
-                            })
-                          }
-                        /> */}
                           </label>
-                          {/* <p className="pl-1">or drag and drop</p> */}
                         </div>
-                        {/* <p className="text-xs leading-5 text-gray-600">
-                      PNG, JPG, GIF up to 10MB Or mp4 file
-                    </p> */}
                       </div>
                     </div>
                   </div>

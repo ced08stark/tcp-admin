@@ -4,8 +4,8 @@ const initialState = {
   ads: {
     id: null,
     nomPrestataire: null,
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: null,
+    endDate: null,
     countClic: 0,
     linkTarget: null,
     adsPicture: null,

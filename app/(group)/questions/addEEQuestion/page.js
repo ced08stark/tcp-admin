@@ -82,22 +82,6 @@ const FileComponent = ({setImages, images, typeQuestion}) => {
             className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
           >
             <span>Upload a image file</span>
-            
-            {/* <UploadButton
-              endpoint="mediaPost"
-              onClientUploadComplete={(res) => {
-                if (res) {
-                  setImageFile(res[0].fileUrl);
-                  setImages([...images, res[0].fileUrl]);
-                  alert("Upload Completed");
-                }
-                // Do something with the respons
-              }}
-              onUploadError={(error) => {
-                // Do something with the error.
-                alert(`ERROR! ${error.message}`);
-              }}
-            /> */}
             <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
               <input
                 type="file"
@@ -165,22 +149,6 @@ const FileAudioComponent = ({ setAudios, audio, typeQuestion }) => {
             className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
           >
             <span>Upload audio file libelle</span>
-
-            {/* <UploadButton
-              endpoint="mediaPost"
-              onClientUploadComplete={(res) => {
-                if (res) {
-                  setImageFile(res[0].fileUrl);
-                  setImages([...images, res[0].fileUrl]);
-                  alert("Upload Completed");
-                }
-                // Do something with the respons
-              }}
-              onUploadError={(error) => {
-                // Do something with the error.
-                alert(`ERROR! ${error.message}`);
-              }}
-            /> */}
             <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
               <input
                 type="file"
@@ -371,20 +339,6 @@ function AddQuestion() {
     }
   };
 
-  const handleChangeNumber = (numero) => {
-    setExistEE(false);
-    setQuestion({...question, numero: numero})
-    
-    
-    if (questions != null) {
-      for (var data of questions) {
-        if (numero == data?.numero) {
-          setExistEE(true);
-        }
-      }
-    }
-  };
-
   const UpdateEE = async (tab) => {
     console.log(currentSerie);
     setIsLoading(true);
@@ -452,7 +406,6 @@ function AddQuestion() {
       const data = await instance
         .post(
           "/api/eeQuestion/created",
-          //formData
           {
             tasks: [
               {
@@ -507,7 +460,6 @@ function AddQuestion() {
   };
 
   const CreatedEO = async () => {
-    console.log([tache1.libelle, tache1.consigne, tache1.duree, Imagesfiles[0]]);
       if(existEO){
         alert('vous ne pouvez par creer cette expression orale dans cette serie')
       }
@@ -516,7 +468,6 @@ function AddQuestion() {
           const data = await instance
             .post(
               "/api/eoQuestion/created",
-              //formData
               {
                 tasks: [
                   {
@@ -570,11 +521,8 @@ function AddQuestion() {
     
   };
 
-  const [image, setImage] = useState("");
+
   const [files, setFiles] = useState([]);
-  const onDrop = useCallback((acceptedFiles) => {
-    setFiles(acceptedFiles);
-  }, []);
 
    const [otherFiles, setOtherFiles] = useState([
      // eslint-disable-next-line react/jsx-key
@@ -631,35 +579,6 @@ function AddQuestion() {
             <legend className="text-sm  font-bold">
               Created & Posted expression ecrite
             </legend>
-            {/* <div>
-            <fieldset className="border border-solid space-y-2 border-gray-600 p-3">
-              <legend className="text-xs  font-bold">identification</legend>
-
-              <div className="relative mb-3">
-                <input
-                  type="number"
-                  min={80}
-                  onChange={(e) => {
-                    handleChangeNumber(parseInt(e.target.value));
-                  }}
-                  className="peer p-2 block min-h-[auto] bg-white w-1/2 lg:w-1/3 text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
-                  placeholder="entrer le numero de la question"
-                />
-              </div>
-              {question?.numero ? (
-                !exist ? (
-                  <></>
-                ) : (
-                  <span className="text-red-500">
-                    ce numero n{`'`}est pas valide pour la serie
-                  </span>
-                )
-              ) : (
-                <span></span>
-              )}
-            </fieldset>
-          </div> */}
-
             <div>
               <fieldset className="border border-solid space-y-2 border-gray-600 p-3">
                 <legend className="text-xs  font-bold">serie</legend>
@@ -729,13 +648,6 @@ function AddQuestion() {
                     </div>
                     <div className=" mx-auto space-y-2 w-full">
                       <span>consigne tache 1</span>
-                      {/* <textarea
-                        onChange={(e) =>
-                          setTache1({ ...tache1, consigne: e.target.value })
-                        }
-                        className="w-full h-28 p-1 rounded-lg my-1"
-                        placeholder="votre texte ici"
-                      ></textarea> */}
                       <Tiptap
                         setComment={setConsigneTache1}
                         comment={consigneTache1}
@@ -807,13 +719,6 @@ function AddQuestion() {
                     </div>
                     <div className="xs:my-3 sm:my-0 mx-auto space-y-2 w-full">
                       <span>consigne tache 2</span>
-                      {/* <textarea
-                        onChange={(e) =>
-                          setTache2({ ...tache2, consigne: e.target.value })
-                        }
-                        className="w-full h-28 p-1 rounded-lg my-1"
-                        placeholder="votre texte ici"
-                      ></textarea> */}
                       <Tiptap
                         setComment={setConsigneTache2}
                         comment={consigneTache2}
@@ -885,16 +790,7 @@ function AddQuestion() {
                     </div>
                     <div className="relative xs:my-3 sm:my-0 mx-auto space-y-2 w-full">
                       <span>consigne tache 3</span>
-                      {/* <textarea
-                        onChange={(e) =>
-                          setTache3({
-                            ...tache3,
-                            consigne: e.target.value,
-                          })
-                        }
-                        className="w-full h-28 p-1 rounded-lg my-1"
-                        placeholder="votre texte ici"
-                      ></textarea> */}
+                    
                       <Tiptap
                         setComment={setConsigneTache3}
                         comment={consigneTache3}
@@ -973,34 +869,6 @@ function AddQuestion() {
             <legend className="text-sm  font-bold">
               Created & Posted expression orale
             </legend>
-            {/* <div>
-            <fieldset className="border border-solid space-y-2 border-gray-600 p-3">
-              <legend className="text-xs  font-bold">identification</legend>
-              <div className="relative mb-3">
-                <input
-                  type="number"
-                  min={80}
-                  onChange={(e) => {
-                    handleChangeNumber(parseInt(e.target.value));
-                  }}
-                  className="peer p-2 block min-h-[auto] bg-white w-1/2 lg:w-1/3 text-xs md:text-sm lg:text-base rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
-                  placeholder="entrer le numero de la question"
-                />
-              </div>
-              {question?.numero ? (
-                !exist ? (
-                  <></>
-                ) : (
-                  <span className="text-red-500">
-                    ce numero n{`'`}est pas valide pour la serie
-                  </span>
-                )
-              ) : (
-                <span></span>
-              )}
-            </fieldset>
-          </div> */}
-
             <div>
               <fieldset className="border border-solid space-y-2 border-gray-600 p-3">
                 <legend className="text-xs  font-bold">serie</legend>
@@ -1046,13 +914,6 @@ function AddQuestion() {
                     </div>
                     <div className=" mx-auto w-full">
                       <span>consigne tache 1</span>
-                      {/* <textarea
-                        onChange={(e) =>
-                          setTache1({ ...tache1, consigne: e.target.value })
-                        }
-                        className="w-full h-28 p-1 rounded-lg my-1"
-                        placeholder="votre texte ici"
-                      ></textarea> */}
                       <Tiptap
                         setComment={setConsigneTache1}
                         comment={consigneTache1}
@@ -1092,14 +953,6 @@ function AddQuestion() {
                         </div>
                       </div>
                     }
-                    {/* <div
-                      className="w-full flex items-center justify-end "
-                      onClick={() => addOtherFile1()}
-                    >
-                      <span className="px-2 py-1 rounded-md mt-2 bg-gray-900 text-white cursor-pointer">
-                        autre image
-                      </span>
-                    </div> */}
                   </div>
                 </fieldset>
                 <fieldset className="w-full  border border-solid space-y-2 border-gray-600 p-3">
@@ -1109,13 +962,6 @@ function AddQuestion() {
                     </div>
                     <div className="xs:my-3 sm:my-0 mx-auto space-y-2 w-full">
                       <span>consigne tache 2</span>
-                      {/* <textarea
-                        onChange={(e) =>
-                          setTache2({ ...tache2, consigne: e.target.value })
-                        }
-                        className="w-full h-28 p-1 rounded-lg my-1"
-                        placeholder="votre texte ici"
-                      ></textarea> */}
                       <Tiptap
                         setComment={setConsigneTache2}
                         comment={consigneTache2}
@@ -1165,16 +1011,6 @@ function AddQuestion() {
                     </div>
                     <div className="relative xs:my-3 sm:my-0 mx-auto space-y-2 w-full">
                       <span>consigne tache 3</span>
-                      {/* <textarea
-                        onChange={(e) =>
-                          setTache3({
-                            ...tache3,
-                            consigne: e.target.value,
-                          })
-                        }
-                        className="w-full h-28 p-1 rounded-lg my-1"
-                        placeholder="votre texte ici"
-                      ></textarea> */}
                       <Tiptap
                         setComment={setConsigneTache3}
                         comment={consigneTache3}
@@ -1252,7 +1088,6 @@ function AddQuestion() {
           </fieldset>
         )}
       </div>
-
       {<AddSerie setSeries={setSeries} series={series} />}
     </div>
   );

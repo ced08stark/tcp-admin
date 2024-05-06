@@ -6,8 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectSerie } from "../../../featured/serieSlice";
 import {
   setQuestion,
-  selectQuestion,
-  selectQuestionsSelect,
+  selectQuestion
 } from "../../../featured/questionSlice";
 
 

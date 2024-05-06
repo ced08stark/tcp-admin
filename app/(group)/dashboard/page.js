@@ -8,20 +8,16 @@ import SerieComponent from "../../../components/SerieComponent"
 import AddSerie from "../../../components/AddSerie";
 import GetCookies from "../../../hooks/getCookies";
 import { instance } from "../../../hooks/Axios";
-import AudioPlayer from "../../../components/AudioPlayer"
 import { useDispatch, useSelector } from "react-redux";
 import {
   setQuestion,
-  selectQuestion,
-  selectQuestionsSelect,
+  selectQuestion
 } from "../../../featured/questionSlice";
-import { setCurrentUser, selectUser } from "../../../featured/userSlice";
+import {  selectUser } from "../../../featured/userSlice";
 
 export default function Home() {
   const dispatch = useDispatch();
-  const router = useRouter()
   const token = GetCookies("token");
-  const [isLoading, setIsLoading] = useState(false);
   const currentQuestion = useSelector(selectQuestion);
   const currentUser = useSelector(selectUser);
   const [series, setSeries] = useState([]);
@@ -30,15 +26,16 @@ export default function Home() {
   const [tests, setTests] = useState([]);
   const [adsList, setAdsList] = useState([]);
   const [testsEO, setTestsEO] = useState([]);
+  const [isLoadingTestEE, setIsLoadingTestEE] = useState(false)
+  const [isLoadingTestEO, setIsLoadingTestEO] = useState(false)
+  const [isLoadingUsers, setIsLoadingUsers] = useState(false)
+  const [isLoadingAds, setIsLoadingAds] = useState(false);
+  const [isLoadingSeries, setIsLoadingSeries] = useState(false);
+
   const Add = async() =>{
       let modal = document.querySelector("#lightbox");
       modal.classList.remove("scale-0");
   }
-const [isLoadingTestEE, setIsLoadingTestEE] = useState(false)
-const [isLoadingTestEO, setIsLoadingTestEO] = useState(false)
-const [isLoadingUsers, setIsLoadingUsers] = useState(false)
-const [isLoadingAds, setIsLoadingAds] = useState(false);
-const [isLoadingSeries, setIsLoadingSeries] = useState(false);
 
   const getTests = async () => {
    setIsLoadingTestEE(true)

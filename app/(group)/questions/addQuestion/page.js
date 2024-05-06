@@ -284,30 +284,11 @@ function AddQuestion() {
         alert('veuillez selectionner la bonne reponse')
     }
     else{
-    // const formData = new FormData();
-    // formData.append("numero", question?.numero);
-    // formData.append("consigne", question?.consigne);
-    // formData.append("files", question?.libelle);
-    // //formData.append("libelle", currentQuestion?.libelle);
-    // formData.append("suggestions[0][text]", suggestion1.text);
-    // formData.append("suggestions[0][isCorrect]", suggestion1.isCorrect);
-    // formData.append("suggestions[1][text]", suggestion2.text);
-    // formData.append("suggestions[1][isCorrect]", suggestion2.isCorrect);
-    // formData.append("suggestions[2][text]", suggestion3.text);
-    // formData.append("suggestions[2][isCorrect]", suggestion3.isCorrect);
-    // formData.append("suggestions[3][text]", suggestion4.text);
-    // formData.append("suggestions[3][isCorrect]", suggestion4.isCorrect);
-    // formData.append("categorie[libelle]", category?.libelle);
-    // formData.append("categorie[point]", category?.point);
-    // formData.append("discipline[libelle]", discipline?.libelle);
-    // formData.append("discipline[duree]", category?.duree);
-    // formData.append("duree", question?.duree);
-    //console.log(image)
+    
     setIsLoading(true);
     const data = await instance
       .post(
         "/api/question/created",
-       // formData,
         {
           numero: question?.numero,
           consigne: question?.consigne,
@@ -350,26 +331,9 @@ function AddQuestion() {
   };
 
   const [image, setImage] = useState('')
-  const [files, setFiles] = useState([]);
+  
  
  
-  // const { getRootProps, getInputProps } = useDropzone({
-  //   onDrop,
-  //  // accept: fileTypes ? generateClientDropzoneAccept(fileTypes) : undefined,
-  // });
- 
-  // const { startUpload } = useUploadThing("mediaPost", {
-  //   onClientUploadComplete: () => {
-  //     alert("uploaded successfully!");
-  //   },
-  //   onUploadError: () => {
-  //     alert("error occurred while uploading");
-  //   },
-  // });
-
-  // const handleFileChange = (event) => {
-  //   setFile(event.target.files[0]);
-  // };
 
 
 
@@ -507,20 +471,6 @@ function AddQuestion() {
                     placeholder="entrer la consigne"
                   />
                 ) : (
-                  // <UploadButton
-                  //   endpoint="mediaPost"
-                  //   onClientUploadComplete={(res) => {
-                  //     if (res) {
-                  //       setQuestion({ ...question, consigne: res[0].fileUrl });
-                  //       alert("Upload Completed");
-                  //     }
-                  //     // Do something with the response
-                  //   }}
-                  //   onUploadError={(error) => {
-                  //     // Do something with the error.
-                  //     alert(`ERROR! ${error.message}`);
-                  //   }}
-                  // />
                   <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
                     <input
                       type="file"
@@ -548,61 +498,8 @@ function AddQuestion() {
                     </div>
                   </div>
                 )}
-                {/* <input
-                  type="text"
-                  onChange={(e) => {
-                    setQuestion({ ...question, consigne: e.target.value });
-                  }}
-                  className="peer p-2 block min-h-[auto] bg-white w-full rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100  motion-reduce:transition-none "
-                  placeholder="entrer la consigne"
-                /> */}
+                
               </div>
-
-              {/*
-              <div className="flex space-x-4">
-                <select
-                  onChange={(e) => {
-                    setQuestion({
-                      ...question,
-                      categorie: {
-                        libelle: e.target.value,
-                      },
-                    });
-                  }}
-                  id="hs-select-label"
-                  className="py-3 px-4 pr-9 block w-full bg-white  rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
-                >
-                  <option selected>Select categorie</option>
-                  <option value="A1">A1</option>
-                  <option value="A2">A2</option>
-                  <option value="B1">B1</option>
-                  <option value="B2">B2</option>
-                  <option value="C1">C1</option>
-                  <option value="C2">C2</option>
-                </select>
-                <select
-                  onChange={(e) => {
-                    setQuestion({
-                      ...question,
-                      discipline: {
-                        libelle: e.target.value,
-                      },
-                    });
-                  }}
-                  id="hs-select-label"
-                  className="py-3 px-4 pr-9 block w-full bg-white  rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
-                >
-                  <option selected>Select discipline</option>
-                  <option value="Comprehension Ecrite">
-                    Comprehension Ecrite
-                  </option>
-                  <option value="Comprehension Orale">
-                    Comprehension Orale
-                  </option>
-                  <option value="Expression Ecrite">Expression Ecrite</option>
-                  <option value="Expression Orale">Expression Orale</option>
-                </select>
-              </div> */}
               <legend className="text-xs  font-bold">upload file</legend>
               <div className="col-span-full">
                 <label
@@ -645,20 +542,6 @@ function AddQuestion() {
                         <span>Upload a file</span>
                         {discipline?.libelle == null ||
                         discipline?.libelle == "Comprehension Ecrite" ? (
-                          // <UploadButton
-                          //   endpoint="imageUploader"
-                          //   onClientUploadComplete={(res) => {
-                          //     if (res) {
-                          //       setImage(res[0].fileUrl);
-                          //       alert("Upload Completed");
-                          //     }
-                          //     // Do something with the respons
-                          //   }}
-                          //   onUploadError={(error) => {
-                          //     // Do something with the error.
-                          //     alert(`ERROR! ${error.message}`);
-                          //   }}
-                          // />
                           <div className="w-full p-4 border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
                             <input
                               type="file"
@@ -688,20 +571,6 @@ function AddQuestion() {
                             </div>
                           </div>
                         ) : (
-                          // <UploadButton
-                          //   endpoint="mediaPost"
-                          //   onClientUploadComplete={(res) => {
-                          //     if (res) {
-                          //       setImage(res[0].fileUrl);
-                          //       alert("Upload Completed");
-                          //     }
-                          //     // Do something with the response
-                          //   }}
-                          //   onUploadError={(error) => {
-                          //     // Do something with the error.
-                          //     alert(`ERROR! ${error.message}`);
-                          //   }}
-                          // />
                           <div className="w-full border-dashed border-2 cursor-pointer bg-white border-indigo-500 h-[100px] flex item-center justify-center">
                             <input
                               type="file"
@@ -730,27 +599,8 @@ function AddQuestion() {
                             </div>
                           </div>
                         )}
-
-                        {/* <input type="file" {...getInputProps} /> */}
-                        {/* <input
-                          id="file-upload"
-                          name="file-upload"
-                          type="file"
-                          className="sr-only"
-                          ref={fileRef}
-                          onChange={() =>
-                            setQuestion({
-                              ...question,
-                              libelle: fileRef.current.files[0],
-                            })
-                          }
-                        /> */}
                       </label>
-                      {/* <p className="pl-1">or drag and drop</p> */}
                     </div>
-                    {/* <p className="text-xs leading-5 text-gray-600">
-                      PNG, JPG, GIF up to 10MB Or mp4 file
-                    </p> */}
                   </div>
                 </div>
               </div>
@@ -779,7 +629,6 @@ function AddQuestion() {
                     className="absolute bottom-0 right-0 "
                     type="radio"
                     name="suggestion"
-                    //value={true}
                     id="reponse1"
                   />
                 </div>
@@ -801,8 +650,6 @@ function AddQuestion() {
                     className="absolute bottom-0 right-0 "
                     type="radio"
                     name="suggestion"
-                    //value={true}
-                    //checked={true}
                     id="reponse2"
                   />
                 </div>
