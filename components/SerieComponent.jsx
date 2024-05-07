@@ -16,10 +16,8 @@ import { setCurrentUser, selectUser } from "../featured/userSlice";
 
 function SerieComponent({item, setSeries}) {
     const currentRole = localStorage.getItem('role')
-    localStorage.setItem("serie", null);
-    
     const router = useRouter();
-    const currentUser = useSelector(selectUser);
+    const currentUser = useSelector(selectUser)
     const dispatch = useDispatch();
     const token = GetCookies("token");
     const [isLoading, setIsLoading] = useState(false);

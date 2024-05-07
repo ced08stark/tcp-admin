@@ -35,8 +35,8 @@ function QuestionsPage() {
   const [isUploading2, setIsUploading2] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
-  const handleSetConsigne = async (e) => {
-    const formData = new FormData();
+ const handleSetConsigne = async (e) => {
+    formData = new FormData();
     formData.append("files", e.target.files[0]);
     setIsUploading(true);
     const data = await instance.post("api/question/upload", formData, {
@@ -130,13 +130,9 @@ function QuestionsPage() {
     text: null,
     isCorrect: false,
   });
+
   const currentSerie = localStorage.getItem("serie");
  
-
-  const Add = async () => {
-    let modal = document.querySelector("#lightbox");
-    modal.classList.remove("scale-0");
-  };
 
    const handleSerie = async () => {
      const result = await instance.get(`/api/serie/series/${currentSerie}`, {
@@ -188,7 +184,7 @@ function QuestionsPage() {
   // };
 
   useEffect(() => {
-    //getQuestion();
+    getQuestion();
     handleSerie()
   }, []);
   return (

@@ -3,17 +3,17 @@ import Image from "next/image";
 import React, {useEffect, useState} from 'react'
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { selectSerie } from "../../../featured/serieSlice";
 import {
   setQuestion,
   selectQuestion
 } from "../../../featured/questionSlice";
 
 
-export default function Serie() {
-  const serie = useSelector(selectSerie);
-  const currentQuestion = useSelector(selectQuestion);
-  const currentSerie = localStorage.getItem('serie')
+const SeriePage = () =>{
+  
+  const currentQuestion = useSelector(selectQuestion)
+  const currentSerie = localStorage.getItem("serie")
+
   const dispatch = useDispatch();
   useEffect(()=>{
     dispatch(
@@ -135,3 +135,6 @@ export default function Serie() {
     </main>
   );
 }
+
+
+export default SeriePage

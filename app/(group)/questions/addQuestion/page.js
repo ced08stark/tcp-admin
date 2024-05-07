@@ -26,7 +26,6 @@ import * as Icons from '@heroicons/react/24/outline';
 
 
 function AddQuestion() {
-  const fileRef = useRef(null);
   const router = useRouter();
   const token = GetCookies("token");
   const [isLoading, setIsLoading] = useState(false);
@@ -91,8 +90,6 @@ function AddQuestion() {
     modal.classList.remove("scale-0");
   };
   const [check, setCheck] = useState(false)
-  
-
   const getSeries = async () => {
     const data = await instance
       .get("/api/serie/series", {
