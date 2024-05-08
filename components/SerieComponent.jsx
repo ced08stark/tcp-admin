@@ -13,9 +13,10 @@ import { instance } from "../hooks/Axios";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { setCurrentUser, selectUser } from "../featured/userSlice";
+import SetCookies from "../hooks/setCookies";
 
 function SerieComponent({item, setSeries}) {
-    const currentRole = localStorage.getItem('role')
+    const currentRole = GetCookies('role')
     const router = useRouter();
     const currentUser = useSelector(selectUser)
     const dispatch = useDispatch();
@@ -71,7 +72,7 @@ function SerieComponent({item, setSeries}) {
 
    
     const handleSerie = () => {
-        localStorage.setItem("serie", item.libelle);
+        SetCookies("serie", item.libelle);
         dispatch(setSerie(item))
         dispatch(setQuestionsSelect(item?.questions))
         router.push("/series")

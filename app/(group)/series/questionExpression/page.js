@@ -33,7 +33,7 @@ function QuestionsPage() {
     value: "",
   });
   const currentQuestion = useSelector(selectQuestion);
-  const currentSerie = localStorage.getItem("serie");
+  const currentSerie = GetCookies("serie");
   const [image, setImage] = useState(null);
 
   const [isUploading2, setIsUploading2] = useState(false);

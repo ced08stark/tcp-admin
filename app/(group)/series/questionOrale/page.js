@@ -21,6 +21,8 @@ import { baseUrlFile } from "../../../../hooks/Axios";
 function QuestionsPage() {
   const router = useRouter();
   const token = GetCookies("token");
+  const currentSerie = GetCookies("serie");
+  
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState({
     name: "consigne",
@@ -131,7 +133,7 @@ function QuestionsPage() {
     isCorrect: false,
   });
 
-  const currentSerie = localStorage.getItem("serie");
+  
  
 
    const handleSerie = async () => {
@@ -184,7 +186,7 @@ function QuestionsPage() {
   // };
 
   useEffect(() => {
-    getQuestion();
+    //getQuestion();
     handleSerie()
   }, []);
   return (

@@ -7,12 +7,14 @@ import {
   setQuestion,
   selectQuestion
 } from "../../../featured/questionSlice";
+import GetCookies from "../../../hooks/getCookies";
 
 
 const SeriePage = () =>{
   
   const currentQuestion = useSelector(selectQuestion)
-  const currentSerie = localStorage.getItem("serie")
+  
+  const currentSerie = GetCookies("serie");
 
   const dispatch = useDispatch();
   useEffect(()=>{

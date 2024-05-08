@@ -38,7 +38,7 @@ function Test() {
     if (data) {
       setTest(data?.data);
       console.log(data?.data)
-      //console.log(JSON.parse(data?.data?.payload))
+      
       setReponse1(data ? JSON.parse(data?.data?.payload)?.taskUrl1 : "");
       setReponse2(data ? JSON.parse(data?.data?.payload)?.taskUrl2 : "");
       setReponse3(data ? JSON.parse(data?.data?.payload)?.taskUrl3 : "");
@@ -48,9 +48,8 @@ function Test() {
     }
   };
 
-  useEffect(() => {
-    getTest();
-  }, []);
+ 
+
  const handlePressNext = () => {
    if (taskIndex >= 0 && taskIndex < 2) {
      setTaskIndex(taskIndex + 1);
@@ -106,6 +105,10 @@ function Test() {
       alert("veuillez attribuer une note a chaque tache");
     }
   };
+
+   useEffect(() => {
+     getTest();
+   }, []);
   
   return (
     <div className="w-full flex flex-col">

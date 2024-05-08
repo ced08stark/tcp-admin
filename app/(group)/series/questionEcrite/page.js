@@ -35,7 +35,7 @@ function QuestionsPage() {
   const currentQuestion = useSelector(selectQuestion);
   const selectLists = useSelector(selectQuestionsSelect);
   const [serie, setSerie] = useState(null);
-  const currentSerie = localStorage.getItem('serie')
+  const currentSerie = GetCookies('serie')
   const [questions, setQuestions] = useState([]);
   const dispatch = useDispatch();
   const [image, setImage] = useState(null);

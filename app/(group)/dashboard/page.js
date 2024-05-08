@@ -18,7 +18,7 @@ import {  selectUser } from "../../../featured/userSlice";
 export default function Home() {
   const dispatch = useDispatch();
   const token = GetCookies("token");
-  const currentRole = localStorage.getItem('role')
+  const currentRole = GetCookies('role');
   const currentQuestion = useSelector(selectQuestion);
   const [series, setSeries] = useState([]);
   const [questions, setQuestions] = useState([]);
@@ -222,7 +222,7 @@ export default function Home() {
                 </span>
               </h2>
               <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-                Find in-depth information about Next.js features and API.
+                Ajouter les questions de TCF et TEF au differente des series
               </p>
             </div>
             <div className=" absolute lg:relative opacity-20 group-hover:opacity-100">
@@ -264,7 +264,7 @@ export default function Home() {
                 </span>
               </h2>
               <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-                Find in-depth information about Next.js features and API.
+                Ajouter les questions de TCF et TEF au differente des series
               </p>
             </div>
             <div className=" absolute lg:relative opacity-20">
@@ -311,7 +311,8 @@ export default function Home() {
                 </span>
               </h2>
               <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-                Learn about Next.js in an interactive course with&nbsp;quizzes!
+                Parcourez l{"'"} ensemble des tests d{"'"}expression ecrite des
+                utilisateurs et attribuer des &nbsp;notes!
               </p>
             </div>
             <div className=" absolute lg:relative opacity-20">
@@ -355,7 +356,8 @@ export default function Home() {
                 </span>
               </h2>
               <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-                Learn about Next.js in an interactive course with&nbsp;quizzes!
+                Parcourez l{"'"} ensemble des tests d{"'"}expression ecrite des
+                utilisateurs et attribuer des &nbsp;notes!
               </p>
             </div>
             <div className=" absolute lg:relative opacity-20">
@@ -404,7 +406,8 @@ export default function Home() {
                 </span>
               </h2>
               <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-                Learn about Next.js in an interactive course with&nbsp;quizzes!
+                Parcourez l{"'"} ensemble des tests d{"'"}expression orale des
+                utilisateurs et attribuer des &nbsp;notes!
               </p>
             </div>
             <div className=" absolute lg:relative opacity-20 group-hover:opacity-100">
@@ -448,7 +451,8 @@ export default function Home() {
                 </span>
               </h2>
               <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-                Learn about Next.js in an interactive course with&nbsp;quizzes!
+                Parcourez l{"'"} ensemble des tests d{"'"}expression oral des
+                utilisateurs et attribuer des &nbsp;notes!
               </p>
             </div>
             <div className=" absolute lg:relative opacity-20">
@@ -491,14 +495,14 @@ export default function Home() {
           >
             <div className="z-20">
               <h2 className={`mb-3 text-2xl font-semibold`}>
-                Users{" "}
+                Utilisateurs{" "}
                 <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
                   -&gt;
                 </span>
               </h2>
               <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-                Instantly deploy your Next.js site to a shareable URL with
-                Vercel.
+                Decouvrez l{"'"}ensembles des utilisateurs d{"'"}
+                objectifCanada-tcf des &nbsp;notes!
               </p>
             </div>
             <div className="absolute lg:relative opacity-20 group-hover:opacity-100">
@@ -522,8 +526,7 @@ export default function Home() {
                       <span class="visually-hidden">Loading...</span>
                     </div>
                   </>
-                ) : users
-                    ?.length.toString().length > 1 ? (
+                ) : users?.length.toString().length > 1 ? (
                   users?.length
                 ) : (
                   "0" + users?.length
@@ -535,14 +538,14 @@ export default function Home() {
           <div className="group  overflow-hidden relative rounded-lg border border-1 m-2 px-5 py-4 transition-colors border-gray-300 bg-gray-100  flex justify-between">
             <div className="z-20">
               <h2 className={`mb-3 text-2xl font-semibold`}>
-                Users{" "}
+                Utilisateurs{" "}
                 <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
                   -&gt;
                 </span>
               </h2>
               <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-                Instantly deploy your Next.js site to a shareable URL with
-                Vercel.
+                Decouvrez l{"'"}ensembles des utilisateurs d{"'"}
+                objectifCanada-tcf des &nbsp;notes!
               </p>
             </div>
             <div className="absolute lg:relative opacity-20">
@@ -566,8 +569,7 @@ export default function Home() {
                       <span class="visually-hidden">Loading...</span>
                     </div>
                   </>
-                ) : users
-                    ?.length.toString().length > 1 ? (
+                ) : users?.length.toString().length > 1 ? (
                   users?.length
                 ) : (
                   "0" + users?.length
@@ -584,14 +586,13 @@ export default function Home() {
           >
             <div className="z-20">
               <h2 className={`mb-3 text-2xl font-semibold`}>
-                Evenements{" "}
+                Publicite{" "}
                 <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
                   -&gt;
                 </span>
               </h2>
               <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-                Instantly deploy your Next.js site to a shareable URL with
-                Vercel.
+                Programmez vos differentes affiche publicitaire et evenement!
               </p>
             </div>
             <div className="absolute lg:relative opacity-20 group-hover:opacity-100">
@@ -633,8 +634,7 @@ export default function Home() {
                 </span>
               </h2>
               <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-                Instantly deploy your Next.js site to a shareable URL with
-                Vercel.
+                Programmez vos differentes affiche publicitaire !
               </p>
             </div>
             <div className="absolute lg:relative opacity-20">

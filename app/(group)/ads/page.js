@@ -15,7 +15,7 @@ import { DateRangePicker } from "react-date-range";
 function Evenement() {
   const [adsList, setAdsList] = useState([]);
   const currentAds = useSelector(selectAds);
-  const [image, setImage] = useState("null");
+  const [image, setImage] = useState(null);
   const token = GetCookies("token");
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -27,8 +27,7 @@ function Evenement() {
     linkTarget: null,
     startDate: new Date(),
     endDate: new Date(),
-    adsPicture:
-      "files-1700790692705-662116990.PNG",
+    adsPicture: null,
     localisation: null,
   });
 
@@ -334,7 +333,7 @@ function Evenement() {
                           <Image
                             className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
                             src={`${
-                              image != "null"
+                              image != null
                                 ? `${baseUrlFile}${image}`
                                 : `${baseUrlFile}${currentAds?.adsPicture}`
                             }`}

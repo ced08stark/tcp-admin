@@ -30,7 +30,7 @@ function QuestionsPage() {
     value: "",
   });
   const currentQuestion = useSelector(selectQuestion);
-  const currentSerie = localStorage.getItem("serie");
+  const currentSerie = GetCookies("serie");
 
   const handleSerie = async () => {
     const result = await instance.get(`/api/serie/series/${currentSerie}`, {

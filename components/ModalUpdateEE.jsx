@@ -7,7 +7,7 @@ import Tiptap from './TipTap';
 
 function ModalUpdateEE({item, setSerie}) {
     const token = GetCookies("token");
-    const currentSerie = localStorage.getItem('serie')
+    const currentSerie = GetCookies('serie')
     const [isLoading, setIsLoading] = useState(false);
     const [consigneTache1, setConsigneTache1] = useState(null);
     const [consigneTache2, setConsigneTache2] = useState(null);

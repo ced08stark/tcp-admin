@@ -28,7 +28,7 @@ export default function Home() {
     if (data?.data?.role == "admin" || data?.data?.role == "correcteur") {
       alert("connexion success");
       SetCookies("token", data?.data?.token);
-      localStorage.setItem('role', data?.data?.role)
+      SetCookies("role", data?.data?.role);
       dispatch(setCurrentUser(data?.data))
       router.push("/dashboard");
     } else {

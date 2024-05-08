@@ -15,6 +15,7 @@ function UserPage() {
     const [currentCategorie, setCurrentCategorie] = useState('categories');
     const [search, setSearch] = useState('');
     const token = GetCookies("token");
+    
    const getUsers = async () => {
      const data = await instance
        .get("/api/user/users", {
