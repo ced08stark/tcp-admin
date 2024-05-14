@@ -227,7 +227,7 @@ function UserRow({ item, id, setUsers }) {
       <td className="whitespace-nowrap px-6 py-4">{item?.phone}</td>
       <td className="whitespace-nowrap px-6 py-4">{item?.pays}</td>
       <td className="whitespace-nowrap px-6 py-4">
-        {item?.remain || item?.email != Fakemail
+        {item?.remain && item?.email != Fakemail
           ? `valable jusqu'a ${new Date(item?.remain).toDateString()}`
           : "aucun abonnement"}
       </td>
