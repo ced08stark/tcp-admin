@@ -7,6 +7,7 @@ import { setCurrentUser, selectUser } from "../featured/userSlice";
 import { setTests, selectTest } from "../featured/testSlice";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css";
+import { Fakemail } from '../test/fake'
 
 
 function UserRow({ item, id, setUsers }) {
@@ -226,7 +227,7 @@ function UserRow({ item, id, setUsers }) {
       <td className="whitespace-nowrap px-6 py-4">{item?.phone}</td>
       <td className="whitespace-nowrap px-6 py-4">{item?.pays}</td>
       <td className="whitespace-nowrap px-6 py-4">
-        {item?.remain
+        {item?.remain || item?.email != Fakemail
           ? `valable jusqu'a ${new Date(item?.remain).toDateString()}`
           : "aucun abonnement"}
       </td>
