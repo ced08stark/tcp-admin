@@ -10,6 +10,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import { Fakemail } from '../test/fake'
 
 
+
 function UserRow({ item, id, setUsers }) {
     const [isLoading, setIsLoading] = useState(false);
     const [isUpdateSolde, setIsUpdateSolde] = useState(false);

@@ -1,6 +1,5 @@
 "use client"
 import Image from "next/image";
-import Link from "next/link";
 import React, {useState} from "react"
 import { useRouter } from "next/navigation"
 import SetCookies from "../hooks/setCookies";
@@ -15,6 +14,7 @@ export default function Home() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch()
+   
   const [user, setUser] = useState({ email: "", password: "" });
   const handleLogin = async () => {
     setIsLoading(true);
@@ -30,7 +30,9 @@ export default function Home() {
       SetCookies("token", data?.data?.token);
       SetCookies("role", data?.data?.role);
       dispatch(setCurrentUser(data?.data))
+  
       router.push("/dashboard");
+
     } else {
       alert("connexion failed");
     }

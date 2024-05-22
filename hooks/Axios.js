@@ -10,7 +10,7 @@ export const instance = axios.create({
   baseURL: baseUrl,
   //   headers: { "X-Custom-Header": "foobar" },
 });
-
+export const baseUrlEOFile = baseUrl + "api/user-eofile/file/";
 export const baseUrlFile = baseUrl + "api/question/file/";
 export const baseUrlImg = baseUrl + "uploads/image/";
 export const baseUrlpdf = baseUrl + "uploads/pdf/";

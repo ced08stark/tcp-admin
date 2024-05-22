@@ -15,6 +15,7 @@ import {
 } from "../../../featured/questionSlice";
 import {  selectUser } from "../../../featured/userSlice";
 
+
 export default function Home() {
   const dispatch = useDispatch();
   const token = GetCookies("token");
@@ -31,6 +32,8 @@ export default function Home() {
   const [isLoadingUsers, setIsLoadingUsers] = useState(false)
   const [isLoadingAds, setIsLoadingAds] = useState(false);
   const [isLoadingSeries, setIsLoadingSeries] = useState(false);
+
+ 
 
   const Add = async() =>{
       let modal = document.querySelector("#lightbox");

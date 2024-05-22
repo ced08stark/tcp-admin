@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import AudioPlayer from "./AudioPlayer";
-import { baseUrlFile, baseUrlOfUploadthing } from "../hooks/Axios";
+import { baseUrlFile, baseUrlOfUploadthing, baseUrlEOFile } from "../hooks/Axios";
 import TipTap from "./TipTap";
 
 
@@ -75,10 +75,19 @@ function TaskAudio({
         </div>
       </div>
       <div className="m-3 w-full">
-        <div className="text-lg xs:w-[90%] m-auto flex items-center justify-center lg:w-full h-[300px] font-medium p-3 rounded-xl border-2">
+        {/* <div className="text-lg xs:w-[90%] m-auto flex items-center justify-center lg:w-full h-[300px] font-medium p-3 rounded-xl border-2">
           {reponse ? (
             <AudioPlayer
               url={`${baseUrlOfUploadthing + getEndOfUrl(reponse)}`}
+            />
+          ) : (
+            <span className="font-bold text-lg">Aucun audio</span>
+          )}
+        </div> */}
+        <div className="text-lg xs:w-[90%] m-auto flex items-center justify-center lg:w-full h-[300px] font-medium p-3 rounded-xl border-2">
+          {reponse ? (
+            <AudioPlayer
+              url={`${baseUrlEOFile + reponse.toString()}`}
             />
           ) : (
             <span className="font-bold text-lg">Aucun audio</span>
